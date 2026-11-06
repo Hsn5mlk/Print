@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🖨️ مطبعة الأمير</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+:root{
+  --bg:#f4f6fb; --ink:#1e293b; --muted:#64748b;
+  --gold:#c8a45c; --gold2:#a17c3a; --accent:#2563eb;
+  --border:#e2e8f0; --shadow:0 4px 20px rgba(30,41,59,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Tajawal',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
+
+/* Splash */
+.splash{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity .5s,visibility .5s}
+.splash.hide{opacity:0;visibility:hidden}
+.splash-logo{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#e8d9b0,#c8a45c);display:flex;align-items:center;justify-content:center;font-size:56px;box-shadow:0 0 0 6px #fff,0 0 0 8px var(--gold),0 12px 40px rgba(200,164,92,.5);animation:float 3s ease-in-out infinite;margin-bottom:22px}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.splash-title{font-size:34px;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,#a17c3a,#c8a45c,#e8d9b0,#c8a45c);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;text-align:center}
+.splash-sub{font-size:13px;color:var(--muted);letter-spacing:4px;margin-bottom:40px;font-weight:700}
+.splash-btn{padding:15px 46px;border:none;border-radius:50px;cursor:pointer;font-size:17px;font-weight:900;color:#fff;letter-spacing:1px;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 10px 30px rgba(200,164,92,.45);display:flex;align-items:center;gap:10px;transition:transform .2s}
+.splash-btn:active{transform:scale(.96)}
+
+/* App */
+.app{display:none;min-height:100vh;padding-bottom:120px}
+.app.on{display:block}
+.topbar{background:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-logo{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#e8d9b0,#c8a45c);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold)}
+.brand-name{font-size:17px;font-weight:900;color:var(--gold2)}
+.brand-sub{font-size:9px;color:var(--muted);letter-spacing:3px}
+.top-actions{display:flex;gap:8px}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--border);background:#fff;color:var(--ink);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.icon-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
+.icon-btn:active{transform:scale(.92)}
+
+/* Empty */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;text-align:center}
+.empty-ico{font-size:80px;opacity:.3;margin-bottom:18px;color:var(--gold)}
+.empty-title{font-size:20px;font-weight:900;color:var(--muted);margin-bottom:8px}
+.empty-sub{font-size:13px;color:var(--muted);opacity:.8;line-height:1.7;max-width:340px}
+.empty-add{margin-top:22px;padding:13px 30px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(200,164,92,.4)}
+.empty-add:active{transform:scale(.96)}
+
+/* Projects */
+.projects{padding:18px}
+.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sec-title{font-size:16px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:7px}
+.sec-title i{color:var(--gold)}
+.sec-add{padding:9px 18px;border:none;border-radius:11px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 14px rgba(200,164,92,.4)}
+.sec-add:active{transform:scale(.95)}
+.project-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;transition:.2s}
+.project-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.project-info{flex:1;min-width:0}
+.project-name{font-size:15px;font-weight:900;color:var(--ink);margin-bottom:4px}
+.project-meta{font-size:11px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.project-meta span{display:inline-flex;align-items:center;gap:3px}
+.project-actions{display:flex;gap:6px;flex-shrink:0}
+.mini-btn{width:34px;height:34px;border-radius:10px;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,.1);color:#ef4444}
+.mini-btn:active{transform:scale(.9)}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}
+.modal.on{display:flex}
+.modal-card{background:#fff;border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:5;border-radius:20px 20px 0 0}
+.modal-title{font-size:16px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:8px}
+.modal-title i{color:var(--gold)}
+.modal-close{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:rgba(239,68,68,.1);color:#ef4444;font-size:14px;display:flex;align-items:center;justify-content:center}
+.modal-body{padding:20px}
+
+/* Form */
+.f-label{font-size:12px;font-weight:900;color:var(--ink);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.f-label i{color:var(--gold)}
+.f-input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border);background:#f8fafc;color:var(--ink);font-size:14px;outline:none;margin-bottom:14px;font-family:inherit;font-weight:600}
+.f-input:focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(200,164,92,.15)}
+.paper-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.paper-opt{padding:14px 8px;border-radius:12px;border:2px solid var(--border);background:#fff;cursor:pointer;text-align:center;transition:.2s}
+.paper-opt:hover{border-color:var(--gold)}
+.paper-opt.on{border-color:var(--gold);background:rgba(200,164,92,.1);box-shadow:0 0 0 3px rgba(200,164,92,.15)}
+.paper-opt .p-ico{font-size:26px;margin-bottom:4px}
+.paper-opt .p-nm{font-size:13px;font-weight:900;color:var(--ink)}
+.paper-opt .p-dim{font-size:9px;color:var(--muted);margin-top:2px}
+.color-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.color-row .f-input{margin-bottom:0;flex:1}
+.color-row input[type=color]{width:50px;height:44px;border-radius:11px;border:1.5px solid var(--border);background:#fff;cursor:pointer;padding:3px}
+.btn-main{width:100%;padding:15px;border:none;border-radius:13px;cursor:pointer;font-size:14px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 8px 24px rgba(200,164,92,.4);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-main:active{transform:scale(.97)}
+
+/* Editor */
+.editor{display:none;padding:16px}
+.editor.on{display:block}
+.editor-head{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.editor-name{font-size:15px;font-weight:900;color:var(--ink)}
+.editor-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{font-size:10px;padding:3px 9px;border-radius:7px;font-weight:800;background:rgba(200,164,92,.15);color:var(--gold2)}
+.editor-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-sm{padding:9px 16px;border-radius:11px;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;gap:6px}
+.btn-sm.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 4px 14px rgba(200,164,92,.4)}
+.btn-sm.gray{background:#e2e8f0;color:var(--ink)}
+.btn-sm:active{transform:scale(.95)}
+.section-box{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap}
+.section-title{font-size:14px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:7px}
+.section-title i{color:var(--gold);font-size:16px}
+.section-sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ID pairs */
+.id-pair{background:#f8fafc;border-radius:14px;padding:14px;margin-bottom:14px;border:1.5px dashed var(--border)}
+.id-pair-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.id-pair-title{font-size:12px;font-weight:900;color:var(--gold2);display:flex;align-items:center;gap:6px}
+.id-pair-del{width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;background:rgba(239,68,68,.1);color:#ef4444;font-size:13px;display:flex;align-items:center;justify-content:center}
+.id-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.id-card{background:#fff;border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;border:1px solid var(--border)}
+.id-card-label{font-size:10px;font-weight:900;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.id-card-img{width:100%;aspect-ratio:8.5/5.5;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;position:relative;border:1.5px dashed var(--border)}
+.id-card-img img{width:100%;height:100%;object-fit:cover;display:block}
+.id-card-img.empty{color:var(--muted);font-size:11px;text-align:center;padding:10px;flex-direction:column;gap:4px}
+.id-card-img.empty i{font-size:22px;opacity:.5}
+.id-card-img.hidden-card{background:#fff !important;border:1px dashed #cbd5e1}
+.id-card-img.hidden-card img{display:none}
+.id-card-hide{position:absolute;top:6px;left:6px;width:28px;height:28px;border-radius:8px;border:none;cursor:pointer;background:rgba(15,23,42,.85);color:#fff;font-size:13px;display:none;align-items:center;justify-content:center;z-index:5}
+.id-card-hide.active{background:#ef4444}
+.id-card-img:not(.empty) ~ .id-card-hide,
+.id-card-img.hidden-card ~ .id-card-hide{display:flex}
+.hint-bar{background:linear-gradient(135deg,rgba(200,164,92,.12),rgba(200,164,92,.05));border:1px solid rgba(200,164,92,.3);border-radius:12px;padding:11px 13px;font-size:11px;color:var(--gold2);line-height:1.7;display:flex;align-items:flex-start;gap:8px;margin-bottom:14px}
+.hint-bar i{font-size:14px;flex-shrink:0;margin-top:1px}
+
+/* Preview */
+.print-sheet-wrap{background:#fff;border-radius:16px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.print-sheet{background:#fff;border:1px solid #cbd5e1;margin:0 auto;box-shadow:0 6px 20px rgba(0,0,0,.1);position:relative;display:flex;flex-direction:column;gap:6px;padding:8px}
+.print-sheet.a4{width:100%;max-width:595px;aspect-ratio:210/297}
+.print-sheet.a5{width:100%;max-width:420px;aspect-ratio:148/210}
+.print-sheet.a3{width:100%;max-width:595px;aspect-ratio:297/420}
+.sheet-id{display:grid;grid-template-columns:1fr 1fr;gap:6px;border:1px dashed #cbd5e1;padding:6px;background:#fafafa}
+.sheet-id .s-img{width:100%;aspect-ratio:8.5/5.5;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.sheet-id .s-img img{width:100%;height:100%;object-fit:cover}
+.sheet-id .s-img.blank{color:#94a3b8;font-size:10px}
+.sheet-id .s-img.hidden-card{background:#fff !important;border:1px solid #e2e8f0}
+
+.print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
+.print-actions .save-img{background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;box-shadow:0 6px 18px rgba(34,197,94,.4)}
+.print-actions .print-now{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 18px rgba(200,164,92,.4)}
+.print-actions button:active{transform:scale(.97)}
+
+/* Toast */
+.toast{position:fixed;bottom:130px;left:50%;transform:translate(-50%,20px);background:rgba(15,23,42,.95);color:#fff;padding:13px 22px;border-radius:12px;font-size:13px;font-weight:800;z-index:9999;opacity:0;pointer-events:none;transition:.3s;display:flex;align-items:center;gap:8px;max-width:90vw;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* Bottom bar */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px 16px;box-shadow:0 -4px 20px rgba(0,0,0,.08);border-top:1px solid var(--border);display:none;gap:10px;z-index:50}
+.bottom-bar.on{display:flex}
+.bottom-bar button{flex:1;padding:14px;border:none;border-radius:13px;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:8px}
+.bottom-bar .save{background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.4)}
+.bottom-bar .print{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 20px rgba(200,164,92,.4)}
+.bottom-bar button:active{transform:scale(.97)}
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <div class="splash-logo">🖨️</div>
+  <div class="splash-title">مطبعة الأمير</div>
+  <div class="splash-sub">AL-AMIR PRESS</div>
+  <button class="splash-btn" onclick="enterApp()">
+    <i class="bi bi-box-arrow-in-left"></i> دخول
+  </button>
+</div>
+
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo">🖨️</div>
+      <div>
+        <div class="brand-name">مطبعة الأمير</div>
+        <div class="brand-sub">AL-AMIR PRESS</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" onclick="openNewProject()" title="مشروع جديد">
+        <i class="bi bi-plus-lg"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="projectsView">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-ico"><i class="bi bi-printer"></i></div>
+      <div class="empty-title">لا توجد مشاريع بعد</div>
+      <div class="empty-sub">ابدأ مشروع طباعة جديد، واختر حجم الورق وقالب الهوية، ثم أضف صورك</div>
+      <button class="empty-add" onclick="openNewProject()">
+        <i class="bi bi-plus-lg"></i> مشروع جديد
+      </button>
+    </div>
+    <div class="projects" id="projectsList" style="display:none">
+      <div class="sec-head">
+        <div class="sec-title"><i class="bi bi-folder-fill"></i> مشاريعي</div>
+        <button class="sec-add" onclick="openNewProject()"><i class="bi bi-plus-lg"></i> جديد</button>
+      </div>
+      <div id="projectsGrid"></div>
+    </div>
+  </div>
+
+  <div class="editor" id="editorView">
+    <div class="editor-head">
+      <div>
+        <div class="editor-name" id="edProjectName">مشروع</div>
+        <div class="editor-tags" id="edProjectTags"></div>
+      </div>
+      <div class="editor-btns">
+        <button class="btn-sm gray" onclick="backToProjects()"><i class="bi bi-arrow-right"></i> رجوع</button>
+      </div>
+    </div>
+
+    <div class="hint-bar">
+      <i class="bi bi-info-circle-fill"></i>
+      <div>أضف هوية (وجه + ظهر). الصور بعرض <b>8.5</b> وارتفاع <b>5.5</b>. اضغط زر العين لإخفاء صورة (تصبح بيضاء عند الطباعة).</div>
+    </div>
+
+    <div class="section-box">
+      <div class="section-head">
+        <div>
+          <div class="section-title"><i class="bi bi-person-vcard-fill"></i> الهويات</div>
+          <div class="section-sub">كل هوية = صورة وجه + صورة ظهر</div>
+        </div>
+        <button class="btn-sm gold" onclick="addIdPair()"><i class="bi bi-plus-lg"></i> إضافة هوية</button>
+      </div>
+      <div id="idPairsContainer"></div>
+    </div>
+
+    <div class="section-box print-sheet-wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-title"><i class="bi bi-file-earmark-image-fill"></i> معاينة الورقة</div>
+          <div class="section-sub" id="sheetInfo">A4 · أبيض</div>
+        </div>
+      </div>
+      <div class="print-sheet a4" id="livePreview"></div>
+
+      <div class="print-actions">
+        <button class="save-img" id="btnSaveSheet" onclick="saveSheetImage()">
+          <i class="bi bi-download"></i> حفظ الصورة
+        </button>
+        <button class="print-now" onclick="openPrintWindow()">
+          <i class="bi bi-printer-fill"></i> طباعة
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar" id="bottomBar">
+  <button class="save" onclick="saveCurrentProject()"><i class="bi bi-check-circle-fill"></i> حفظ المشروع</button>
+  <button class="print" onclick="openPrintWindow()"><i class="bi bi-printer-fill"></i> طباعة</button>
+</div>
+
+<div class="modal" id="newProjectModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title"><i class="bi bi-plus-circle-fill"></i> مشروع جديد</div>
+      <button class="modal-close" onclick="closeModal('newProjectModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="f-label"><i class="bi bi-tag-fill"></i> اسم المشروع</div>
+      <input type="text" class="f-input" id="newProjName" placeholder="مثال: هويات موظفين" maxlength="40">
+
+      <div class="f-label"><i class="bi bi-aspect-ratio-fill"></i> حجم الورقة</div>
+      <div class="paper-grid">
+        <div class="paper-opt" data-size="A4" onclick="pickPaper('A4')">
+          <div class="p-ico">📄</div><div class="p-nm">A4</div><div class="p-dim">210 × 297 مم</div>
+        </div>
+        <div class="paper-opt" data-size="A5" onclick="pickPaper('A5')">
+          <div class="p-ico">📃</div><div class="p-nm">A5</div><div class="p-dim">148 × 210 مم</div>
+        </div>
+        <div class="paper-opt" data-size="A3" onclick="pickPaper('A3')">
+          <div class="p-ico">📋</div><div class="p-nm">A3</div><div class="p-dim">297 × 420 مم</div>
+        </div>
+      </div>
+
+      <div class="f-label"><i class="bi bi-palette-fill"></i> لون الورقة</div>
+      <div class="color-row">
+        <input type="color" id="paperColor" value="#ffffff">
+        <input type="text" class="f-input" id="paperColorText" value="#ffffff" readonly>
+      </div>
+
+      <button class="btn-main" onclick="createProject()"><i class="bi bi-check-lg"></i> إنشاء المشروع</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<input type="file" id="fileInputFront" accept="image/*" style="display:none">
+<input type="file" id="fileInputBack" accept="image/*" style="display:none">
+
+<script>
+/* ============================================================
+   State
+============================================================ */
+let projects = [];
+let currentProject = null;
+let selectedPaper = 'A4';
+let pickerTarget = null;
+const STORAGE_KEY = 'amir_press_projects_v1';
+
+const $ = id => document.getElementById(id);
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function showToast(msg, ico='✅'){
+  const t = $('toast');
+  t.innerHTML = `<span>${ico}</span> ${msg}`;
+  t.classList.add('on');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('on'), 2400);
+}
+function closeModal(id){ $(id).classList.remove('on'); }
+function openModal(id){ $(id).classList.add('on'); }
+
+/* ============================================================
+   Storage
+============================================================ */
+function loadProjects(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY); projects = raw ? JSON.parse(raw) : []; }
+  catch(e){ projects = []; }
+}
+function persistProjects(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(projects)); }
+  catch(e){ showToast('مساحة التخزين ممتلئة!', '⚠️'); }
+}
+
+/* ============================================================
+   Splash
+============================================================ */
+function enterApp(){
+  $('splash').classList.add('hide');
+  setTimeout(()=>{ $('splash').style.display='none'; }, 500);
+  $('app').classList.add('on');
+  renderProjects();
+}
+
+/* ============================================================
+   Projects list
+============================================================ */
+function renderProjects(){
+  const list = $('projectsList');
+  const empty = $('emptyState');
+  const grid = $('projectsGrid');
+  if(!projects.length){ list.style.display = 'none'; empty.style.display = 'flex'; return; }
+  empty.style.display = 'none'; list.style.display = 'block';
+  grid.innerHTML = projects.map(p=>{
+    const totalIds = p.ids ? p.ids.length : 0;
+    return `
+      <div class="project-card" onclick="openProject('${p.id}')">
+        <div class="project-info">
+          <div class="project-name">${escapeHtml(p.name)}</div>
+          <div class="project-meta">
+            <span><i class="bi bi-aspect-ratio"></i> ${p.size || 'A4'}</span>
+            <span><i class="bi bi-person-vcard"></i> ${totalIds} هوية</span>
+          </div>
+        </div>
+        <div class="project-actions">
+          <button class="mini-btn" onclick="event.stopPropagation();deleteProject('${p.id}')">
+            <i class="bi bi-trash-fill"></i>
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function deleteProject(id){
+  if(!confirm('حذف هذا المشروع؟')) return;
+  projects = projects.filter(p=>p.id !== id);
+  persistProjects(); renderProjects(); showToast('تم حذف المشروع','🗑️');
+}
+
+/* ============================================================
+   New project
+============================================================ */
+function openNewProject(){
+  $('newProjName').value = '';
+  selectedPaper = 'A4';
+  $('paperColor').value = '#ffffff';
+  $('paperColorText').value = '#ffffff';
+  document.querySelectorAll('.paper-opt').forEach(o=>o.classList.toggle('on', o.dataset.size === 'A4'));
+  openModal('newProjectModal');
+}
+function pickPaper(size){
+  selectedPaper = size;
+  document.querySelectorAll('.paper-opt').forEach(o=>o.classList.toggle('on', o.dataset.size === size));
+}
+$('paperColor').addEventListener('input', e=>{ $('paperColorText').value = e.target.value; });
+
+function createProject(){
+  const name = $('newProjName').value.trim() || 'مشروع بدون اسم';
+  const color = $('paperColor').value || '#ffffff';
+  const project = { id: uid(), name, size: selectedPaper, color, ids: [], createdAt: Date.now() };
+  projects.unshift(project);
+  persistProjects(); closeModal('newProjectModal'); renderProjects();
+  showToast('تم إنشاء المشروع','✅');
+  openProject(project.id);
+}
+
+/* ============================================================
+   Editor
+============================================================ */
+function openProject(id){
+  currentProject = projects.find(p=>p.id === id);
+  if(!currentProject) return;
+  $('projectsView').style.display = 'none';
+  $('editorView').classList.add('on');
+  $('bottomBar').classList.add('on');
+  $('edProjectName').textContent = currentProject.name;
+  $('edProjectTags').innerHTML = `
+    <span class="tag"><i class="bi bi-aspect-ratio"></i> ${currentProject.size}</span>
+    <span class="tag" style="background:${currentProject.color}22;color:${darken(currentProject.color)}"><i class="bi bi-palette-fill"></i> ${currentProject.color}</span>
+    <span class="tag" id="idCountTag"><i class="bi bi-person-vcard"></i> ${currentProject.ids.length} هوية</span>`;
+  renderIdPairs(); renderLivePreview();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function backToProjects(){
+  currentProject = null;
+  $('editorView').classList.remove('on');
+  $('bottomBar').classList.remove('on');
+  $('projectsView').style.display = 'block';
+  renderProjects();
+}
+function darken(hex){
+  try{
+    const c = hex.replace('#','');
+    const r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
+    return `rgb(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)})`;
+  }catch(e){ return '#a17c3a'; }
+}
+
+/* ============================================================
+   ID pairs
+============================================================ */
+function addIdPair(){
+  if(!currentProject) return;
+  currentProject.ids.push({ id: uid(), front: null, back: null, hideFront: false, hideBack: false });
+  persistProjects(); renderIdPairs(); renderLivePreview(); updateIdCountTag();
+  showToast('أضفت هوية جديدة','➕');
+}
+function updateIdCountTag(){
+  const tag = $('idCountTag');
+  if(tag && currentProject) tag.innerHTML = `<i class="bi bi-person-vcard"></i> ${currentProject.ids.length} هوية`;
+}
+function renderIdPairs(){
+  const cont = $('idPairsContainer');
+  if(!currentProject.ids.length){
+    cont.innerHTML = `
+      <div style="text-align:center;padding:30px 16px;color:var(--muted)">
+        <div style="font-size:44px;opacity:.3;margin-bottom:10px"><i class="bi bi-person-vcard"></i></div>
+        <div style="font-size:13px;font-weight:800;margin-bottom:14px">لم تُضف أي هوية بعد</div>
+        <button class="btn-sm gold" onclick="addIdPair()" style="margin:0 auto;padding:12px 22px"><i class="bi bi-plus-lg"></i> إضافة هوية</button>
+      </div>`;
+    return;
+  }
+  cont.innerHTML = currentProject.ids.map((pair, idx)=>`
+    <div class="id-pair">
+      <div class="id-pair-head">
+        <div class="id-pair-title"><i class="bi bi-person-vcard-fill"></i> هوية #${idx+1}</div>
+        <button class="id-pair-del" onclick="deleteIdPair('${pair.id}')"><i class="bi bi-trash-fill"></i></button>
+      </div>
+      <div class="id-cards">
+        ${renderCard(pair, 'front', 'الوجه', 'bi-person-badge-fill')}
+        ${renderCard(pair, 'back', 'الظهر', 'bi-card-image')}
+      </div>
+    </div>
+  `).join('');
+}
+function renderCard(pair, side, label, icon){
+  const img = pair[side];
+  const isHidden = !!pair['hide' + (side==='front'?'Front':'Back')];
+  const showHide = !!img || isHidden;
+  return `
+    <div class="id-card">
+      <div class="id-card-label"><i class="bi ${icon}"></i> ${label}</div>
+      <div class="id-card-img ${img ? '' : 'empty'} ${isHidden ? 'hidden-card' : ''}" onclick="pickImage('${pair.id}','${side}')">
+        ${ img ? `<img src="${img}" alt="${label}">` : `<i class="bi bi-plus-circle"></i><span>اضغط لإضافة صورة</span>` }
+      </div>
+      ${ showHide ? `
+        <button class="id-card-hide ${isHidden ? 'active' : ''}" onclick="event.stopPropagation();toggleHide('${pair.id}','${side}')" title="${isHidden ? 'إظهار' : 'إخفاء'}">
+          <i class="bi ${isHidden ? 'bi-eye-slash-fill' : 'bi-eye-fill'}"></i>
+        </button>` : '' }
+    </div>
+  `;
+}
+function deleteIdPair(pairId){
+  if(!confirm('حذف هذه الهوية؟')) return;
+  currentProject.ids = currentProject.ids.filter(p=>p.id !== pairId);
+  persistProjects(); renderIdPairs(); renderLivePreview(); updateIdCountTag();
+  showToast('تم حذف الهوية','🗑️');
+}
+function toggleHide(pairId, side){
+  const pair = currentProject.ids.find(p=>p.id === pairId);
+  if(!pair) return;
+  const key = side === 'front' ? 'hideFront' : 'hideBack';
+  pair[key] = !pair[key];
+  persistProjects(); renderIdPairs(); renderLivePreview();
+  showToast(pair[key] ? 'الصورة مخفية (ستطبع بيضاء)' : 'الصورة ظاهرة', pair[key] ? '🚫' : '👁️');
+}
+
+/* ============================================================
+   Image picker
+============================================================ */
+function pickImage(pairId, side){
+  pickerTarget = { pairId, side };
+  const input = side === 'front' ? $('fileInputFront') : $('fileInputBack');
+  input.value = ''; input.click();
+}
+$('fileInputFront').addEventListener('change', e=>handleFile(e));
+$('fileInputBack').addEventListener('change', e=>handleFile(e));
+
+function handleFile(e){
+  const file = e.target.files[0];
+  if(!file || !pickerTarget) return;
+  if(!file.type.startsWith('image/')){ showToast('الرجاء اختيار صورة صحيحة','⚠️'); return; }
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    const pair = currentProject.ids.find(p=>p.id === pickerTarget.pairId);
+    if(pair){
+      pair[pickerTarget.side] = ev.target.result;
+      persistProjects(); renderIdPairs(); renderLivePreview();
+      showToast('تمت إضافة الصورة','🖼️');
+    }
+    pickerTarget = null;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ============================================================
+   Live preview
+============================================================ */
+function renderLivePreview(){
+  const preview = $('livePreview');
+  if(!currentProject) return;
+  preview.className = 'print-sheet ' + currentProject.size.toLowerCase();
+  preview.style.background = currentProject.color;
+  $('sheetInfo').textContent = `${currentProject.size} · ${currentProject.color}`;
+
+  if(!currentProject.ids.length){
+    preview.innerHTML = `<div style="text-align:center;color:#94a3b8;font-size:12px;padding:30px 10px">ستظهر الهويات هنا بعد إضافتها</div>`;
+    return;
+  }
+  preview.innerHTML = currentProject.ids.map(pair=>{
+    const frontHtml = (pair.hideFront || !pair.front)
+      ? `<div class="s-img ${pair.hideFront ? 'hidden-card' : 'blank'}"></div>`
+      : `<div class="s-img"><img src="${pair.front}"></div>`;
+    const backHtml = (pair.hideBack || !pair.back)
+      ? `<div class="s-img ${pair.hideBack ? 'hidden-card' : 'blank'}"></div>`
+      : `<div class="s-img"><img src="${pair.back}"></div>`;
+    return `<div class="sheet-id">${frontHtml}${backHtml}</div>`;
+  }).join('');
+}
+
+/* ============================================================
+   Save project
+============================================================ */
+function saveCurrentProject(){
+  if(!currentProject) return;
+  persistProjects();
+  showToast('تم حفظ المشروع','💾');
+}
+
+/* ============================================================
+   Save sheet as image
+============================================================ */
+async function saveSheetImage(){
+  if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
+  if(!currentProject.ids.length){ showToast('أضف هوية واحدة على الأقل','⚠️'); return; }
+
+  const btn = $('btnSaveSheet');
+  const oldHtml = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> جاري التجهيز...';
+
+  try{
+    const sheetEl = buildPrintableSheet();
+    document.body.appendChild(sheetEl);
+    sheetEl.style.position = 'fixed';
+    sheetEl.style.left = '-99999px';
+    sheetEl.style.top = '0';
+
+    await waitForImages(sheetEl);
+
+    const paperMM = {
+      A3: { w: 297, h: 420 },
+      A4: { w: 210, h: 297 },
+      A5: { w: 148, h: 210 }
+    };
+    const p = paperMM[currentProject.size] || paperMM.A4;
+    const dpi = 300;
+    const targetW = Math.round(p.w / 25.4 * dpi);
+    const targetH = Math.round(p.h / 25.4 * dpi);
+
+    sheetEl.style.width = targetW + 'px';
+    sheetEl.style.height = targetH + 'px';
+    sheetEl.style.maxWidth = 'none';
+    sheetEl.style.aspectRatio = 'auto';
+
+    const canvas = await html2canvas(sheetEl, {
+      scale: 1, width: targetW, height: targetH,
+      backgroundColor: currentProject.color,
+      useCORS: true, allowTaint: true, logging: false
+    });
+
+    document.body.removeChild(sheetEl);
+
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    if(!blob){ showToast('فشل الحفظ','❌'); return; }
+
+    const safeName = (currentProject.name || 'paper').replace(/[^\w\u0600-\u06FF\- ]+/g,'_');
+    const fileName = `${safeName}_${currentProject.size}_${Date.now()}.png`;
+    const file = new File([blob], fileName, { type: 'image/png' });
+
+    if(navigator.canShare && navigator.canShare({ files: [file] })){
+      try{
+        await navigator.share({ files: [file], title: currentProject.name });
+        showToast('تم حفظ الصورة في المعرض','📱');
+        return;
+      }catch(err){
+        if(err.name === 'AbortError'){ showToast('تم الإلغاء','ℹ️'); return; }
+      }
+    }
+    downloadBlob(blob, fileName);
+    showToast('تم تنزيل الصورة','⬇️');
+  }catch(err){
+    console.error(err);
+    showToast('فشل تجهيز الصورة','❌');
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = oldHtml;
+  }
+}
+
+function downloadBlob(blob, fileName){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 1500);
+}
+
+function waitForImages(rootEl){
+  return new Promise(resolve=>{
+    const imgs = rootEl.querySelectorAll('img');
+    if(!imgs.length){ resolve(); return; }
+    let pending = imgs.length;
+    imgs.forEach(img=>{
+      if(img.complete && img.naturalWidth > 0){ pending--; if(pending === 0) resolve(); }
+      else{ img.onload = img.onerror = ()=>{ pending--; if(pending === 0) resolve(); }; }
+    });
+    setTimeout(resolve, 3000);
+  });
+}
+
+function buildPrintableSheet(){
+  const sheet = document.createElement('div');
+  sheet.className = 'print-sheet ' + currentProject.size.toLowerCase();
+  sheet.style.background = currentProject.color;
+  sheet.style.border = 'none';
+  sheet.style.boxShadow = 'none';
+  sheet.style.gap = '6px';
+  sheet.style.padding = '8px';
+  sheet.style.display = 'flex';
+  sheet.style.flexDirection = 'column';
+
+  const visiblePairs = currentProject.ids.filter(p=>{
+    const f = p.front && !p.hideFront;
+    const b = p.back && !p.hideBack;
+    return f || b;
+  });
+
+  visiblePairs.forEach(pair=>{
+    const wrap = document.createElement('div');
+    wrap.className = 'sheet-id';
+    wrap.style.border = '1px dashed #bbb';
+    wrap.style.padding = '6px';
+    wrap.style.background = '#fafafa';
+
+    if(pair.front && !pair.hideFront){
+      const f = document.createElement('div');
+      f.className = 's-img';
+      f.innerHTML = `<img src="${pair.front}">`;
+      wrap.appendChild(f);
+    } else {
+      const f = document.createElement('div');
+      f.className = 's-img hidden-card';
+      f.style.background = '#ffffff';
+      f.style.border = '1px solid #e2e8f0';
+      wrap.appendChild(f);
+    }
+
+    if(pair.back && !pair.hideBack){
+      const b = document.createElement('div');
+      b.className = 's-img';
+      b.innerHTML = `<img src="${pair.back}">`;
+      wrap.appendChild(b);
+    } else {
+      const b = document.createElement('div');
+      b.className = 's-img hidden-card';
+      b.style.background = '#ffffff';
+      b.style.border = '1px solid #e2e8f0';
+      wrap.appendChild(b);
+    }
+
+    sheet.appendChild(wrap);
+  });
+
+  return sheet;
+}
+
+/* ============================================================
+   ✅ FIX: Open print in NEW WINDOW with ONLY the sheet
+   ✅ Also intercepts Ctrl+P / Cmd+P globally
+============================================================ */
+let printWindowRef = null;
+
+function openPrintWindow(){
+  if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
+  if(!currentProject.ids.length){ showToast('أضف هوية واحدة على الأقل','⚠️'); return; }
+
+  const visiblePairs = currentProject.ids.filter(p=>{
+    const f = p.front && !p.hideFront;
+    const b = p.back && !p.hideBack;
+    return f || b;
+  });
+  if(!visiblePairs.length){ showToast('كل الصور مخفية','🚫'); return; }
+
+  const sizeKey = (currentProject.size || 'A4').toUpperCase();
+  const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
+  const p = paperMM[sizeKey] || paperMM.A4;
+
+  const pairsHtml = visiblePairs.map(pair=>{
+    const frontHtml = (pair.front && !pair.hideFront)
+      ? `<div class="s-img"><img src="${pair.front}"></div>`
+      : `<div class="s-img blank"></div>`;
+    const backHtml = (pair.back && !pair.hideBack)
+      ? `<div class="s-img"><img src="${pair.back}"></div>`
+      : `<div class="s-img blank"></div>`;
+    return `<div class="sheet-id">${frontHtml}${backHtml}</div>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>طباعة - ${escapeHtml(currentProject.name)}</title>
+<style>
+  @page{
+    size: ${sizeKey} portrait;
+    margin: 0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+  html,body{
+    background:#fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+  .paper{
+    width: ${p.w}mm;
+    min-height: ${p.h}mm;
+    background: ${currentProject.color};
+    padding: 5mm;
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+    margin: 0 auto;
+  }
+  .sheet-id{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+    padding: 2mm;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .s-img{
+    width: 100%;
+    aspect-ratio: 8.5 / 5.5;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .s-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .s-img.blank{background: #ffffff;}
+
+  @media screen{
+    body{
+      padding:0;
+      background:#f1f5f9;
+      min-height:100vh;
+    }
+    .toolbar{
+      position: sticky;
+      top: 0;
+      background: #fff;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.1);
+      z-index: 10;
+    }
+    .toolbar button{
+      padding: 12px 26px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family:inherit;
+    }
+    .btn-print{background:#c8a45c;color:#fff;box-shadow:0 4px 14px rgba(200,164,92,.4)}
+    .btn-close{background:#e2e8f0;color:#1e293b}
+    .paper{box-shadow:0 6px 30px rgba(0,0,0,.15);margin:20px auto}
+    .hint{
+      text-align:center;font-size:12px;color:#64748b;
+      padding: 10px;background:#fffbea;border-bottom:1px solid #fde68a;
+    }
+  }
+
+  @media print{
+    html,body{background:#fff}
+    .toolbar, .hint{display:none !important}
+    .paper{
+      box-shadow:none;
+      margin:0;
+      padding: 5mm;
+      width: 100%;
+      min-height: auto;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="hint">💡 اضغط زر الطباعة أو Ctrl+P لطباعة الورقة فقط</div>
+  <div class="toolbar">
+    <button class="btn-print" onclick="window.print()">🖨️ طباعة</button>
+    <button class="btn-close" onclick="window.close()">✕ إغلاق</button>
+  </div>
+  <div class="paper">
+    ${pairsHtml}
+  </div>
+  <script>
+    window.addEventListener('load', function(){
+      var imgs = document.querySelectorAll('img');
+      var pending = imgs.length;
+      function fire(){
+        setTimeout(function(){ try{ window.print(); }catch(e){} }, 350);
+      }
+      if(pending === 0){ fire(); return; }
+      imgs.forEach(function(img){
+        if(img.complete){ pending--; if(pending===0) fire(); }
+        else { img.onload = img.onerror = function(){ pending--; if(pending===0) fire(); }; }
+      });
+      setTimeout(function(){ try{ window.print(); }catch(e){} }, 2200);
+    });
+  <\/script>
+</body>
+</html>`;
+
+  // Try to open new window
+  const win = window.open('', '_blank');
+  if(!win){
+    showToast('اسمح بالنوافذ المنبثقة للطباعة','⚠️');
+    return;
+  }
+  printWindowRef = win;
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+}
+
+/* ============================================================
+   ✅ Intercept Ctrl+P / Cmd+P globally — open print window instead
+============================================================ */
+document.addEventListener('keydown', function(e){
+  const isCtrlP = (e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P');
+  if(!isCtrlP) return;
+  e.preventDefault();
+  e.stopPropagation();
+  if(currentProject && currentProject.ids && currentProject.ids.length){
+    openPrintWindow();
+  } else {
+    showToast('افتح مشروعاً فيه هويات للطباعة','⚠️');
+  }
+  return false;
+}, true);
+
+/* ============================================================
+   Init
+============================================================ */
+loadProjects();
+</script>
+</body>
+</html>
