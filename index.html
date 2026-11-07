@@ -23,7 +23,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .splash-title{font-size:34px;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,#a17c3a,#c8a45c,#e8d9b0,#c8a45c);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;text-align:center}
 .splash-sub{font-size:13px;color:var(--muted);letter-spacing:4px;margin-bottom:40px;font-weight:700}
-.splash-btn{padding:15px 46px;border:none;border-radius:50px;cursor:pointer;font-size:17px;font-weight:900;color:#fff;letter-spacing:1px;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 10px 30px rgba(200,164,92,.45);display:flex;align-items:center;gap:10px;transition:transform .2s}
+.splash-btn{padding:15px 46px;border:none;border-radius:50px;cursor:pointer;font-size:17px;font-weight:900;color:#fff;letter-spacing:1px;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 10px 30px rgba(200,164,92,.45);display:flex;align-items:center;gap:10px}
 .splash-btn:active{transform:scale(.96)}
 
 /* App */
@@ -63,7 +63,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 /* Modal */
 .modal{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}
 .modal.on{display:flex}
-.modal-card{background:#fff;border-radius:20px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-card{background:#fff;border-radius:20px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:5;border-radius:20px 20px 0 0}
 .modal-title{font-size:16px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:8px}
 .modal-title i{color:var(--gold)}
@@ -98,27 +98,54 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .btn-sm{padding:9px 16px;border-radius:11px;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;gap:6px}
 .btn-sm.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 4px 14px rgba(200,164,92,.4)}
 .btn-sm.gray{background:#e2e8f0;color:var(--ink)}
+.btn-sm.red{background:rgba(239,68,68,.12);color:#ef4444}
 .section-box{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
 .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap}
 .section-title{font-size:14px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:7px}
 .section-title i{color:var(--gold);font-size:16px}
 .section-sub{font-size:10px;color:var(--muted);margin-top:2px}
 
-/* Template selector */
-.template-row{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:12px;
-}
-.tpl-opt{
-  padding:10px 4px;border-radius:12px;border:2px solid var(--border);background:#fff;
-  text-align:center;cursor:pointer;transition:.2s;
-}
-.tpl-opt:hover{border-color:var(--gold)}
-.tpl-opt.on{border-color:var(--gold);background:rgba(200,164,92,.12);box-shadow:0 0 0 3px rgba(200,164,92,.15)}
-.tpl-opt .tpl-ico{font-size:20px;margin-bottom:3px}
-.tpl-opt .tpl-nm{font-size:9px;font-weight:900;color:var(--ink);line-height:1.3}
-.tpl-opt .tpl-dim{font-size:7px;color:var(--muted);margin-top:2px}
+/* Type icons row */
+.type-icons-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+.type-icon-card{position:relative;background:#fff;border:2px solid var(--border);border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;transition:.2s;box-shadow:var(--shadow)}
+.type-icon-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(200,164,92,.25)}
+.type-icon-card .ti-emoji{font-size:28px;margin-bottom:6px;display:block}
+.type-icon-card .ti-name{font-size:11px;font-weight:900;color:var(--ink);line-height:1.2}
+.type-icon-card .ti-dim{font-size:8px;color:var(--muted);margin-top:3px}
+.type-icon-card .ti-badge{position:absolute;top:-6px;left:-6px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;min-width:22px;height:22px;border-radius:11px;padding:0 6px;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(34,197,94,.5);z-index:2}
+.type-icon-card .ti-badge.empty{background:rgba(148,163,184,.3);color:#fff;box-shadow:none}
 
-/* ID items */
+/* Sheet preview */
+.print-sheet-wrap{background:#fff;border-radius:16px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.print-sheet{background:#fff;border:1px solid #cbd5e1;margin:0 auto;box-shadow:0 6px 20px rgba(0,0,0,.1);position:relative;display:flex;flex-direction:column;padding:8px}
+.print-sheet.a4{width:100%;max-width:595px;aspect-ratio:210/297}
+.print-sheet.a5{width:100%;max-width:420px;aspect-ratio:148/210}
+.print-sheet.a3{width:100%;max-width:595px;aspect-ratio:297/420}
+
+.sheet-item{display:flex;flex-direction:column;margin-bottom:6px;position:relative;cursor:grab;transition:opacity .2s,transform .2s}
+.sheet-item:last-child{margin-bottom:0}
+.sheet-item.dragging{opacity:.4;cursor:grabbing;transform:scale(.98)}
+.sheet-item.drag-over{outline:2px dashed var(--gold);outline-offset:4px;background:rgba(200,164,92,.05)}
+.sheet-item-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sheet-photos-grid{display:grid;gap:6px}
+.sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
+.sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
+.sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
+.s-img{width:100%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:none;position:relative}
+.s-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .1s}
+.s-img.blank{background:#fff}
+.s-img.hidden-card{background:#fff !important;border:none}
+.full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.drag-handle{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:6px;background:rgba(15,23,42,.7);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;z-index:10;cursor:grab;pointer-events:auto}
+.sheet-item:hover .drag-handle{display:flex}
+
+.print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
+.print-actions .save-img{background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;box-shadow:0 6px 18px rgba(34,197,94,.4)}
+.print-actions .print-now{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 18px rgba(200,164,92,.4)}
+
+/* Items inside type modal */
 .id-pair{background:#f8fafc;border-radius:14px;padding:14px;margin-bottom:14px;border:1.5px dashed var(--border)}
 .id-pair-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .id-pair-title{font-size:12px;font-weight:900;color:var(--gold2);display:flex;align-items:center;gap:6px}
@@ -133,77 +160,63 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .id-card-img.empty i{font-size:22px;opacity:.5}
 .id-card-img.hidden-card{background:#fff !important;border:1px dashed #cbd5e1}
 .id-card-img.hidden-card img{display:none}
-.id-card-hide{position:absolute;top:6px;left:6px;width:28px;height:28px;border-radius:8px;border:none;cursor:pointer;background:rgba(15,23,42,.85);color:#fff;font-size:13px;display:none;align-items:center;justify-content:center;z-index:5}
-.id-card-hide.active{background:#ef4444}
-.id-card-img:not(.empty) ~ .id-card-hide,
-.id-card-img.hidden-card ~ .id-card-hide{display:flex}
-.hint-bar{background:linear-gradient(135deg,rgba(200,164,92,.12),rgba(200,164,92,.05));border:1px solid rgba(200,164,92,.3);border-radius:12px;padding:11px 13px;font-size:11px;color:var(--gold2);line-height:1.7;display:flex;align-items:flex-start;gap:8px;margin-bottom:14px}
-.hint-bar i{font-size:14px;flex-shrink:0;margin-top:1px}
 
-/* Preview */
-.print-sheet-wrap{background:#fff;border-radius:16px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border)}
-.print-sheet{background:#fff;border:1px solid #cbd5e1;margin:0 auto;box-shadow:0 6px 20px rgba(0,0,0,.1);position:relative;display:flex;flex-direction:column;padding:8px}
-.print-sheet.a4{width:100%;max-width:595px;aspect-ratio:210/297}
-.print-sheet.a5{width:100%;max-width:420px;aspect-ratio:148/210}
-.print-sheet.a3{width:100%;max-width:595px;aspect-ratio:297/420}
+.id-card-actions{position:absolute;top:6px;left:6px;display:none;gap:4px;z-index:5}
+.id-card-img:not(.empty) ~ .id-card-actions,
+.id-card-img.hidden-card ~ .id-card-actions{display:flex}
+.id-card-actions button{width:28px;height:28px;border-radius:8px;border:none;cursor:pointer;background:rgba(15,23,42,.85);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+.id-card-actions button:hover{background:rgba(15,23,42,.95)}
+.id-card-actions button.active{background:#ef4444}
+.id-card-actions button.crop-btn{background:rgba(200,164,92,.95)}
+.id-card-actions button.crop-btn:hover{background:#a17c3a}
 
-/* ============================================================
-   ✅ CLEAN SHEET — pictures only, no text, no borders
-   ============================================================ */
-.sheet-item{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  margin-bottom:6px;
-}
-.sheet-item:last-child{margin-bottom:0}
-.sheet-item-pair{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
-.sheet-photos-grid{
-  display:grid;
-  gap:6px;
-}
-.sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
-.sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
-.sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
+.modal-empty{text-align:center;padding:36px 20px;color:var(--muted)}
+.modal-empty .me-ico{font-size:52px;opacity:.3;margin-bottom:12px}
+.modal-empty .me-txt{font-size:13px;font-weight:800;margin-bottom:16px}
 
-.s-img{
-  width:100%;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  border:none;
-}
-.s-img img{width:100%;height:100%;object-fit:cover;display:block}
-.s-img.blank{background:#fff}
-.s-img.hidden-card{background:#fff !important;border:none}
+.photo-count-selector{display:flex;gap:8px;margin-bottom:14px}
 
-/* full image */
-.full-image-wrap{
-  position: relative;
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-.full-image-wrap img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
+/* Settings — number inputs */
+.settings-type-block{background:linear-gradient(135deg,rgba(200,164,92,.06),rgba(200,164,92,.02));border:1.5px solid rgba(200,164,92,.25);border-radius:14px;padding:14px;margin-bottom:14px}
+.settings-type-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px;font-weight:900;color:var(--gold2)}
+.settings-type-head .sth-emoji{font-size:20px}
+.settings-type-head .sth-name{flex:1}
+.settings-type-head .sth-current{font-size:10px;color:var(--muted);font-weight:700;background:#fff;padding:4px 10px;border-radius:8px;border:1px solid var(--border)}
+.settings-inputs-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.settings-input-group{display:flex;flex-direction:column;gap:5px}
+.settings-input-group label{font-size:11px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:4px}
+.settings-input-group label i{font-size:12px;color:var(--gold)}
+.settings-input-wrapper{position:relative;display:flex;align-items:center}
+.settings-input-wrapper input[type=number]{width:100%;padding:11px 40px 11px 12px;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--ink);font-size:14px;font-weight:900;outline:none;font-family:inherit;text-align:right;transition:.15s}
+.settings-input-wrapper input[type=number]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,164,92,.15)}
+.settings-input-wrapper input[type=number]::-webkit-outer-spin-button,
+.settings-input-wrapper input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.settings-input-wrapper input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.settings-input-wrapper .unit{position:absolute;left:12px;font-size:11px;font-weight:900;color:var(--muted);pointer-events:none}
+.settings-save-btn{width:100%;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 12px rgba(34,197,94,.35);font-family:inherit}
+.settings-save-btn:active{transform:scale(.97)}
 
-.print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-.print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
-.print-actions .save-img{background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;box-shadow:0 6px 18px rgba(34,197,94,.4)}
-.print-actions .print-now{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 18px rgba(200,164,92,.4)}
+/* Crop Modal */
+.crop-modal{position:fixed;inset:0;background:rgba(15,23,42,.95);backdrop-filter:blur(6px);display:none;z-index:300;flex-direction:column}
+.crop-modal.on{display:flex}
+.crop-header{padding:14px 18px;background:#fff;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 12px rgba(0,0,0,.15);flex-shrink:0}
+.crop-title{font-size:15px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:8px}
+.crop-title i{color:var(--gold)}
+.crop-actions{display:flex;gap:8px}
+.crop-actions button{padding:9px 18px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;gap:6px;font-family:inherit}
+.crop-actions .cancel{background:#e2e8f0;color:var(--ink)}
+.crop-actions .apply{background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;box-shadow:0 4px 14px rgba(34,197,94,.4)}
+.crop-body{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
+.crop-viewport{position:relative;background:#111;border:2px solid var(--gold);border-radius:12px;box-shadow:0 0 60px rgba(200,164,92,.4);overflow:hidden;cursor:grab;touch-action:none;max-width:100%;max-height:100%}
+.crop-viewport.dragging{cursor:grabbing}
+.crop-viewport img{position:absolute;top:0;left:0;user-select:none;pointer-events:none;transform-origin:0 0;max-width:none;max-height:none}
+.crop-controls{padding:14px 18px;background:#fff;display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:0 -2px 12px rgba(0,0,0,.15);flex-shrink:0}
+.crop-controls label{font-size:11px;font-weight:800;color:var(--muted);display:flex;align-items:center;gap:6px}
+.crop-controls input[type=range]{flex:1;min-width:100px;height:6px;border-radius:4px;background:rgba(200,164,92,.2);outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+.crop-controls input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));cursor:pointer;box-shadow:0 2px 8px rgba(200,164,92,.5)}
+.crop-controls input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));cursor:pointer;border:none}
+.crop-controls .zoom-val{min-width:52px;text-align:center;font-size:12px;font-weight:900;color:var(--gold2);background:rgba(200,164,92,.1);padding:6px 10px;border-radius:8px}
+.crop-controls .reset-btn{padding:8px 14px;border-radius:9px;border:none;cursor:pointer;background:rgba(37,99,235,.1);color:var(--accent);font-size:11px;font-weight:900;display:flex;align-items:center;gap:5px;font-family:inherit}
 
 /* Toast */
 .toast{position:fixed;bottom:130px;left:50%;transform:translate(-50%,20px);background:rgba(15,23,42,.95);color:#fff;padding:13px 22px;border-radius:12px;font-size:13px;font-weight:800;z-index:9999;opacity:0;pointer-events:none;transition:.3s;display:flex;align-items:center;gap:8px;max-width:90vw;box-shadow:0 10px 30px rgba(0,0,0,.3)}
@@ -217,8 +230,10 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .bottom-bar .print{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 20px rgba(200,164,92,.4)}
 
 @media(max-width:420px){
-  .template-row{grid-template-columns:repeat(3,1fr)}
-  .tpl-opt .tpl-nm{font-size:8px}
+  .type-icons-row{grid-template-columns:repeat(3,1fr)}
+  .type-icon-card .ti-emoji{font-size:24px}
+  .type-icon-card .ti-name{font-size:10px}
+  .settings-inputs-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -274,68 +289,23 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
         <div class="editor-tags" id="edProjectTags"></div>
       </div>
       <div class="editor-btns">
+        <button class="btn-sm gold" onclick="openSettingsModal()" title="إعدادات عامة">
+          <i class="bi bi-gear-fill"></i> إعدادات
+        </button>
         <button class="btn-sm gray" onclick="backToProjects()"><i class="bi bi-arrow-right"></i> رجوع</button>
       </div>
     </div>
 
-    <div class="section-box">
-      <div class="section-head">
-        <div>
-          <div class="section-title"><i class="bi bi-collection-fill"></i> نوع العنصر</div>
-          <div class="section-sub" id="templateHint">اختر نوع العنصر ثم اضغط إضافة</div>
-        </div>
-      </div>
-      <div class="template-row" id="templateRow">
-        <div class="tpl-opt" data-tpl="id" onclick="pickTemplate('id')">
-          <div class="tpl-ico">🪪</div><div class="tpl-nm">هوية</div><div class="tpl-dim">7.56×4.4</div>
-        </div>
-        <div class="tpl-opt" data-tpl="residency" onclick="pickTemplate('residency')">
-          <div class="tpl-ico">🏠</div><div class="tpl-nm">بطاقة سكن</div><div class="tpl-dim">10.5×7.4</div>
-        </div>
-        <div class="tpl-opt" data-tpl="passport" onclick="pickTemplate('passport')">
-          <div class="tpl-ico">🛂</div><div class="tpl-nm">جواز سفر</div><div class="tpl-dim">8.8×12.5</div>
-        </div>
-        <div class="tpl-opt" data-tpl="photos" onclick="pickTemplate('photos')">
-          <div class="tpl-ico">📸</div><div class="tpl-nm">صور شخصية</div><div class="tpl-dim">7.56×4.4</div>
-        </div>
-        <div class="tpl-opt" data-tpl="full" onclick="pickTemplate('full')">
-          <div class="tpl-ico">🖼️</div><div class="tpl-nm">صورة كاملة</div><div class="tpl-dim">كامل الورقة</div>
-        </div>
-      </div>
-
-      <div id="photoCountRow" style="display:none;margin-top:6px">
-        <div class="f-label" style="margin-bottom:8px"><i class="bi bi-grid-3x3-gap-fill"></i> عدد الصور في الورقة</div>
-        <div style="display:flex;gap:8px">
-          <button class="btn-sm gray photo-count-btn" data-count="4" onclick="pickPhotoCount(4)" style="flex:1;justify-content:center;padding:12px">4 صور</button>
-          <button class="btn-sm gray photo-count-btn" data-count="6" onclick="pickPhotoCount(6)" style="flex:1;justify-content:center;padding:12px">6 صور</button>
-          <button class="btn-sm gray photo-count-btn" data-count="9" onclick="pickPhotoCount(9)" style="flex:1;justify-content:center;padding:12px">9 صور</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="hint-bar">
-      <i class="bi bi-info-circle-fill"></i>
-      <div id="hintText">أضف عناصر. كل عنصر يظهر بحجمه الصحيح.</div>
-    </div>
-
-    <div class="section-box">
-      <div class="section-head">
-        <div>
-          <div class="section-title"><i class="bi bi-list-check"></i> العناصر المضافة</div>
-          <div class="section-sub" id="itemsSubtitle">يمكنك إضافة عناصر مختلطة</div>
-        </div>
-        <button class="btn-sm gold" onclick="addIdPair()" id="addItemBtn">
-          <i class="bi bi-plus-lg"></i> <span id="addBtnText">إضافة</span>
-        </button>
-      </div>
-      <div id="idPairsContainer"></div>
-    </div>
+    <div class="type-icons-row" id="typeIconsRow"></div>
 
     <div class="section-box print-sheet-wrap">
       <div class="section-head">
         <div>
-          <div class="section-title"><i class="bi bi-file-earmark-image-fill"></i> معاينة الورقة</div>
+          <div class="section-title"><i class="bi bi-file-earmark-image-fill"></i> ورقة العمل</div>
           <div class="section-sub" id="sheetInfo">A4 · أبيض</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);display:flex;align-items:center;gap:4px">
+          <i class="bi bi-hand-index-thumb"></i> اسحب العناصر لإعادة ترتيبها
         </div>
       </div>
       <div class="print-sheet a4" id="livePreview"></div>
@@ -391,6 +361,76 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </div>
 </div>
 
+<div class="modal" id="typeEditorModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title" id="typeModalTitle">
+        <span id="typeModalIcon">🪪</span>
+        <span id="typeModalName">هوية</span>
+      </div>
+      <button class="modal-close" onclick="closeModal('typeEditorModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div id="photoCountSelector" class="photo-count-selector" style="display:none">
+        <button class="btn-sm gray photo-count-btn" data-count="4" onclick="pickPhotoCount(4)" style="flex:1;justify-content:center;padding:11px">4</button>
+        <button class="btn-sm gray photo-count-btn" data-count="6" onclick="pickPhotoCount(6)" style="flex:1;justify-content:center;padding:11px">6</button>
+        <button class="btn-sm gray photo-count-btn" data-count="9" onclick="pickPhotoCount(9)" style="flex:1;justify-content:center;padding:11px">9</button>
+      </div>
+      <div id="typeItemsList"></div>
+      <button class="btn-main" id="typeAddBtn" onclick="addItemToType()" style="margin-top:10px">
+        <i class="bi bi-plus-lg"></i> <span id="typeAddBtnLabel">إضافة هوية</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="settingsModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title">
+        <i class="bi bi-sliders2"></i>
+        إعدادات أبعاد الأقسام
+      </div>
+      <button class="modal-close" onclick="closeModal('settingsModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div style="background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(34,197,94,.03));border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:11px 13px;font-size:11px;color:#15803d;margin-bottom:16px;display:flex;align-items:flex-start;gap:8px">
+        <i class="bi bi-info-circle-fill" style="font-size:14px;flex-shrink:0;margin-top:1px"></i>
+        <div>كل قسم له أبعاده الخاصة. اكتب القيم ثم اضغط <b>حفظ</b>. تُطبَّق فوراً على الورقة وتُحفظ كافتراضي للقسم للمشاريع القادمة. القيم بالسنتيمتر.</div>
+      </div>
+
+      <div id="settingsContainer"></div>
+
+      <button class="btn-main" onclick="resetSettingsDefaults()" style="background:rgba(239,68,68,.12);color:#ef4444;box-shadow:none;margin-top:8px">
+        <i class="bi bi-arrow-counterclockwise"></i> استعادة كل الأبعاد الافتراضية
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="crop-modal" id="cropModal">
+  <div class="crop-header">
+    <div class="crop-title"><i class="bi bi-crop"></i> قص الصورة</div>
+    <div class="crop-actions">
+      <button class="cancel" onclick="cancelCrop()"><i class="bi bi-x-lg"></i> إلغاء</button>
+      <button class="apply" onclick="applyCrop()"><i class="bi bi-check-lg"></i> تطبيق</button>
+    </div>
+  </div>
+  <div class="crop-body" id="cropBody">
+    <div class="crop-viewport" id="cropViewport">
+      <img id="cropImage" src="" alt="crop">
+    </div>
+  </div>
+  <div class="crop-controls">
+    <label>🔍 تكبير</label>
+    <input type="range" id="cropZoom" min="1" max="5" step="0.05" value="1">
+    <div class="zoom-val" id="cropZoomVal">1.00x</div>
+    <button class="reset-btn" onclick="resetCropPosition()">
+      <i class="bi bi-arrow-counterclockwise"></i> إعادة تعيين
+    </button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <input type="file" id="fileInputFront" accept="image/*" style="display:none">
@@ -404,20 +444,45 @@ let projects = [];
 let currentProject = null;
 let selectedPaper = 'A4';
 let pickerTarget = null;
-let currentTemplate = 'id';
-const STORAGE_KEY = 'amir_press_projects_v2';
+let currentEditingType = 'id';
+let dragSourceEl = null;
+const STORAGE_KEY = 'amir_press_projects_v7';
+const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v4';
+
+/* Fixed gaps */
+const PAIR_GAP_PX = 6;
+const PHOTO_GAP_PX = 6;
+const ITEM_GAP_PX = 6;
+
+/* ============================================================
+   ✅ القياسات الافتراضية الجديدة
+============================================================ */
+const DEFAULT_SIZES = {
+  id:        { w: 5.56, h: 3.1 },
+  residency: { w: 8.5,  h: 5.5 },
+  passport:  { w: 8.8,  h: 12.5 },
+  photos:    { w: 1.5,  h: 2.5 },
+  full:      { w: 0,    h: 0 }
+};
+
+/* Global sizes — loaded from localStorage */
+let GLOBAL_SIZES = JSON.parse(JSON.stringify(DEFAULT_SIZES));
+try{
+  const raw = localStorage.getItem(GLOBAL_SIZES_KEY);
+  if(raw) GLOBAL_SIZES = { ...DEFAULT_SIZES, ...JSON.parse(raw) };
+}catch(e){}
+
+function saveGlobalSizes(){
+  try{ localStorage.setItem(GLOBAL_SIZES_KEY, JSON.stringify(GLOBAL_SIZES)); }
+  catch(e){}
+}
 
 const TEMPLATES = {
-  id:        { key:'id',        name:'هوية',        icon:'🪪', w:7.56, h:4.4,  ratioW:7.56, ratioH:4.4,  kind:'pair',
-               addLabel:'إضافة هوية',   itemsTitle:'هويات' },
-  residency: { key:'residency', name:'بطاقة سكن',   icon:'🏠', w:10.5, h:7.4,  ratioW:10.5, ratioH:7.4,  kind:'pair',
-               addLabel:'إضافة بطاقة سكن', itemsTitle:'بطاقات سكن' },
-  passport:  { key:'passport',  name:'جواز سفر',    icon:'🛂', w:8.8,  h:12.5, ratioW:8.8,  ratioH:12.5, kind:'pair',
-               addLabel:'إضافة جواز سفر', itemsTitle:'جوازات سفر' },
-  photos:    { key:'photos',    name:'صور شخصية',   icon:'📸', w:0.2, h:0.2,  ratioW:0.2, ratioH:0.2,  kind:'photos',
-               addLabel:'إضافة صورة شخصية', itemsTitle:'صور شخصية' },
-  full:      { key:'full',      name:'صورة كاملة',  icon:'🖼️', w:0,   h:0,    ratioW:1,    ratioH:1,    kind:'full',
-               addLabel:'إضافة صورة كاملة', itemsTitle:'صورة كاملة' }
+  id:        { key:'id',        name:'هوية',        icon:'🪪', kind:'pair',   addLabel:'إضافة هوية' },
+  residency: { key:'residency', name:'بطاقة سكن',   icon:'🏠', kind:'pair',   addLabel:'إضافة بطاقة سكن' },
+  passport:  { key:'passport',  name:'جواز سفر',    icon:'🛂', kind:'pair',   addLabel:'إضافة جواز سفر' },
+  photos:    { key:'photos',    name:'صور شخصية',   icon:'📸', kind:'photos', addLabel:'إضافة صورة شخصية' },
+  full:      { key:'full',      name:'صورة كاملة',  icon:'🖼️', kind:'full',   addLabel:'إضافة صورة كاملة' }
 };
 
 const $ = id => document.getElementById(id);
@@ -438,8 +503,13 @@ function loadProjects(){
   catch(e){ projects = []; }
   projects.forEach(p=>{
     if(!p.ids) p.ids = [];
-    p.ids.forEach(it=>{ if(!it.template) it.template = p.template || 'id'; });
+    p.ids.forEach(it=>{
+      if(!it.template) it.template = 'id';
+      if(!it.crops) it.crops = {};
+    });
     if(!p.photoCount) p.photoCount = 6;
+    if(!p.order) p.order = p.ids.map(it => it.id);
+    if(!p.sizes) p.sizes = JSON.parse(JSON.stringify(GLOBAL_SIZES));
   });
 }
 function persistProjects(){
@@ -455,7 +525,7 @@ function enterApp(){
   renderProjects();
 }
 
-/* Projects */
+/* Projects list */
 function renderProjects(){
   const list = $('projectsList');
   const empty = $('emptyState');
@@ -508,7 +578,9 @@ function createProject(){
   const color = $('paperColor').value || '#ffffff';
   const project = {
     id: uid(), name, size: selectedPaper, color,
-    photoCount: 6, ids: [], createdAt: Date.now()
+    photoCount: 6, ids: [], createdAt: Date.now(),
+    sizes: JSON.parse(JSON.stringify(GLOBAL_SIZES)),
+    order: []
   };
   projects.unshift(project);
   persistProjects(); closeModal('newProjectModal'); renderProjects();
@@ -520,16 +592,17 @@ function createProject(){
 function openProject(id){
   currentProject = projects.find(p=>p.id === id);
   if(!currentProject) return;
-  currentTemplate = 'id';
+  if(!currentProject.sizes) currentProject.sizes = JSON.parse(JSON.stringify(GLOBAL_SIZES));
+  if(!currentProject.order) currentProject.order = currentProject.ids.map(it => it.id);
+  if(!currentProject.ids) currentProject.ids = [];
+  currentProject.ids.forEach(it => { if(!it.crops) it.crops = {}; });
 
   $('projectsView').style.display = 'none';
   $('editorView').classList.add('on');
   $('bottomBar').classList.add('on');
   $('edProjectName').textContent = currentProject.name;
-  renderTemplateRow();
-  renderItems();
+  renderTypeIconsRow();
   renderLivePreview();
-  updateLabels();
   updateEditorHeader();
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -555,152 +628,174 @@ function updateEditorHeader(){
     <span class="tag"><i class="bi bi-list-check"></i> ${currentProject.ids.length} عنصر</span>`;
 }
 
-/* Template picker */
-function pickTemplate(tpl){
-  currentTemplate = tpl;
-  renderTemplateRow();
-  updateLabels();
-  showToast(`النوع: ${TEMPLATES[tpl].name}`, '✅');
-}
-function pickPhotoCount(n){
-  if(!currentProject) return;
-  currentProject.photoCount = n;
-  persistProjects();
-  renderTemplateRow();
-  renderItems();
-  renderLivePreview();
-  showToast(`عدد الصور: ${n}`, '✅');
-}
-function renderTemplateRow(){
-  document.querySelectorAll('.tpl-opt').forEach(el=>{
-    el.classList.toggle('on', el.dataset.tpl === currentTemplate);
-  });
-  $('photoCountRow').style.display = (currentTemplate === 'photos') ? 'block' : 'none';
-  document.querySelectorAll('.photo-count-btn').forEach(b=>{
-    const n = currentProject ? (currentProject.photoCount||6) : 6;
-    b.classList.toggle('gold', parseInt(b.dataset.count) === n);
-    b.classList.toggle('gray', parseInt(b.dataset.count) !== n);
-  });
-}
-
-function updateLabels(){
-  const tpl = TEMPLATES[currentTemplate];
-  $('addBtnText').textContent = tpl.addLabel;
-  $('itemsSubtitle').textContent = `القسم التالي: ${tpl.name}`;
-
-  if(tpl.kind === 'full'){
-    $('hintText').innerHTML = 'الصورة الكاملة تملأ الورقة بالكامل.';
-    $('templateHint').textContent = `القالب: صورة كاملة · ورقة ${currentProject ? currentProject.size : ''}`;
-  } else if(tpl.kind === 'photos'){
-    $('hintText').innerHTML = `أضف صور شخصية بحجم ${tpl.w}×${tpl.h} سم. الصورة تملأ الإطار كاملاً.`;
-    $('templateHint').textContent = `القالب: ${tpl.name} · ${tpl.w}×${tpl.h} سم`;
-  } else {
-    $('hintText').innerHTML = `أضف ${tpl.name} بحجم ${tpl.w}×${tpl.h} سم. الصورة تملأ الإطار كاملاً.`;
-    $('templateHint').textContent = `القالب: ${tpl.name} · ${tpl.w}×${tpl.h} سم`;
+/* ✅ المساعد الموحد للحصول على أحدث حجم */
+function getEffectiveSize(key){
+  if(currentProject && currentProject.sizes && currentProject.sizes[key] &&
+     typeof currentProject.sizes[key].w === 'number' && currentProject.sizes[key].w > 0 &&
+     typeof currentProject.sizes[key].h === 'number' && currentProject.sizes[key].h > 0){
+    return { w: currentProject.sizes[key].w, h: currentProject.sizes[key].h };
   }
-  updateEditorHeader();
-}
-
-/* Add item */
-function addIdPair(){
-  if(!currentProject) return;
-  currentProject.ids.push({
-    id: uid(),
-    template: currentTemplate,
-    front: null,
-    back: null,
-    hideFront: false,
-    hideBack: false
-  });
-  persistProjects();
-  renderItems();
-  renderLivePreview();
-  updateEditorHeader();
-  showToast(`أضفت ${TEMPLATES[currentTemplate].name} جديد`, '➕');
-}
-
-/* Items list (management UI, has titles — but sheet is clean) */
-function renderItems(){
-  const cont = $('idPairsContainer');
-  if(!currentProject.ids.length){
-    cont.innerHTML = `
-      <div style="text-align:center;padding:30px 16px;color:var(--muted)">
-        <div style="font-size:44px;opacity:.3;margin-bottom:10px"><i class="bi bi-plus-square"></i></div>
-        <div style="font-size:13px;font-weight:800;margin-bottom:14px">لم تُضف أي عنصر بعد</div>
-        <div style="font-size:11px">اختر نوع العنصر بالأعلى ثم اضغط "إضافة"</div>
-      </div>`;
-    return;
+  if(GLOBAL_SIZES[key] && GLOBAL_SIZES[key].w > 0 && GLOBAL_SIZES[key].h > 0){
+    return { w: GLOBAL_SIZES[key].w, h: GLOBAL_SIZES[key].h };
   }
-  const grouped = {};
-  currentProject.ids.forEach(it=>{
-    const tpl = TEMPLATES[it.template || 'id'] || TEMPLATES.id;
-    if(!grouped[tpl.key]) grouped[tpl.key] = { tpl, items: [] };
-    grouped[tpl.key].items.push(it);
-  });
+  return { w: DEFAULT_SIZES[key].w, h: DEFAULT_SIZES[key].h };
+}
 
-  let html = '';
-  Object.keys(grouped).forEach(k=>{
-    const { tpl, items } = grouped[k];
-    html += `
-      <div style="margin-bottom:16px">
-        <div style="font-size:12px;font-weight:900;color:var(--gold2);margin-bottom:8px;display:flex;align-items:center;gap:6px">
-          <span style="font-size:16px">${tpl.icon}</span> ${tpl.itemsTitle} <span style="color:#94a3b8;font-weight:600">(${items.length})</span>
-        </div>
-        ${items.map((pair, idx)=>renderPairCard(pair, idx, tpl)).join('')}
+/* Type icons */
+function renderTypeIconsRow(){
+  const row = $('typeIconsRow');
+  const keys = ['id','residency','passport','photos','full'];
+  row.innerHTML = keys.map(k=>{
+    const tpl = TEMPLATES[k];
+    const count = currentProject.ids.filter(it => it.template === k).length;
+    const size = getEffectiveSize(k);
+    const dimText = tpl.kind === 'full' ? 'كامل' : `${size.w}×${size.h}`;
+    return `
+      <div class="type-icon-card" onclick="openTypeEditor('${k}')">
+        <div class="ti-badge ${count>0?'':'empty'}">${count}</div>
+        <div class="ti-emoji">${tpl.icon}</div>
+        <div class="ti-name">${tpl.name}</div>
+        <div class="ti-dim">${dimText}</div>
       </div>
     `;
-  });
-  cont.innerHTML = html;
+  }).join('');
 }
 
-function renderPairCard(pair, idx, tpl){
-  const single = (tpl.kind === 'photos' || tpl.kind === 'full');
-  const aspect = tpl.kind === 'full' ? '210 / 297' : `${tpl.ratioW} / ${tpl.ratioH}`;
-  return `
+/* Type editor */
+function openTypeEditor(typeKey){
+  currentEditingType = typeKey;
+  const tpl = TEMPLATES[typeKey];
+  $('typeModalIcon').textContent = tpl.icon;
+  $('typeModalName').textContent = tpl.name;
+  $('typeAddBtnLabel').textContent = tpl.addLabel;
+
+  $('photoCountSelector').style.display = (tpl.kind === 'photos') ? 'flex' : 'none';
+  if(tpl.kind === 'photos'){
+    document.querySelectorAll('.photo-count-btn').forEach(b=>{
+      const n = currentProject.photoCount || 6;
+      b.classList.toggle('gold', parseInt(b.dataset.count) === n);
+      b.classList.toggle('gray', parseInt(b.dataset.count) !== n);
+    });
+  }
+
+  renderTypeItems();
+  openModal('typeEditorModal');
+}
+
+function renderTypeItems(){
+  const cont = $('typeItemsList');
+  const items = currentProject.ids.filter(it => it.template === currentEditingType);
+  const tpl = TEMPLATES[currentEditingType];
+  const size = getEffectiveSize(currentEditingType);
+
+  if(!items.length){
+    cont.innerHTML = `
+      <div class="modal-empty">
+        <div class="me-ico">${tpl.icon}</div>
+        <div class="me-txt">لم تُضف أي ${tpl.name} بعد</div>
+      </div>
+    `;
+    return;
+  }
+
+  cont.innerHTML = items.map((pair, idx)=>`
     <div class="id-pair">
       <div class="id-pair-head">
         <div class="id-pair-title"><i class="bi bi-${tpl.kind==='photos'?'image-fill':(tpl.kind==='full'?'file-image-fill':'person-vcard-fill')}"></i> ${tpl.name} #${idx+1}</div>
-        <button class="id-pair-del" onclick="deleteIdPair('${pair.id}')"><i class="bi bi-trash-fill"></i></button>
+        <button class="id-pair-del" onclick="deleteItem('${pair.id}')"><i class="bi bi-trash-fill"></i></button>
       </div>
-      <div class="id-cards ${single?'single':''}">
-        ${renderCard(pair, 'front', tpl.kind==='full'?'الصورة الكاملة':(tpl.kind==='photos'?'الصورة':'الوجه'), tpl.kind==='full'?'bi-file-image-fill':'bi-person-badge-fill', tpl, aspect)}
-        ${tpl.kind==='pair' ? renderCard(pair, 'back', 'الظهر', 'bi-card-image', tpl, aspect) : ''}
+      <div class="id-cards ${(tpl.kind==='photos'||tpl.kind==='full')?'single':''}">
+        ${renderCard(pair, 'front', tpl.kind==='full'?'الصورة الكاملة':(tpl.kind==='photos'?'الصورة':'الوجه'), tpl.kind==='full'?'bi-file-image-fill':'bi-person-badge-fill', size)}
+        ${tpl.kind==='pair' ? renderCard(pair, 'back', 'الظهر', 'bi-card-image', size) : ''}
       </div>
     </div>
-  `;
+  `).join('');
 }
-function renderCard(pair, side, label, icon, tpl, aspect){
+
+function renderCard(pair, side, label, icon, size){
   const img = pair[side];
   const isHidden = !!pair['hide' + (side==='front'?'Front':'Back')];
-  const showHide = !!img || isHidden;
+  const showActions = !!img || isHidden;
+  const aspect = size.w > 0 ? `${size.w} / ${size.h}` : '210 / 297';
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1 };
+  const imgStyle = `object-fit:cover; transform: translate(${crop.x}%, ${crop.y}%) scale(${crop.zoom});`;
+
   return `
     <div class="id-card">
       <div class="id-card-label"><i class="bi ${icon}"></i> ${label}</div>
       <div class="id-card-img ${img ? '' : 'empty'} ${isHidden ? 'hidden-card' : ''}"
            style="aspect-ratio:${aspect}"
            onclick="pickImage('${pair.id}','${side}')">
-        ${ img ? `<img src="${img}" alt="${label}">` : `<i class="bi bi-plus-circle"></i><span>اضغط لإضافة صورة</span>` }
+        ${ img ? `<img src="${img}" style="${imgStyle}" alt="${label}">` : `<i class="bi bi-plus-circle"></i><span>اضغط لإضافة صورة</span>` }
       </div>
-      ${ showHide ? `
-        <button class="id-card-hide ${isHidden ? 'active' : ''}" onclick="event.stopPropagation();toggleHide('${pair.id}','${side}')" title="${isHidden ? 'إظهار' : 'إخفاء'}">
-          <i class="bi ${isHidden ? 'bi-eye-slash-fill' : 'bi-eye-fill'}"></i>
-        </button>` : '' }
+      ${ showActions ? `
+        <div class="id-card-actions">
+          <button class="eye-btn ${isHidden ? 'active' : ''}" onclick="event.stopPropagation();toggleHide('${pair.id}','${side}')" title="${isHidden ? 'إظهار' : 'إخفاء'}">
+            <i class="bi ${isHidden ? 'bi-eye-slash-fill' : 'bi-eye-fill'}"></i>
+          </button>
+          ${img ? `<button class="crop-btn" onclick="event.stopPropagation();openCrop('${pair.id}','${side}')" title="قص الصورة">
+            <i class="bi bi-crop"></i>
+          </button>` : ''}
+        </div>` : '' }
     </div>
   `;
 }
-function deleteIdPair(pairId){
+
+function addItemToType(){
+  if(!currentProject) return;
+  const newId = uid();
+  currentProject.ids.push({
+    id: newId,
+    template: currentEditingType,
+    front: null, back: null,
+    hideFront: false, hideBack: false,
+    crops: {}
+  });
+  if(!currentProject.order) currentProject.order = [];
+  currentProject.order.push(newId);
+  persistProjects();
+  renderTypeItems();
+  renderTypeIconsRow();
+  renderLivePreview();
+  updateEditorHeader();
+  showToast(`أضفت ${TEMPLATES[currentEditingType].name} جديد`, '➕');
+}
+
+function deleteItem(itemId){
   if(!confirm('حذف هذا العنصر؟')) return;
-  currentProject.ids = currentProject.ids.filter(p=>p.id !== pairId);
-  persistProjects(); renderItems(); renderLivePreview(); updateEditorHeader();
+  currentProject.ids = currentProject.ids.filter(p=>p.id !== itemId);
+  if(currentProject.order){
+    currentProject.order = currentProject.order.filter(id => id !== itemId);
+  }
+  persistProjects();
+  renderTypeItems();
+  renderTypeIconsRow();
+  renderLivePreview();
+  updateEditorHeader();
   showToast('تم الحذف','🗑️');
 }
+
 function toggleHide(pairId, side){
   const pair = currentProject.ids.find(p=>p.id === pairId);
   if(!pair) return;
   const key = side === 'front' ? 'hideFront' : 'hideBack';
   pair[key] = !pair[key];
-  persistProjects(); renderItems(); renderLivePreview();
-  showToast(pair[key] ? 'الصورة مخفية (ستطبع بيضاء)' : 'الصورة ظاهرة', pair[key] ? '🚫' : '👁️');
+  persistProjects();
+  renderTypeItems();
+  renderLivePreview();
+  showToast(pair[key] ? 'الصورة مخفية' : 'الصورة ظاهرة', pair[key] ? '🚫' : '👁️');
+}
+
+function pickPhotoCount(n){
+  if(!currentProject) return;
+  currentProject.photoCount = n;
+  persistProjects();
+  document.querySelectorAll('.photo-count-btn').forEach(b=>{
+    b.classList.toggle('gold', parseInt(b.dataset.count) === n);
+    b.classList.toggle('gray', parseInt(b.dataset.count) !== n);
+  });
+  renderLivePreview();
+  showToast(`عدد الصور: ${n}`, '✅');
 }
 
 /* Image picker */
@@ -721,7 +816,11 @@ function handleFile(e){
     const pair = currentProject.ids.find(p=>p.id === pickerTarget.pairId);
     if(pair){
       pair[pickerTarget.side] = ev.target.result;
-      persistProjects(); renderItems(); renderLivePreview();
+      if(!pair.crops) pair.crops = {};
+      pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1 };
+      persistProjects();
+      renderTypeItems();
+      renderLivePreview();
       showToast('تمت إضافة الصورة','🖼️');
     }
     pickerTarget = null;
@@ -729,68 +828,331 @@ function handleFile(e){
   reader.readAsDataURL(file);
 }
 
-/* ============================================================
-   ✅ CLEAN sheet HTML — pictures only, no text, no borders
-   ============================================================ */
-function buildSheetHTML(){
-  const items = currentProject.ids;
-  const html = [];
-  const photoCount = currentProject.photoCount || 6;
+/* Crop */
+let cropState = null;
+let cropDrag = null;
 
-  // Full image items — show first one only (fills page)
-  const fullItems = items.filter(it => TEMPLATES[it.template].kind === 'full' && it.front && !it.hideFront);
-  if(fullItems.length){
-    return `<div class="full-image-wrap"><img src="${fullItems[0].front}"></div>`;
+function openCrop(pairId, side){
+  const pair = currentProject.ids.find(p=>p.id === pairId);
+  if(!pair || !pair[side]) return;
+
+  const imgSrc = pair[side];
+  const size = getEffectiveSize(pair.template);
+  const aspect = size.w / size.h;
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1 };
+
+  cropState = {
+    pairId, side, imgSrc, aspect,
+    x: crop.x, y: crop.y, zoom: crop.zoom
+  };
+
+  const maxW = Math.min(window.innerWidth * 0.85, 500);
+  const maxH = Math.min(window.innerHeight * 0.6, 500);
+  let vw, vh;
+  if(aspect > maxW / maxH){
+    vw = maxW;
+    vh = maxW / aspect;
+  } else {
+    vh = maxH;
+    vw = maxH * aspect;
   }
 
-  const pairs = items.filter(it => TEMPLATES[it.template].kind === 'pair');
-  const photoItems = items.filter(it => TEMPLATES[it.template].kind === 'photos');
+  const vp = $('cropViewport');
+  vp.style.width = vw + 'px';
+  vp.style.height = vh + 'px';
 
-  // Pair items — NO titles, NO borders — just images side by side
-  pairs.forEach((pair)=>{
-    const tpl = TEMPLATES[pair.template] || TEMPLATES.id;
-    const frontStyle = `aspect-ratio:${tpl.ratioW}/${tpl.ratioH}`;
-    const frontHtml = (pair.hideFront || !pair.front)
-      ? `<div class="s-img ${pair.hideFront ? 'hidden-card' : 'blank'}" style="${frontStyle}"></div>`
-      : `<div class="s-img" style="${frontStyle}"><img src="${pair.front}"></div>`;
-    const backHtml = (pair.hideBack || !pair.back)
-      ? `<div class="s-img ${pair.hideBack ? 'hidden-card' : 'blank'}" style="${frontStyle}"></div>`
-      : `<div class="s-img" style="${frontStyle}"><img src="${pair.back}"></div>`;
+  const img = $('cropImage');
+  img.onload = ()=>{
+    const iw = img.naturalWidth;
+    const ih = img.naturalHeight;
+    const viewportRatio = vw / vh;
+    const imageRatio = iw / ih;
 
-    html.push(`
-      <div class="sheet-item">
-        <div class="sheet-item-pair">${frontHtml}${backHtml}</div>
+    let baseW, baseH;
+    if(imageRatio > viewportRatio){
+      baseH = vh;
+      baseW = vh * imageRatio;
+    } else {
+      baseW = vw;
+      baseH = vw / imageRatio;
+    }
+
+    cropState.baseW = baseW;
+    cropState.baseH = baseH;
+    cropState.vw = vw;
+    cropState.vh = vh;
+    applyCropTransform();
+  };
+  img.src = imgSrc;
+
+  $('cropZoom').value = crop.zoom;
+  $('cropZoomVal').textContent = crop.zoom.toFixed(2) + 'x';
+
+  openModal('cropModal');
+  setupCropDrag();
+}
+
+function applyCropTransform(){
+  if(!cropState) return;
+  const img = $('cropImage');
+  const z = cropState.zoom;
+  const bw = cropState.baseW * z;
+  const bh = cropState.baseH * z;
+  const offsetX = (cropState.vw - bw) / 2 + (cropState.x / 100) * bw;
+  const offsetY = (cropState.vh - bh) / 2 + (cropState.y / 100) * bh;
+  img.style.width = bw + 'px';
+  img.style.height = bh + 'px';
+  img.style.left = offsetX + 'px';
+  img.style.top = offsetY + 'px';
+}
+
+function setupCropDrag(){
+  const vp = $('cropViewport');
+  vp.onpointerdown = (e)=>{
+    if(!cropState) return;
+    e.preventDefault();
+    vp.classList.add('dragging');
+    cropDrag = { startX: e.clientX, startY: e.clientY, startOffsetX: cropState.x, startOffsetY: cropState.y };
+    try{ vp.setPointerCapture(e.pointerId); }catch(err){}
+  };
+  vp.onpointermove = (e)=>{
+    if(!cropDrag || !cropState) return;
+    const dx = e.clientX - cropDrag.startX;
+    const dy = e.clientY - cropDrag.startY;
+    const bw = cropState.baseW * cropState.zoom;
+    const bh = cropState.baseH * cropState.zoom;
+    cropState.x = cropDrag.startOffsetX + (dx / bw) * 100;
+    cropState.y = cropDrag.startOffsetY + (dy / bh) * 100;
+    applyCropTransform();
+  };
+  vp.onpointerup = ()=>{ cropDrag = null; vp.classList.remove('dragging'); };
+  vp.onpointercancel = ()=>{ cropDrag = null; vp.classList.remove('dragging'); };
+}
+
+$('cropZoom').addEventListener('input', (e)=>{
+  if(!cropState) return;
+  cropState.zoom = parseFloat(e.target.value);
+  $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
+  applyCropTransform();
+});
+
+function resetCropPosition(){
+  if(!cropState) return;
+  cropState.x = 0; cropState.y = 0; cropState.zoom = 1;
+  $('cropZoom').value = 1;
+  $('cropZoomVal').textContent = '1.00x';
+  applyCropTransform();
+}
+
+function cancelCrop(){
+  cropState = null; cropDrag = null;
+  closeModal('cropModal');
+}
+
+function applyCrop(){
+  if(!cropState) return;
+  const pair = currentProject.ids.find(p=>p.id === cropState.pairId);
+  if(pair){
+    if(!pair.crops) pair.crops = {};
+    pair.crops[cropState.side] = { x: cropState.x, y: cropState.y, zoom: cropState.zoom };
+    persistProjects();
+    renderTypeItems();
+    renderLivePreview();
+    showToast('تم تطبيق القص','✂️');
+  }
+  cropState = null; cropDrag = null;
+  closeModal('cropModal');
+}
+
+/* Settings */
+function openSettingsModal(){
+  if(!currentProject) return;
+  renderSettingsContent();
+  openModal('settingsModal');
+}
+
+function renderSettingsContent(){
+  const cont = $('settingsContainer');
+  const keys = ['id','residency','passport','photos'];
+  let html = '';
+
+  keys.forEach(k=>{
+    const tpl = TEMPLATES[k];
+    const size = getEffectiveSize(k);
+    html += `
+      <div class="settings-type-block">
+        <div class="settings-type-head">
+          <span class="sth-emoji">${tpl.icon}</span>
+          <span class="sth-name">${tpl.name}</span>
+          <span class="sth-current" id="sth-current-${k}">${size.w}×${size.h} سم</span>
+        </div>
+        <div class="settings-inputs-row">
+          <div class="settings-input-group">
+            <label><i class="bi bi-arrows-expand-vertical"></i> العرض</label>
+            <div class="settings-input-wrapper">
+              <input type="number" id="input-w-${k}" value="${size.w}" min="0.5" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].w}">
+              <span class="unit">سم</span>
+            </div>
+          </div>
+          <div class="settings-input-group">
+            <label><i class="bi bi-arrows-expand"></i> الارتفاع</label>
+            <div class="settings-input-wrapper">
+              <input type="number" id="input-h-${k}" value="${size.h}" min="0.5" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].h}">
+              <span class="unit">سم</span>
+            </div>
+          </div>
+        </div>
+        <button class="settings-save-btn" onclick="applyTypeSize('${k}')">
+          <i class="bi bi-check-circle-fill"></i> حفظ أبعاد ${tpl.name}
+        </button>
       </div>
-    `);
+    `;
   });
 
-  // Photo items — NO titles, NO borders
-  if(photoItems.length){
-    const photoTpl = TEMPLATES.photos;
-    const cells = [];
-    const limited = photoItems.slice(0, photoCount);
-    for(let i=0;i<photoCount;i++){
-      const pair = limited[i];
-      if(pair){
-        const isHidden = !!pair.hideFront || !pair.front;
-        cells.push(isHidden
-          ? `<div class="s-img hidden-card" style="aspect-ratio:${photoTpl.ratioW}/${photoTpl.ratioH}"></div>`
-          : `<div class="s-img" style="aspect-ratio:${photoTpl.ratioW}/${photoTpl.ratioH}"><img src="${pair.front}"></div>`);
-      } else {
-        cells.push(`<div class="s-img blank" style="aspect-ratio:${photoTpl.ratioW}/${photoTpl.ratioH}"></div>`);
-      }
-    }
-    html.push(`
-      <div class="sheet-item">
-        <div class="sheet-photos-grid photos-${photoCount}">${cells.join('')}</div>
-      </div>
-    `);
+  cont.innerHTML = html;
+}
+
+function applyTypeSize(typeKey){
+  if(!currentProject) return;
+  const wInput = $('input-w-' + typeKey);
+  const hInput = $('input-h-' + typeKey);
+  const newW = parseFloat(wInput.value);
+  const newH = parseFloat(hInput.value);
+
+  if(!newW || !newH || newW < 0.5 || newH < 0.5 || newW > 50 || newH > 50){
+    showToast('قيمة غير صحيحة (0.5 - 50 سم)', '⚠️');
+    return;
   }
+
+  if(!currentProject.sizes) currentProject.sizes = {};
+  if(!currentProject.sizes[typeKey]) currentProject.sizes[typeKey] = {};
+  if(!GLOBAL_SIZES[typeKey]) GLOBAL_SIZES[typeKey] = {};
+
+  currentProject.sizes[typeKey].w = newW;
+  currentProject.sizes[typeKey].h = newH;
+
+  GLOBAL_SIZES[typeKey].w = newW;
+  GLOBAL_SIZES[typeKey].h = newH;
+  saveGlobalSizes();
+
+  persistProjects();
+
+  const tag = $('sth-current-' + typeKey);
+  if(tag) tag.textContent = `${newW}×${newH} سم`;
+
+  renderTypeIconsRow();
+  renderLivePreview();
+  if(currentEditingType === typeKey) renderTypeItems();
+
+  showToast(`✅ حفظ أبعاد ${TEMPLATES[typeKey].name}: ${newW}×${newH} سم`, '✅');
+}
+
+function resetSettingsDefaults(){
+  if(!confirm('استعادة كل الأبعاد الافتراضية لكل الأقسام؟')) return;
+  currentProject.sizes = JSON.parse(JSON.stringify(DEFAULT_SIZES));
+  GLOBAL_SIZES = JSON.parse(JSON.stringify(DEFAULT_SIZES));
+  saveGlobalSizes();
+  persistProjects();
+  renderSettingsContent();
+  renderTypeIconsRow();
+  renderLivePreview();
+  showToast('تمت استعادة كل الأبعاد','🔄');
+}
+
+/* Sheet builder */
+function getSortedItems(){
+  const items = currentProject.ids;
+  if(!currentProject.order || !currentProject.order.length) return items.slice();
+  const orderMap = {};
+  currentProject.order.forEach((id, idx) => { orderMap[id] = idx; });
+  return items.slice().sort((a,b)=>{
+    const ai = orderMap[a.id] !== undefined ? orderMap[a.id] : 999999;
+    const bi = orderMap[b.id] !== undefined ? orderMap[b.id] : 999999;
+    return ai - bi;
+  });
+}
+
+function imgStyleForPair(pair, side){
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1 };
+  return `object-fit:cover; transform: translate(${crop.x}%, ${crop.y}%) scale(${crop.zoom});`;
+}
+
+function buildSheetHTML(editable){
+  const allItems = getSortedItems();
+  const photoCount = currentProject.photoCount || 6;
+
+  const fullItem = allItems.find(it => it.template === 'full' && it.front && !it.hideFront);
+  if(fullItem){
+    const style = imgStyleForPair(fullItem, 'front');
+    return `<div class="full-image-wrap"><img src="${fullItem.front}" style="${style}"></div>`;
+  }
+
+  const photoItems = allItems.filter(it => it.template === 'photos');
+  const html = [];
+  let photoRendered = false;
+
+  allItems.forEach((it)=>{
+    const tpl = TEMPLATES[it.template];
+    if(!tpl) return;
+
+    if(tpl.kind === 'photos'){
+      if(photoRendered) return;
+      photoRendered = true;
+
+      const limited = photoItems.slice(0, photoCount);
+      const cells = [];
+      const size = getEffectiveSize('photos');
+      const aspect = `${size.w}/${size.h}`;
+      for(let i=0;i<photoCount;i++){
+        const pair = limited[i];
+        if(pair){
+          const isHidden = !!pair.hideFront || !pair.front;
+          if(isHidden){
+            cells.push(`<div class="s-img hidden-card" style="aspect-ratio:${aspect}"></div>`);
+          } else {
+            const st = imgStyleForPair(pair, 'front');
+            cells.push(`<div class="s-img" style="aspect-ratio:${aspect}"><img src="${pair.front}" style="${st}"></div>`);
+          }
+        } else {
+          cells.push(`<div class="s-img blank" style="aspect-ratio:${aspect}"></div>`);
+        }
+      }
+      html.push(`
+        <div class="sheet-item" data-type="photos" data-photo-block="1"
+             ${editable ? `draggable="true"` : ''}
+             style="margin-bottom:${ITEM_GAP_PX}px">
+          ${editable ? `<div class="drag-handle"><i class="bi bi-grip-vertical"></i></div>` : ''}
+          <div class="sheet-photos-grid photos-${photoCount}" style="gap:${PHOTO_GAP_PX}px">${cells.join('')}</div>
+        </div>
+      `);
+      return;
+    }
+
+    if(tpl.kind === 'pair'){
+      const size = getEffectiveSize(it.template);
+      const aspect = `${size.w}/${size.h}`;
+
+      const frontHtml = (it.hideFront || !it.front)
+        ? `<div class="s-img ${it.hideFront ? 'hidden-card' : 'blank'}" style="aspect-ratio:${aspect}"></div>`
+        : `<div class="s-img" style="aspect-ratio:${aspect}"><img src="${it.front}" style="${imgStyleForPair(it,'front')}"></div>`;
+      const backHtml = (it.hideBack || !it.back)
+        ? `<div class="s-img ${it.hideBack ? 'hidden-card' : 'blank'}" style="aspect-ratio:${aspect}"></div>`
+        : `<div class="s-img" style="aspect-ratio:${aspect}"><img src="${it.back}" style="${imgStyleForPair(it,'back')}"></div>`;
+
+      html.push(`
+        <div class="sheet-item" data-id="${it.id}"
+             ${editable ? `draggable="true"` : ''}
+             style="margin-bottom:${ITEM_GAP_PX}px">
+          ${editable ? `<div class="drag-handle"><i class="bi bi-grip-vertical"></i></div>` : ''}
+          <div class="sheet-item-pair" style="gap:${PAIR_GAP_PX}px">${frontHtml}${backHtml}</div>
+        </div>
+      `);
+    }
+  });
 
   return html.join('');
 }
 
-/* Live preview */
 function renderLivePreview(){
   const preview = $('livePreview');
   if(!currentProject) return;
@@ -799,20 +1161,74 @@ function renderLivePreview(){
   $('sheetInfo').textContent = `${currentProject.size} · ${currentProject.color}`;
 
   if(!currentProject.ids.length){
-    preview.innerHTML = `<div style="text-align:center;color:#94a3b8;font-size:12px;padding:30px 10px">ستظهر العناصر هنا بعد إضافتها</div>`;
+    preview.innerHTML = `<div style="text-align:center;color:#94a3b8;font-size:12px;padding:30px 10px">أضف عناصر من الأيقونات أعلاه</div>`;
     return;
   }
-  preview.innerHTML = buildSheetHTML();
+  preview.innerHTML = buildSheetHTML(true);
+  setupDragAndDrop();
 }
 
-/* Save project */
+function setupDragAndDrop(){
+  const preview = $('livePreview');
+  const items = preview.querySelectorAll('.sheet-item[draggable="true"]');
+  items.forEach(el=>{
+    el.addEventListener('dragstart', handleDragStart);
+    el.addEventListener('dragover', handleDragOver);
+    el.addEventListener('dragleave', handleDragLeave);
+    el.addEventListener('drop', handleDrop);
+    el.addEventListener('dragend', handleDragEnd);
+  });
+}
+function handleDragStart(e){
+  dragSourceEl = this;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  try{ e.dataTransfer.setData('text/plain', ''); }catch(err){}
+}
+function handleDragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  if(this !== dragSourceEl) this.classList.add('drag-over');
+}
+function handleDragLeave(){ this.classList.remove('drag-over'); }
+function handleDrop(e){
+  e.preventDefault();
+  this.classList.remove('drag-over');
+  if(!dragSourceEl || this === dragSourceEl) return;
+  const preview = $('livePreview');
+  const items = Array.from(preview.querySelectorAll('.sheet-item[draggable="true"]'));
+  const sourceIdx = items.indexOf(dragSourceEl);
+  const targetIdx = items.indexOf(this);
+  if(sourceIdx === -1 || targetIdx === -1) return;
+  const arr = items.slice();
+  const [moved] = arr.splice(sourceIdx, 1);
+  arr.splice(targetIdx, 0, moved);
+  const newOrder = [];
+  arr.forEach(el=>{
+    if(el.dataset.photoBlock === '1'){
+      currentProject.ids.filter(it => it.template === 'photos').forEach(it => newOrder.push(it.id));
+    } else if(el.dataset.id){
+      newOrder.push(el.dataset.id);
+    }
+  });
+  currentProject.ids.forEach(it=>{ if(!newOrder.includes(it.id)) newOrder.push(it.id); });
+  currentProject.order = newOrder;
+  persistProjects();
+  renderLivePreview();
+  showToast('تم إعادة الترتيب','🔄');
+}
+function handleDragEnd(){
+  this.classList.remove('dragging');
+  document.querySelectorAll('.sheet-item.drag-over').forEach(el=>el.classList.remove('drag-over'));
+  dragSourceEl = null;
+}
+
 function saveCurrentProject(){
   if(!currentProject) return;
   persistProjects();
   showToast('تم حفظ المشروع','💾');
 }
 
-/* Build printable sheet (off-screen, exact paper size) */
 function buildPrintableSheet(paperW, paperH){
   const sheet = document.createElement('div');
   sheet.style.background = currentProject.color;
@@ -823,12 +1239,10 @@ function buildPrintableSheet(paperW, paperH){
   sheet.style.display = 'flex';
   sheet.style.flexDirection = 'column';
   sheet.style.overflow = 'hidden';
-  sheet.style.gap = '10px';
-  sheet.innerHTML = buildSheetHTML();
+  sheet.innerHTML = buildSheetHTML(false);
   return sheet;
 }
 
-/* Save sheet as image */
 async function saveSheetImage(){
   if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
   if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
@@ -918,7 +1332,6 @@ function waitForImages(rootEl){
   });
 }
 
-/* Print in new window */
 function openPrintWindow(){
   if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
   if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
@@ -927,7 +1340,7 @@ function openPrintWindow(){
   const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
   const p = paperMM[sizeKey] || paperMM.A4;
 
-  const paperHtml = buildSheetHTML();
+  const paperHtml = buildSheetHTML(false);
 
   const html = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -937,75 +1350,24 @@ function openPrintWindow(){
 <style>
   @page{ size: ${sizeKey} portrait; margin: 0; }
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-  html,body{
-    background:#fff;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    color-adjust: exact;
-  }
-  .paper{
-    width: ${p.w}mm;
-    min-height: ${p.h}mm;
-    background: ${currentProject.color};
-    padding: 10px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    box-sizing: border-box;
-  }
-  /* ✅ Pictures only — no titles, no borders */
-  .sheet-item{
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-  .sheet-item-pair{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
-  .sheet-photos-grid{
-    display: grid;
-    gap: 6px;
-  }
+  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact}
+  .paper{width:${p.w}mm;min-height:${p.h}mm;background:${currentProject.color};padding:10px;margin:0 auto;display:flex;flex-direction:column;box-sizing:border-box}
+  .sheet-item{display:flex;flex-direction:column;page-break-inside:avoid;break-inside:avoid}
+  .sheet-item-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .sheet-photos-grid{display:grid;gap:6px}
   .sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
   .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
   .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
-  .s-img{
-    width:100%;
-    background:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    border:none;
-  }
+  .s-img{width:100%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:none;position:relative}
   .s-img img{width:100%;height:100%;object-fit:cover;display:block}
   .s-img.blank{background:#fff}
-  .full-image-wrap{
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-  }
+  .full-image-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
   .full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-
+  .drag-handle{display:none !important}
   @media screen{
     body{padding:0;background:#f1f5f9;min-height:100vh}
-    .toolbar{
-      position:sticky;top:0;background:#fff;padding:14px 16px;
-      display:flex;justify-content:center;gap:10px;
-      box-shadow:0 2px 12px rgba(0,0,0,.1);z-index:10;
-    }
-    .toolbar button{
-      padding:12px 26px;border:none;border-radius:10px;cursor:pointer;
-      font-size:14px;font-weight:900;display:inline-flex;align-items:center;gap:6px;font-family:inherit;
-    }
+    .toolbar{position:sticky;top:0;background:#fff;padding:14px 16px;display:flex;justify-content:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.1);z-index:10}
+    .toolbar button{padding:12px 26px;border:none;border-radius:10px;cursor:pointer;font-size:14px;font-weight:900;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
     .btn-print{background:#c8a45c;color:#fff;box-shadow:0 4px 14px rgba(200,164,92,.4)}
     .btn-close{background:#e2e8f0;color:#1e293b}
     .paper{box-shadow:0 6px 30px rgba(0,0,0,.15);margin:20px auto}
@@ -1019,7 +1381,7 @@ function openPrintWindow(){
 </style>
 </head>
 <body>
-  <div class="hint">💡 اضغط زر الطباعة أو Ctrl+P لطباعة الورقة فقط</div>
+  <div class="hint">💡 اضغط زر الطباعة أو Ctrl+P</div>
   <div class="toolbar">
     <button class="btn-print" onclick="window.print()">🖨️ طباعة</button>
     <button class="btn-close" onclick="window.close()">✕ إغلاق</button>
@@ -1054,7 +1416,6 @@ function openPrintWindow(){
   win.focus();
 }
 
-/* Ctrl+P intercept */
 document.addEventListener('keydown', function(e){
   const isCtrlP = (e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P');
   if(!isCtrlP) return;
@@ -1067,7 +1428,6 @@ document.addEventListener('keydown', function(e){
   return false;
 }, true);
 
-/* Init */
 loadProjects();
 </script>
 </body>
