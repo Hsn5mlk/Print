@@ -37,7 +37,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .top-actions{display:flex;gap:8px}
 .icon-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--border);background:#fff;color:var(--ink);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
 .icon-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
-.icon-btn:active{transform:scale(.92)}
 
 /* Empty */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;text-align:center}
@@ -45,7 +44,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .empty-title{font-size:20px;font-weight:900;color:var(--muted);margin-bottom:8px}
 .empty-sub{font-size:13px;color:var(--muted);opacity:.8;line-height:1.7;max-width:340px}
 .empty-add{margin-top:22px;padding:13px 30px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(200,164,92,.4)}
-.empty-add:active{transform:scale(.96)}
 
 /* Projects */
 .projects{padding:18px}
@@ -53,7 +51,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .sec-title{font-size:16px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:7px}
 .sec-title i{color:var(--gold)}
 .sec-add{padding:9px 18px;border:none;border-radius:11px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 14px rgba(200,164,92,.4)}
-.sec-add:active{transform:scale(.95)}
 .project-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;transition:.2s}
 .project-card:hover{border-color:var(--gold);transform:translateY(-2px)}
 .project-info{flex:1;min-width:0}
@@ -62,12 +59,11 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .project-meta span{display:inline-flex;align-items:center;gap:3px}
 .project-actions{display:flex;gap:6px;flex-shrink:0}
 .mini-btn{width:34px;height:34px;border-radius:10px;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,.1);color:#ef4444}
-.mini-btn:active{transform:scale(.9)}
 
 /* Modal */
 .modal{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}
 .modal.on{display:flex}
-.modal-card{background:#fff;border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-card{background:#fff;border-radius:20px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:5;border-radius:20px 20px 0 0}
 .modal-title{font-size:16px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:8px}
 .modal-title i{color:var(--gold)}
@@ -90,7 +86,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .color-row .f-input{margin-bottom:0;flex:1}
 .color-row input[type=color]{width:50px;height:44px;border-radius:11px;border:1.5px solid var(--border);background:#fff;cursor:pointer;padding:3px}
 .btn-main{width:100%;padding:15px;border:none;border-radius:13px;cursor:pointer;font-size:14px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 8px 24px rgba(200,164,92,.4);display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-main:active{transform:scale(.97)}
 
 /* Editor */
 .editor{display:none;padding:16px}
@@ -103,22 +98,36 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .btn-sm{padding:9px 16px;border-radius:11px;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;gap:6px}
 .btn-sm.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 4px 14px rgba(200,164,92,.4)}
 .btn-sm.gray{background:#e2e8f0;color:var(--ink)}
-.btn-sm:active{transform:scale(.95)}
 .section-box{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
 .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap}
 .section-title{font-size:14px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:7px}
 .section-title i{color:var(--gold);font-size:16px}
 .section-sub{font-size:10px;color:var(--muted);margin-top:2px}
 
-/* ID pairs */
+/* Template selector */
+.template-row{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:12px;
+}
+.tpl-opt{
+  padding:10px 4px;border-radius:12px;border:2px solid var(--border);background:#fff;
+  text-align:center;cursor:pointer;transition:.2s;
+}
+.tpl-opt:hover{border-color:var(--gold)}
+.tpl-opt.on{border-color:var(--gold);background:rgba(200,164,92,.12);box-shadow:0 0 0 3px rgba(200,164,92,.15)}
+.tpl-opt .tpl-ico{font-size:20px;margin-bottom:3px}
+.tpl-opt .tpl-nm{font-size:9px;font-weight:900;color:var(--ink);line-height:1.3}
+.tpl-opt .tpl-dim{font-size:7px;color:var(--muted);margin-top:2px}
+
+/* ID items */
 .id-pair{background:#f8fafc;border-radius:14px;padding:14px;margin-bottom:14px;border:1.5px dashed var(--border)}
 .id-pair-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .id-pair-title{font-size:12px;font-weight:900;color:var(--gold2);display:flex;align-items:center;gap:6px}
 .id-pair-del{width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;background:rgba(239,68,68,.1);color:#ef4444;font-size:13px;display:flex;align-items:center;justify-content:center}
 .id-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.id-cards.single{grid-template-columns:1fr}
 .id-card{background:#fff;border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;border:1px solid var(--border)}
 .id-card-label{font-size:10px;font-weight:900;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:4px}
-.id-card-img{width:100%;aspect-ratio:8.5/5.5;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;position:relative;border:1.5px dashed var(--border)}
+.id-card-img{width:100%;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;position:relative;border:1.5px dashed var(--border)}
 .id-card-img img{width:100%;height:100%;object-fit:cover;display:block}
 .id-card-img.empty{color:var(--muted);font-size:11px;text-align:center;padding:10px;flex-direction:column;gap:4px}
 .id-card-img.empty i{font-size:22px;opacity:.5}
@@ -133,21 +142,68 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 
 /* Preview */
 .print-sheet-wrap{background:#fff;border-radius:16px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border)}
-.print-sheet{background:#fff;border:1px solid #cbd5e1;margin:0 auto;box-shadow:0 6px 20px rgba(0,0,0,.1);position:relative;display:flex;flex-direction:column;gap:6px;padding:8px}
+.print-sheet{background:#fff;border:1px solid #cbd5e1;margin:0 auto;box-shadow:0 6px 20px rgba(0,0,0,.1);position:relative;display:flex;flex-direction:column;padding:8px}
 .print-sheet.a4{width:100%;max-width:595px;aspect-ratio:210/297}
 .print-sheet.a5{width:100%;max-width:420px;aspect-ratio:148/210}
 .print-sheet.a3{width:100%;max-width:595px;aspect-ratio:297/420}
-.sheet-id{display:grid;grid-template-columns:1fr 1fr;gap:6px;border:1px dashed #cbd5e1;padding:6px;background:#fafafa}
-.sheet-id .s-img{width:100%;aspect-ratio:8.5/5.5;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.sheet-id .s-img img{width:100%;height:100%;object-fit:cover}
-.sheet-id .s-img.blank{color:#94a3b8;font-size:10px}
-.sheet-id .s-img.hidden-card{background:#fff !important;border:1px solid #e2e8f0}
+
+/* ============================================================
+   ✅ CLEAN SHEET — pictures only, no text, no borders
+   ============================================================ */
+.sheet-item{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:6px;
+}
+.sheet-item:last-child{margin-bottom:0}
+.sheet-item-pair{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+.sheet-photos-grid{
+  display:grid;
+  gap:6px;
+}
+.sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
+.sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
+.sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
+
+.s-img{
+  width:100%;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border:none;
+}
+.s-img img{width:100%;height:100%;object-fit:cover;display:block}
+.s-img.blank{background:#fff}
+.s-img.hidden-card{background:#fff !important;border:none}
+
+/* full image */
+.full-image-wrap{
+  position: relative;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.full-image-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 
 .print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
 .print-actions .save-img{background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;box-shadow:0 6px 18px rgba(34,197,94,.4)}
 .print-actions .print-now{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 18px rgba(200,164,92,.4)}
-.print-actions button:active{transform:scale(.97)}
 
 /* Toast */
 .toast{position:fixed;bottom:130px;left:50%;transform:translate(-50%,20px);background:rgba(15,23,42,.95);color:#fff;padding:13px 22px;border-radius:12px;font-size:13px;font-weight:800;z-index:9999;opacity:0;pointer-events:none;transition:.3s;display:flex;align-items:center;gap:8px;max-width:90vw;box-shadow:0 10px 30px rgba(0,0,0,.3)}
@@ -159,7 +215,11 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .bottom-bar button{flex:1;padding:14px;border:none;border-radius:13px;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:8px}
 .bottom-bar .save{background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.4)}
 .bottom-bar .print{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 20px rgba(200,164,92,.4)}
-.bottom-bar button:active{transform:scale(.97)}
+
+@media(max-width:420px){
+  .template-row{grid-template-columns:repeat(3,1fr)}
+  .tpl-opt .tpl-nm{font-size:8px}
+}
 </style>
 </head>
 <body>
@@ -193,7 +253,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
     <div class="empty-state" id="emptyState">
       <div class="empty-ico"><i class="bi bi-printer"></i></div>
       <div class="empty-title">لا توجد مشاريع بعد</div>
-      <div class="empty-sub">ابدأ مشروع طباعة جديد، واختر حجم الورق وقالب الهوية، ثم أضف صورك</div>
+      <div class="empty-sub">ابدأ مشروع طباعة جديد</div>
       <button class="empty-add" onclick="openNewProject()">
         <i class="bi bi-plus-lg"></i> مشروع جديد
       </button>
@@ -218,18 +278,55 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
       </div>
     </div>
 
+    <div class="section-box">
+      <div class="section-head">
+        <div>
+          <div class="section-title"><i class="bi bi-collection-fill"></i> نوع العنصر</div>
+          <div class="section-sub" id="templateHint">اختر نوع العنصر ثم اضغط إضافة</div>
+        </div>
+      </div>
+      <div class="template-row" id="templateRow">
+        <div class="tpl-opt" data-tpl="id" onclick="pickTemplate('id')">
+          <div class="tpl-ico">🪪</div><div class="tpl-nm">هوية</div><div class="tpl-dim">7.56×4.4</div>
+        </div>
+        <div class="tpl-opt" data-tpl="residency" onclick="pickTemplate('residency')">
+          <div class="tpl-ico">🏠</div><div class="tpl-nm">بطاقة سكن</div><div class="tpl-dim">10.5×7.4</div>
+        </div>
+        <div class="tpl-opt" data-tpl="passport" onclick="pickTemplate('passport')">
+          <div class="tpl-ico">🛂</div><div class="tpl-nm">جواز سفر</div><div class="tpl-dim">8.8×12.5</div>
+        </div>
+        <div class="tpl-opt" data-tpl="photos" onclick="pickTemplate('photos')">
+          <div class="tpl-ico">📸</div><div class="tpl-nm">صور شخصية</div><div class="tpl-dim">7.56×4.4</div>
+        </div>
+        <div class="tpl-opt" data-tpl="full" onclick="pickTemplate('full')">
+          <div class="tpl-ico">🖼️</div><div class="tpl-nm">صورة كاملة</div><div class="tpl-dim">كامل الورقة</div>
+        </div>
+      </div>
+
+      <div id="photoCountRow" style="display:none;margin-top:6px">
+        <div class="f-label" style="margin-bottom:8px"><i class="bi bi-grid-3x3-gap-fill"></i> عدد الصور في الورقة</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-sm gray photo-count-btn" data-count="4" onclick="pickPhotoCount(4)" style="flex:1;justify-content:center;padding:12px">4 صور</button>
+          <button class="btn-sm gray photo-count-btn" data-count="6" onclick="pickPhotoCount(6)" style="flex:1;justify-content:center;padding:12px">6 صور</button>
+          <button class="btn-sm gray photo-count-btn" data-count="9" onclick="pickPhotoCount(9)" style="flex:1;justify-content:center;padding:12px">9 صور</button>
+        </div>
+      </div>
+    </div>
+
     <div class="hint-bar">
       <i class="bi bi-info-circle-fill"></i>
-      <div>أضف هوية (وجه + ظهر). الصور بعرض <b>8.5</b> وارتفاع <b>5.5</b>. اضغط زر العين لإخفاء صورة (تصبح بيضاء عند الطباعة).</div>
+      <div id="hintText">أضف عناصر. كل عنصر يظهر بحجمه الصحيح.</div>
     </div>
 
     <div class="section-box">
       <div class="section-head">
         <div>
-          <div class="section-title"><i class="bi bi-person-vcard-fill"></i> الهويات</div>
-          <div class="section-sub">كل هوية = صورة وجه + صورة ظهر</div>
+          <div class="section-title"><i class="bi bi-list-check"></i> العناصر المضافة</div>
+          <div class="section-sub" id="itemsSubtitle">يمكنك إضافة عناصر مختلطة</div>
         </div>
-        <button class="btn-sm gold" onclick="addIdPair()"><i class="bi bi-plus-lg"></i> إضافة هوية</button>
+        <button class="btn-sm gold" onclick="addIdPair()" id="addItemBtn">
+          <i class="bi bi-plus-lg"></i> <span id="addBtnText">إضافة</span>
+        </button>
       </div>
       <div id="idPairsContainer"></div>
     </div>
@@ -268,18 +365,18 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
     </div>
     <div class="modal-body">
       <div class="f-label"><i class="bi bi-tag-fill"></i> اسم المشروع</div>
-      <input type="text" class="f-input" id="newProjName" placeholder="مثال: هويات موظفين" maxlength="40">
+      <input type="text" class="f-input" id="newProjName" placeholder="مثال: هويات وبطاقات" maxlength="40">
 
       <div class="f-label"><i class="bi bi-aspect-ratio-fill"></i> حجم الورقة</div>
       <div class="paper-grid">
         <div class="paper-opt" data-size="A4" onclick="pickPaper('A4')">
-          <div class="p-ico">📄</div><div class="p-nm">A4</div><div class="p-dim">210 × 297 مم</div>
+          <div class="p-ico">📄</div><div class="p-nm">A4</div><div class="p-dim">21 × 29.7 سم</div>
         </div>
         <div class="paper-opt" data-size="A5" onclick="pickPaper('A5')">
-          <div class="p-ico">📃</div><div class="p-nm">A5</div><div class="p-dim">148 × 210 مم</div>
+          <div class="p-ico">📃</div><div class="p-nm">A5</div><div class="p-dim">14.8 × 21 سم</div>
         </div>
         <div class="paper-opt" data-size="A3" onclick="pickPaper('A3')">
-          <div class="p-ico">📋</div><div class="p-nm">A3</div><div class="p-dim">297 × 420 مم</div>
+          <div class="p-ico">📋</div><div class="p-nm">A3</div><div class="p-dim">29.7 × 42 سم</div>
         </div>
       </div>
 
@@ -307,7 +404,21 @@ let projects = [];
 let currentProject = null;
 let selectedPaper = 'A4';
 let pickerTarget = null;
-const STORAGE_KEY = 'amir_press_projects_v1';
+let currentTemplate = 'id';
+const STORAGE_KEY = 'amir_press_projects_v2';
+
+const TEMPLATES = {
+  id:        { key:'id',        name:'هوية',        icon:'🪪', w:7.56, h:4.4,  ratioW:7.56, ratioH:4.4,  kind:'pair',
+               addLabel:'إضافة هوية',   itemsTitle:'هويات' },
+  residency: { key:'residency', name:'بطاقة سكن',   icon:'🏠', w:10.5, h:7.4,  ratioW:10.5, ratioH:7.4,  kind:'pair',
+               addLabel:'إضافة بطاقة سكن', itemsTitle:'بطاقات سكن' },
+  passport:  { key:'passport',  name:'جواز سفر',    icon:'🛂', w:8.8,  h:12.5, ratioW:8.8,  ratioH:12.5, kind:'pair',
+               addLabel:'إضافة جواز سفر', itemsTitle:'جوازات سفر' },
+  photos:    { key:'photos',    name:'صور شخصية',   icon:'📸', w:0.2, h:0.2,  ratioW:0.2, ratioH:0.2,  kind:'photos',
+               addLabel:'إضافة صورة شخصية', itemsTitle:'صور شخصية' },
+  full:      { key:'full',      name:'صورة كاملة',  icon:'🖼️', w:0,   h:0,    ratioW:1,    ratioH:1,    kind:'full',
+               addLabel:'إضافة صورة كاملة', itemsTitle:'صورة كاملة' }
+};
 
 const $ = id => document.getElementById(id);
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
@@ -321,21 +432,22 @@ function showToast(msg, ico='✅'){
 function closeModal(id){ $(id).classList.remove('on'); }
 function openModal(id){ $(id).classList.add('on'); }
 
-/* ============================================================
-   Storage
-============================================================ */
+/* Storage */
 function loadProjects(){
   try{ const raw = localStorage.getItem(STORAGE_KEY); projects = raw ? JSON.parse(raw) : []; }
   catch(e){ projects = []; }
+  projects.forEach(p=>{
+    if(!p.ids) p.ids = [];
+    p.ids.forEach(it=>{ if(!it.template) it.template = p.template || 'id'; });
+    if(!p.photoCount) p.photoCount = 6;
+  });
 }
 function persistProjects(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(projects)); }
   catch(e){ showToast('مساحة التخزين ممتلئة!', '⚠️'); }
 }
 
-/* ============================================================
-   Splash
-============================================================ */
+/* Splash */
 function enterApp(){
   $('splash').classList.add('hide');
   setTimeout(()=>{ $('splash').style.display='none'; }, 500);
@@ -343,9 +455,7 @@ function enterApp(){
   renderProjects();
 }
 
-/* ============================================================
-   Projects list
-============================================================ */
+/* Projects */
 function renderProjects(){
   const list = $('projectsList');
   const empty = $('emptyState');
@@ -360,7 +470,7 @@ function renderProjects(){
           <div class="project-name">${escapeHtml(p.name)}</div>
           <div class="project-meta">
             <span><i class="bi bi-aspect-ratio"></i> ${p.size || 'A4'}</span>
-            <span><i class="bi bi-person-vcard"></i> ${totalIds} هوية</span>
+            <span><i class="bi bi-person-vcard"></i> ${totalIds} عنصر</span>
           </div>
         </div>
         <div class="project-actions">
@@ -378,9 +488,7 @@ function deleteProject(id){
   persistProjects(); renderProjects(); showToast('تم حذف المشروع','🗑️');
 }
 
-/* ============================================================
-   New project
-============================================================ */
+/* New project */
 function openNewProject(){
   $('newProjName').value = '';
   selectedPaper = 'A4';
@@ -398,28 +506,31 @@ $('paperColor').addEventListener('input', e=>{ $('paperColorText').value = e.tar
 function createProject(){
   const name = $('newProjName').value.trim() || 'مشروع بدون اسم';
   const color = $('paperColor').value || '#ffffff';
-  const project = { id: uid(), name, size: selectedPaper, color, ids: [], createdAt: Date.now() };
+  const project = {
+    id: uid(), name, size: selectedPaper, color,
+    photoCount: 6, ids: [], createdAt: Date.now()
+  };
   projects.unshift(project);
   persistProjects(); closeModal('newProjectModal'); renderProjects();
   showToast('تم إنشاء المشروع','✅');
   openProject(project.id);
 }
 
-/* ============================================================
-   Editor
-============================================================ */
+/* Editor */
 function openProject(id){
   currentProject = projects.find(p=>p.id === id);
   if(!currentProject) return;
+  currentTemplate = 'id';
+
   $('projectsView').style.display = 'none';
   $('editorView').classList.add('on');
   $('bottomBar').classList.add('on');
   $('edProjectName').textContent = currentProject.name;
-  $('edProjectTags').innerHTML = `
-    <span class="tag"><i class="bi bi-aspect-ratio"></i> ${currentProject.size}</span>
-    <span class="tag" style="background:${currentProject.color}22;color:${darken(currentProject.color)}"><i class="bi bi-palette-fill"></i> ${currentProject.color}</span>
-    <span class="tag" id="idCountTag"><i class="bi bi-person-vcard"></i> ${currentProject.ids.length} هوية</span>`;
-  renderIdPairs(); renderLivePreview();
+  renderTemplateRow();
+  renderItems();
+  renderLivePreview();
+  updateLabels();
+  updateEditorHeader();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 function backToProjects(){
@@ -436,52 +547,138 @@ function darken(hex){
     return `rgb(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)})`;
   }catch(e){ return '#a17c3a'; }
 }
+function updateEditorHeader(){
+  if(!currentProject) return;
+  $('edProjectTags').innerHTML = `
+    <span class="tag"><i class="bi bi-aspect-ratio"></i> ${currentProject.size}</span>
+    <span class="tag" style="background:${currentProject.color}22;color:${darken(currentProject.color)}"><i class="bi bi-palette-fill"></i> ${currentProject.color}</span>
+    <span class="tag"><i class="bi bi-list-check"></i> ${currentProject.ids.length} عنصر</span>`;
+}
 
-/* ============================================================
-   ID pairs
-============================================================ */
+/* Template picker */
+function pickTemplate(tpl){
+  currentTemplate = tpl;
+  renderTemplateRow();
+  updateLabels();
+  showToast(`النوع: ${TEMPLATES[tpl].name}`, '✅');
+}
+function pickPhotoCount(n){
+  if(!currentProject) return;
+  currentProject.photoCount = n;
+  persistProjects();
+  renderTemplateRow();
+  renderItems();
+  renderLivePreview();
+  showToast(`عدد الصور: ${n}`, '✅');
+}
+function renderTemplateRow(){
+  document.querySelectorAll('.tpl-opt').forEach(el=>{
+    el.classList.toggle('on', el.dataset.tpl === currentTemplate);
+  });
+  $('photoCountRow').style.display = (currentTemplate === 'photos') ? 'block' : 'none';
+  document.querySelectorAll('.photo-count-btn').forEach(b=>{
+    const n = currentProject ? (currentProject.photoCount||6) : 6;
+    b.classList.toggle('gold', parseInt(b.dataset.count) === n);
+    b.classList.toggle('gray', parseInt(b.dataset.count) !== n);
+  });
+}
+
+function updateLabels(){
+  const tpl = TEMPLATES[currentTemplate];
+  $('addBtnText').textContent = tpl.addLabel;
+  $('itemsSubtitle').textContent = `القسم التالي: ${tpl.name}`;
+
+  if(tpl.kind === 'full'){
+    $('hintText').innerHTML = 'الصورة الكاملة تملأ الورقة بالكامل.';
+    $('templateHint').textContent = `القالب: صورة كاملة · ورقة ${currentProject ? currentProject.size : ''}`;
+  } else if(tpl.kind === 'photos'){
+    $('hintText').innerHTML = `أضف صور شخصية بحجم ${tpl.w}×${tpl.h} سم. الصورة تملأ الإطار كاملاً.`;
+    $('templateHint').textContent = `القالب: ${tpl.name} · ${tpl.w}×${tpl.h} سم`;
+  } else {
+    $('hintText').innerHTML = `أضف ${tpl.name} بحجم ${tpl.w}×${tpl.h} سم. الصورة تملأ الإطار كاملاً.`;
+    $('templateHint').textContent = `القالب: ${tpl.name} · ${tpl.w}×${tpl.h} سم`;
+  }
+  updateEditorHeader();
+}
+
+/* Add item */
 function addIdPair(){
   if(!currentProject) return;
-  currentProject.ids.push({ id: uid(), front: null, back: null, hideFront: false, hideBack: false });
-  persistProjects(); renderIdPairs(); renderLivePreview(); updateIdCountTag();
-  showToast('أضفت هوية جديدة','➕');
+  currentProject.ids.push({
+    id: uid(),
+    template: currentTemplate,
+    front: null,
+    back: null,
+    hideFront: false,
+    hideBack: false
+  });
+  persistProjects();
+  renderItems();
+  renderLivePreview();
+  updateEditorHeader();
+  showToast(`أضفت ${TEMPLATES[currentTemplate].name} جديد`, '➕');
 }
-function updateIdCountTag(){
-  const tag = $('idCountTag');
-  if(tag && currentProject) tag.innerHTML = `<i class="bi bi-person-vcard"></i> ${currentProject.ids.length} هوية`;
-}
-function renderIdPairs(){
+
+/* Items list (management UI, has titles — but sheet is clean) */
+function renderItems(){
   const cont = $('idPairsContainer');
   if(!currentProject.ids.length){
     cont.innerHTML = `
       <div style="text-align:center;padding:30px 16px;color:var(--muted)">
-        <div style="font-size:44px;opacity:.3;margin-bottom:10px"><i class="bi bi-person-vcard"></i></div>
-        <div style="font-size:13px;font-weight:800;margin-bottom:14px">لم تُضف أي هوية بعد</div>
-        <button class="btn-sm gold" onclick="addIdPair()" style="margin:0 auto;padding:12px 22px"><i class="bi bi-plus-lg"></i> إضافة هوية</button>
+        <div style="font-size:44px;opacity:.3;margin-bottom:10px"><i class="bi bi-plus-square"></i></div>
+        <div style="font-size:13px;font-weight:800;margin-bottom:14px">لم تُضف أي عنصر بعد</div>
+        <div style="font-size:11px">اختر نوع العنصر بالأعلى ثم اضغط "إضافة"</div>
       </div>`;
     return;
   }
-  cont.innerHTML = currentProject.ids.map((pair, idx)=>`
+  const grouped = {};
+  currentProject.ids.forEach(it=>{
+    const tpl = TEMPLATES[it.template || 'id'] || TEMPLATES.id;
+    if(!grouped[tpl.key]) grouped[tpl.key] = { tpl, items: [] };
+    grouped[tpl.key].items.push(it);
+  });
+
+  let html = '';
+  Object.keys(grouped).forEach(k=>{
+    const { tpl, items } = grouped[k];
+    html += `
+      <div style="margin-bottom:16px">
+        <div style="font-size:12px;font-weight:900;color:var(--gold2);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+          <span style="font-size:16px">${tpl.icon}</span> ${tpl.itemsTitle} <span style="color:#94a3b8;font-weight:600">(${items.length})</span>
+        </div>
+        ${items.map((pair, idx)=>renderPairCard(pair, idx, tpl)).join('')}
+      </div>
+    `;
+  });
+  cont.innerHTML = html;
+}
+
+function renderPairCard(pair, idx, tpl){
+  const single = (tpl.kind === 'photos' || tpl.kind === 'full');
+  const aspect = tpl.kind === 'full' ? '210 / 297' : `${tpl.ratioW} / ${tpl.ratioH}`;
+  return `
     <div class="id-pair">
       <div class="id-pair-head">
-        <div class="id-pair-title"><i class="bi bi-person-vcard-fill"></i> هوية #${idx+1}</div>
+        <div class="id-pair-title"><i class="bi bi-${tpl.kind==='photos'?'image-fill':(tpl.kind==='full'?'file-image-fill':'person-vcard-fill')}"></i> ${tpl.name} #${idx+1}</div>
         <button class="id-pair-del" onclick="deleteIdPair('${pair.id}')"><i class="bi bi-trash-fill"></i></button>
       </div>
-      <div class="id-cards">
-        ${renderCard(pair, 'front', 'الوجه', 'bi-person-badge-fill')}
-        ${renderCard(pair, 'back', 'الظهر', 'bi-card-image')}
+      <div class="id-cards ${single?'single':''}">
+        ${renderCard(pair, 'front', tpl.kind==='full'?'الصورة الكاملة':(tpl.kind==='photos'?'الصورة':'الوجه'), tpl.kind==='full'?'bi-file-image-fill':'bi-person-badge-fill', tpl, aspect)}
+        ${tpl.kind==='pair' ? renderCard(pair, 'back', 'الظهر', 'bi-card-image', tpl, aspect) : ''}
       </div>
     </div>
-  `).join('');
+  `;
 }
-function renderCard(pair, side, label, icon){
+function renderCard(pair, side, label, icon, tpl, aspect){
   const img = pair[side];
   const isHidden = !!pair['hide' + (side==='front'?'Front':'Back')];
   const showHide = !!img || isHidden;
   return `
     <div class="id-card">
       <div class="id-card-label"><i class="bi ${icon}"></i> ${label}</div>
-      <div class="id-card-img ${img ? '' : 'empty'} ${isHidden ? 'hidden-card' : ''}" onclick="pickImage('${pair.id}','${side}')">
+      <div class="id-card-img ${img ? '' : 'empty'} ${isHidden ? 'hidden-card' : ''}"
+           style="aspect-ratio:${aspect}"
+           onclick="pickImage('${pair.id}','${side}')">
         ${ img ? `<img src="${img}" alt="${label}">` : `<i class="bi bi-plus-circle"></i><span>اضغط لإضافة صورة</span>` }
       </div>
       ${ showHide ? `
@@ -492,23 +689,21 @@ function renderCard(pair, side, label, icon){
   `;
 }
 function deleteIdPair(pairId){
-  if(!confirm('حذف هذه الهوية؟')) return;
+  if(!confirm('حذف هذا العنصر؟')) return;
   currentProject.ids = currentProject.ids.filter(p=>p.id !== pairId);
-  persistProjects(); renderIdPairs(); renderLivePreview(); updateIdCountTag();
-  showToast('تم حذف الهوية','🗑️');
+  persistProjects(); renderItems(); renderLivePreview(); updateEditorHeader();
+  showToast('تم الحذف','🗑️');
 }
 function toggleHide(pairId, side){
   const pair = currentProject.ids.find(p=>p.id === pairId);
   if(!pair) return;
   const key = side === 'front' ? 'hideFront' : 'hideBack';
   pair[key] = !pair[key];
-  persistProjects(); renderIdPairs(); renderLivePreview();
+  persistProjects(); renderItems(); renderLivePreview();
   showToast(pair[key] ? 'الصورة مخفية (ستطبع بيضاء)' : 'الصورة ظاهرة', pair[key] ? '🚫' : '👁️');
 }
 
-/* ============================================================
-   Image picker
-============================================================ */
+/* Image picker */
 function pickImage(pairId, side){
   pickerTarget = { pairId, side };
   const input = side === 'front' ? $('fileInputFront') : $('fileInputBack');
@@ -526,7 +721,7 @@ function handleFile(e){
     const pair = currentProject.ids.find(p=>p.id === pickerTarget.pairId);
     if(pair){
       pair[pickerTarget.side] = ev.target.result;
-      persistProjects(); renderIdPairs(); renderLivePreview();
+      persistProjects(); renderItems(); renderLivePreview();
       showToast('تمت إضافة الصورة','🖼️');
     }
     pickerTarget = null;
@@ -535,8 +730,67 @@ function handleFile(e){
 }
 
 /* ============================================================
-   Live preview
-============================================================ */
+   ✅ CLEAN sheet HTML — pictures only, no text, no borders
+   ============================================================ */
+function buildSheetHTML(){
+  const items = currentProject.ids;
+  const html = [];
+  const photoCount = currentProject.photoCount || 6;
+
+  // Full image items — show first one only (fills page)
+  const fullItems = items.filter(it => TEMPLATES[it.template].kind === 'full' && it.front && !it.hideFront);
+  if(fullItems.length){
+    return `<div class="full-image-wrap"><img src="${fullItems[0].front}"></div>`;
+  }
+
+  const pairs = items.filter(it => TEMPLATES[it.template].kind === 'pair');
+  const photoItems = items.filter(it => TEMPLATES[it.template].kind === 'photos');
+
+  // Pair items — NO titles, NO borders — just images side by side
+  pairs.forEach((pair)=>{
+    const tpl = TEMPLATES[pair.template] || TEMPLATES.id;
+    const frontStyle = `aspect-ratio:${tpl.ratioW}/${tpl.ratioH}`;
+    const frontHtml = (pair.hideFront || !pair.front)
+      ? `<div class="s-img ${pair.hideFront ? 'hidden-card' : 'blank'}" style="${frontStyle}"></div>`
+      : `<div class="s-img" style="${frontStyle}"><img src="${pair.front}"></div>`;
+    const backHtml = (pair.hideBack || !pair.back)
+      ? `<div class="s-img ${pair.hideBack ? 'hidden-card' : 'blank'}" style="${frontStyle}"></div>`
+      : `<div class="s-img" style="${frontStyle}"><img src="${pair.back}"></div>`;
+
+    html.push(`
+      <div class="sheet-item">
+        <div class="sheet-item-pair">${frontHtml}${backHtml}</div>
+      </div>
+    `);
+  });
+
+  // Photo items — NO titles, NO borders
+  if(photoItems.length){
+    const photoTpl = TEMPLATES.photos;
+    const cells = [];
+    const limited = photoItems.slice(0, photoCount);
+    for(let i=0;i<photoCount;i++){
+      const pair = limited[i];
+      if(pair){
+        const isHidden = !!pair.hideFront || !pair.front;
+        cells.push(isHidden
+          ? `<div class="s-img hidden-card" style="aspect-ratio:${photoTpl.ratioW}/${photoTpl.ratioH}"></div>`
+          : `<div class="s-img" style="aspect-ratio:${photoTpl.ratioW}/${photoTpl.ratioH}"><img src="${pair.front}"></div>`);
+      } else {
+        cells.push(`<div class="s-img blank" style="aspect-ratio:${photoTpl.ratioW}/${photoTpl.ratioH}"></div>`);
+      }
+    }
+    html.push(`
+      <div class="sheet-item">
+        <div class="sheet-photos-grid photos-${photoCount}">${cells.join('')}</div>
+      </div>
+    `);
+  }
+
+  return html.join('');
+}
+
+/* Live preview */
 function renderLivePreview(){
   const preview = $('livePreview');
   if(!currentProject) return;
@@ -545,35 +799,39 @@ function renderLivePreview(){
   $('sheetInfo').textContent = `${currentProject.size} · ${currentProject.color}`;
 
   if(!currentProject.ids.length){
-    preview.innerHTML = `<div style="text-align:center;color:#94a3b8;font-size:12px;padding:30px 10px">ستظهر الهويات هنا بعد إضافتها</div>`;
+    preview.innerHTML = `<div style="text-align:center;color:#94a3b8;font-size:12px;padding:30px 10px">ستظهر العناصر هنا بعد إضافتها</div>`;
     return;
   }
-  preview.innerHTML = currentProject.ids.map(pair=>{
-    const frontHtml = (pair.hideFront || !pair.front)
-      ? `<div class="s-img ${pair.hideFront ? 'hidden-card' : 'blank'}"></div>`
-      : `<div class="s-img"><img src="${pair.front}"></div>`;
-    const backHtml = (pair.hideBack || !pair.back)
-      ? `<div class="s-img ${pair.hideBack ? 'hidden-card' : 'blank'}"></div>`
-      : `<div class="s-img"><img src="${pair.back}"></div>`;
-    return `<div class="sheet-id">${frontHtml}${backHtml}</div>`;
-  }).join('');
+  preview.innerHTML = buildSheetHTML();
 }
 
-/* ============================================================
-   Save project
-============================================================ */
+/* Save project */
 function saveCurrentProject(){
   if(!currentProject) return;
   persistProjects();
   showToast('تم حفظ المشروع','💾');
 }
 
-/* ============================================================
-   Save sheet as image
-============================================================ */
+/* Build printable sheet (off-screen, exact paper size) */
+function buildPrintableSheet(paperW, paperH){
+  const sheet = document.createElement('div');
+  sheet.style.background = currentProject.color;
+  sheet.style.width = paperW + 'px';
+  sheet.style.height = paperH + 'px';
+  sheet.style.padding = '10px';
+  sheet.style.boxSizing = 'border-box';
+  sheet.style.display = 'flex';
+  sheet.style.flexDirection = 'column';
+  sheet.style.overflow = 'hidden';
+  sheet.style.gap = '10px';
+  sheet.innerHTML = buildSheetHTML();
+  return sheet;
+}
+
+/* Save sheet as image */
 async function saveSheetImage(){
   if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
-  if(!currentProject.ids.length){ showToast('أضف هوية واحدة على الأقل','⚠️'); return; }
+  if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
 
   const btn = $('btnSaveSheet');
   const oldHtml = btn.innerHTML;
@@ -581,28 +839,22 @@ async function saveSheetImage(){
   btn.innerHTML = '<i class="bi bi-hourglass-split"></i> جاري التجهيز...';
 
   try{
-    const sheetEl = buildPrintableSheet();
-    document.body.appendChild(sheetEl);
-    sheetEl.style.position = 'fixed';
-    sheetEl.style.left = '-99999px';
-    sheetEl.style.top = '0';
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'fixed';
+    wrapper.style.left = '-99999px';
+    wrapper.style.top = '0';
 
-    await waitForImages(sheetEl);
-
-    const paperMM = {
-      A3: { w: 297, h: 420 },
-      A4: { w: 210, h: 297 },
-      A5: { w: 148, h: 210 }
-    };
+    const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
     const p = paperMM[currentProject.size] || paperMM.A4;
     const dpi = 300;
     const targetW = Math.round(p.w / 25.4 * dpi);
     const targetH = Math.round(p.h / 25.4 * dpi);
 
-    sheetEl.style.width = targetW + 'px';
-    sheetEl.style.height = targetH + 'px';
-    sheetEl.style.maxWidth = 'none';
-    sheetEl.style.aspectRatio = 'auto';
+    const sheetEl = buildPrintableSheet(targetW, targetH);
+    wrapper.appendChild(sheetEl);
+    document.body.appendChild(wrapper);
+
+    await waitForImages(wrapper);
 
     const canvas = await html2canvas(sheetEl, {
       scale: 1, width: targetW, height: targetH,
@@ -610,7 +862,7 @@ async function saveSheetImage(){
       useCORS: true, allowTaint: true, logging: false
     });
 
-    document.body.removeChild(sheetEl);
+    document.body.removeChild(wrapper);
 
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
     if(!blob){ showToast('فشل الحفظ','❌'); return; }
@@ -666,92 +918,16 @@ function waitForImages(rootEl){
   });
 }
 
-function buildPrintableSheet(){
-  const sheet = document.createElement('div');
-  sheet.className = 'print-sheet ' + currentProject.size.toLowerCase();
-  sheet.style.background = currentProject.color;
-  sheet.style.border = 'none';
-  sheet.style.boxShadow = 'none';
-  sheet.style.gap = '6px';
-  sheet.style.padding = '8px';
-  sheet.style.display = 'flex';
-  sheet.style.flexDirection = 'column';
-
-  const visiblePairs = currentProject.ids.filter(p=>{
-    const f = p.front && !p.hideFront;
-    const b = p.back && !p.hideBack;
-    return f || b;
-  });
-
-  visiblePairs.forEach(pair=>{
-    const wrap = document.createElement('div');
-    wrap.className = 'sheet-id';
-    wrap.style.border = '1px dashed #bbb';
-    wrap.style.padding = '6px';
-    wrap.style.background = '#fafafa';
-
-    if(pair.front && !pair.hideFront){
-      const f = document.createElement('div');
-      f.className = 's-img';
-      f.innerHTML = `<img src="${pair.front}">`;
-      wrap.appendChild(f);
-    } else {
-      const f = document.createElement('div');
-      f.className = 's-img hidden-card';
-      f.style.background = '#ffffff';
-      f.style.border = '1px solid #e2e8f0';
-      wrap.appendChild(f);
-    }
-
-    if(pair.back && !pair.hideBack){
-      const b = document.createElement('div');
-      b.className = 's-img';
-      b.innerHTML = `<img src="${pair.back}">`;
-      wrap.appendChild(b);
-    } else {
-      const b = document.createElement('div');
-      b.className = 's-img hidden-card';
-      b.style.background = '#ffffff';
-      b.style.border = '1px solid #e2e8f0';
-      wrap.appendChild(b);
-    }
-
-    sheet.appendChild(wrap);
-  });
-
-  return sheet;
-}
-
-/* ============================================================
-   ✅ FIX: Open print in NEW WINDOW with ONLY the sheet
-   ✅ Also intercepts Ctrl+P / Cmd+P globally
-============================================================ */
-let printWindowRef = null;
-
+/* Print in new window */
 function openPrintWindow(){
   if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
-  if(!currentProject.ids.length){ showToast('أضف هوية واحدة على الأقل','⚠️'); return; }
-
-  const visiblePairs = currentProject.ids.filter(p=>{
-    const f = p.front && !p.hideFront;
-    const b = p.back && !p.hideBack;
-    return f || b;
-  });
-  if(!visiblePairs.length){ showToast('كل الصور مخفية','🚫'); return; }
+  if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
 
   const sizeKey = (currentProject.size || 'A4').toUpperCase();
   const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
   const p = paperMM[sizeKey] || paperMM.A4;
 
-  const pairsHtml = visiblePairs.map(pair=>{
-    const frontHtml = (pair.front && !pair.hideFront)
-      ? `<div class="s-img"><img src="${pair.front}"></div>`
-      : `<div class="s-img blank"></div>`;
-    const backHtml = (pair.back && !pair.hideBack)
-      ? `<div class="s-img"><img src="${pair.back}"></div>`
-      : `<div class="s-img blank"></div>`;
-    return `<div class="sheet-id">${frontHtml}${backHtml}</div>`;
-  }).join('');
+  const paperHtml = buildSheetHTML();
 
   const html = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -759,10 +935,7 @@ function openPrintWindow(){
 <meta charset="UTF-8">
 <title>طباعة - ${escapeHtml(currentProject.name)}</title>
 <style>
-  @page{
-    size: ${sizeKey} portrait;
-    margin: 0;
-  }
+  @page{ size: ${sizeKey} portrait; margin: 0; }
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
   html,body{
     background:#fff;
@@ -774,85 +947,74 @@ function openPrintWindow(){
     width: ${p.w}mm;
     min-height: ${p.h}mm;
     background: ${currentProject.color};
-    padding: 5mm;
+    padding: 10px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 3mm;
-    margin: 0 auto;
+    gap: 8px;
+    box-sizing: border-box;
   }
-  .sheet-id{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3mm;
-    padding: 2mm;
+  /* ✅ Pictures only — no titles, no borders */
+  .sheet-item{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     page-break-inside: avoid;
     break-inside: avoid;
   }
+  .sheet-item-pair{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .sheet-photos-grid{
+    display: grid;
+    gap: 6px;
+  }
+  .sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
+  .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
+  .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
   .s-img{
-    width: 100%;
-    aspect-ratio: 8.5 / 5.5;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    width:100%;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    border:none;
   }
-  .s-img img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  .s-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .s-img.blank{background:#fff}
+  .full-image-wrap{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
   }
-  .s-img.blank{background: #ffffff;}
+  .full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
 
   @media screen{
-    body{
-      padding:0;
-      background:#f1f5f9;
-      min-height:100vh;
-    }
+    body{padding:0;background:#f1f5f9;min-height:100vh}
     .toolbar{
-      position: sticky;
-      top: 0;
-      background: #fff;
-      padding: 14px 16px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.1);
-      z-index: 10;
+      position:sticky;top:0;background:#fff;padding:14px 16px;
+      display:flex;justify-content:center;gap:10px;
+      box-shadow:0 2px 12px rgba(0,0,0,.1);z-index:10;
     }
     .toolbar button{
-      padding: 12px 26px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 900;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family:inherit;
+      padding:12px 26px;border:none;border-radius:10px;cursor:pointer;
+      font-size:14px;font-weight:900;display:inline-flex;align-items:center;gap:6px;font-family:inherit;
     }
     .btn-print{background:#c8a45c;color:#fff;box-shadow:0 4px 14px rgba(200,164,92,.4)}
     .btn-close{background:#e2e8f0;color:#1e293b}
     .paper{box-shadow:0 6px 30px rgba(0,0,0,.15);margin:20px auto}
-    .hint{
-      text-align:center;font-size:12px;color:#64748b;
-      padding: 10px;background:#fffbea;border-bottom:1px solid #fde68a;
-    }
+    .hint{text-align:center;font-size:12px;color:#64748b;padding:10px;background:#fffbea;border-bottom:1px solid #fde68a}
   }
-
   @media print{
     html,body{background:#fff}
-    .toolbar, .hint{display:none !important}
-    .paper{
-      box-shadow:none;
-      margin:0;
-      padding: 5mm;
-      width: 100%;
-      min-height: auto;
-    }
+    .toolbar,.hint{display:none !important}
+    .paper{box-shadow:none;margin:0;width:100%;padding:10px}
   }
 </style>
 </head>
@@ -862,59 +1024,50 @@ function openPrintWindow(){
     <button class="btn-print" onclick="window.print()">🖨️ طباعة</button>
     <button class="btn-close" onclick="window.close()">✕ إغلاق</button>
   </div>
-  <div class="paper">
-    ${pairsHtml}
-  </div>
+  <div class="paper">${paperHtml}</div>
   <script>
     window.addEventListener('load', function(){
       var imgs = document.querySelectorAll('img');
       var pending = imgs.length;
-      function fire(){
-        setTimeout(function(){ try{ window.print(); }catch(e){} }, 350);
+      var fired = false;
+      function firePrint(){
+        if(fired) return;
+        fired = true;
+        setTimeout(function(){ try{ window.focus(); window.print(); }catch(e){} }, 400);
       }
-      if(pending === 0){ fire(); return; }
+      if(pending === 0){ firePrint(); return; }
       imgs.forEach(function(img){
-        if(img.complete){ pending--; if(pending===0) fire(); }
-        else { img.onload = img.onerror = function(){ pending--; if(pending===0) fire(); }; }
+        if(img.complete && img.naturalWidth > 0){ pending--; if(pending===0) firePrint(); }
+        else { img.onload = img.onerror = function(){ pending--; if(pending===0) firePrint(); }; }
       });
-      setTimeout(function(){ try{ window.print(); }catch(e){} }, 2200);
+      setTimeout(firePrint, 2500);
     });
   <\/script>
 </body>
 </html>`;
 
-  // Try to open new window
   const win = window.open('', '_blank');
-  if(!win){
-    showToast('اسمح بالنوافذ المنبثقة للطباعة','⚠️');
-    return;
-  }
-  printWindowRef = win;
+  if(!win){ showToast('اسمح بالنوافذ المنبثقة للطباعة','⚠️'); return; }
   win.document.open();
   win.document.write(html);
   win.document.close();
   win.focus();
 }
 
-/* ============================================================
-   ✅ Intercept Ctrl+P / Cmd+P globally — open print window instead
-============================================================ */
+/* Ctrl+P intercept */
 document.addEventListener('keydown', function(e){
   const isCtrlP = (e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P');
   if(!isCtrlP) return;
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault(); e.stopPropagation();
   if(currentProject && currentProject.ids && currentProject.ids.length){
     openPrintWindow();
   } else {
-    showToast('افتح مشروعاً فيه هويات للطباعة','⚠️');
+    showToast('افتح مشروعاً فيه عناصر للطباعة','⚠️');
   }
   return false;
 }, true);
 
-/* ============================================================
-   Init
-============================================================ */
+/* Init */
 loadProjects();
 </script>
 </body>
