@@ -396,7 +396,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
     <div class="modal-body">
       <div style="background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(34,197,94,.03));border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:11px 13px;font-size:11px;color:#15803d;margin-bottom:16px;display:flex;align-items:flex-start;gap:8px">
         <i class="bi bi-info-circle-fill" style="font-size:14px;flex-shrink:0;margin-top:1px"></i>
-        <div>كل قسم له أبعاده الخاصة. اكتب القيم ثم اضغط <b>حفظ</b>. تُطبَّق فوراً على الورقة وتُحفظ كافتراضي للقسم للمشاريع القادمة. القيم بالسنتيمتر.</div>
+        <div>كل قسم له أبعاده الخاصة. اكتب القيم ثم اضغط <b>حفظ</b>. تُطبَّق فوراً على الورقة والطباعة فقط (وليس على بطاقات نافذة الإضافة)، وتُحفظ كافتراضي للقسم للمشاريع القادمة. القيم من <b>0.1</b> إلى <b>50</b> سم.</div>
       </div>
 
       <div id="settingsContainer"></div>
@@ -422,8 +422,8 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
     </div>
   </div>
   <div class="crop-controls">
-    <label>🔍 تكبير</label>
-    <input type="range" id="cropZoom" min="1" max="5" step="0.05" value="1">
+    <label>🔍 تكبير/تصغير</label>
+    <input type="range" id="cropZoom" min="0.1" max="5" step="0.05" value="1">
     <div class="zoom-val" id="cropZoomVal">1.00x</div>
     <button class="reset-btn" onclick="resetCropPosition()">
       <i class="bi bi-arrow-counterclockwise"></i> إعادة تعيين
@@ -449,13 +449,17 @@ let dragSourceEl = null;
 const STORAGE_KEY = 'amir_press_projects_v7';
 const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v4';
 
+/* Crop zoom bounds */
+const CROP_MIN_ZOOM = 0.1;
+const CROP_MAX_ZOOM = 5;
+
 /* Fixed gaps */
 const PAIR_GAP_PX = 6;
 const PHOTO_GAP_PX = 6;
 const ITEM_GAP_PX = 6;
 
 /* ============================================================
-   ✅ القياسات الافتراضية الجديدة
+   Default sizes
 ============================================================ */
 const DEFAULT_SIZES = {
   id:        { w: 5.56, h: 3.1 },
@@ -628,7 +632,7 @@ function updateEditorHeader(){
     <span class="tag"><i class="bi bi-list-check"></i> ${currentProject.ids.length} عنصر</span>`;
 }
 
-/* ✅ المساعد الموحد للحصول على أحدث حجم */
+/* Effective size — for sheet/print only */
 function getEffectiveSize(key){
   if(currentProject && currentProject.sizes && currentProject.sizes[key] &&
      typeof currentProject.sizes[key].w === 'number' && currentProject.sizes[key].w > 0 &&
@@ -639,6 +643,12 @@ function getEffectiveSize(key){
     return { w: GLOBAL_SIZES[key].w, h: GLOBAL_SIZES[key].h };
   }
   return { w: DEFAULT_SIZES[key].w, h: DEFAULT_SIZES[key].h };
+}
+
+/* Card size — modal cards always use DEFAULT_SIZES */
+function getCardSize(key){
+  if(DEFAULT_SIZES[key]) return { w: DEFAULT_SIZES[key].w, h: DEFAULT_SIZES[key].h };
+  return { w: 5.56, h: 3.1 };
 }
 
 /* Type icons */
@@ -686,7 +696,7 @@ function renderTypeItems(){
   const cont = $('typeItemsList');
   const items = currentProject.ids.filter(it => it.template === currentEditingType);
   const tpl = TEMPLATES[currentEditingType];
-  const size = getEffectiveSize(currentEditingType);
+  const size = getCardSize(currentEditingType);
 
   if(!items.length){
     cont.innerHTML = `
@@ -828,9 +838,17 @@ function handleFile(e){
   reader.readAsDataURL(file);
 }
 
-/* Crop */
+/* ============================================================
+   Crop — pinch-to-zoom, wheel, negative pan, min zoom 0.1
+============================================================ */
 let cropState = null;
+let cropPointers = new Map();
 let cropDrag = null;
+let cropPinch = null;
+
+function clampZoom(z){
+  return Math.max(CROP_MIN_ZOOM, Math.min(CROP_MAX_ZOOM, z));
+}
 
 function openCrop(pairId, side){
   const pair = currentProject.ids.find(p=>p.id === pairId);
@@ -843,7 +861,7 @@ function openCrop(pairId, side){
 
   cropState = {
     pairId, side, imgSrc, aspect,
-    x: crop.x, y: crop.y, zoom: crop.zoom
+    x: crop.x, y: crop.y, zoom: clampZoom(crop.zoom)
   };
 
   const maxW = Math.min(window.innerWidth * 0.85, 500);
@@ -885,11 +903,11 @@ function openCrop(pairId, side){
   };
   img.src = imgSrc;
 
-  $('cropZoom').value = crop.zoom;
-  $('cropZoomVal').textContent = crop.zoom.toFixed(2) + 'x';
+  $('cropZoom').value = cropState.zoom;
+  $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
 
   openModal('cropModal');
-  setupCropDrag();
+  setupCropInteractions();
 }
 
 function applyCropTransform(){
@@ -906,32 +924,163 @@ function applyCropTransform(){
   img.style.top = offsetY + 'px';
 }
 
-function setupCropDrag(){
+function setupCropInteractions(){
   const vp = $('cropViewport');
+
   vp.onpointerdown = (e)=>{
     if(!cropState) return;
     e.preventDefault();
-    vp.classList.add('dragging');
-    cropDrag = { startX: e.clientX, startY: e.clientY, startOffsetX: cropState.x, startOffsetY: cropState.y };
     try{ vp.setPointerCapture(e.pointerId); }catch(err){}
+
+    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if(cropPointers.size === 1){
+      vp.classList.add('dragging');
+      cropDrag = {
+        startX: e.clientX,
+        startY: e.clientY,
+        startOffsetX: cropState.x,
+        startOffsetY: cropState.y
+      };
+    } else if(cropPointers.size === 2){
+      vp.classList.remove('dragging');
+      cropDrag = null;
+      const pts = Array.from(cropPointers.values());
+      const dx = pts[0].x - pts[1].x;
+      const dy = pts[0].y - pts[1].y;
+      const dist = Math.hypot(dx, dy);
+      cropPinch = {
+        startDist: dist || 1,
+        startZoom: cropState.zoom,
+        startX: cropState.x,
+        startY: cropState.y,
+        midX: (pts[0].x + pts[1].x) / 2,
+        midY: (pts[0].y + pts[1].y) / 2
+      };
+    }
   };
+
   vp.onpointermove = (e)=>{
-    if(!cropDrag || !cropState) return;
-    const dx = e.clientX - cropDrag.startX;
-    const dy = e.clientY - cropDrag.startY;
-    const bw = cropState.baseW * cropState.zoom;
-    const bh = cropState.baseH * cropState.zoom;
-    cropState.x = cropDrag.startOffsetX + (dx / bw) * 100;
-    cropState.y = cropDrag.startOffsetY + (dy / bh) * 100;
-    applyCropTransform();
+    if(!cropState) return;
+    if(!cropPointers.has(e.pointerId)) return;
+    e.preventDefault();
+
+    cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if(cropPointers.size === 1 && cropDrag){
+      const dx = e.clientX - cropDrag.startX;
+      const dy = e.clientY - cropDrag.startY;
+      const bw = cropState.baseW * cropState.zoom;
+      const bh = cropState.baseH * cropState.zoom;
+      cropState.x = cropDrag.startOffsetX + (dx / bw) * 100;
+      cropState.y = cropDrag.startOffsetY + (dy / bh) * 100;
+      applyCropTransform();
+      syncZoomSlider();
+    } else if(cropPointers.size === 2 && cropPinch){
+      const pts = Array.from(cropPointers.values());
+      const dx = pts[0].x - pts[1].x;
+      const dy = pts[0].y - pts[1].y;
+      const dist = Math.hypot(dx, dy) || 1;
+      const scale = dist / cropPinch.startDist;
+      let newZoom = clampZoom(cropPinch.startZoom * scale);
+
+      const midX = (pts[0].x + pts[1].x) / 2;
+      const midY = (pts[0].y + pts[1].y) / 2;
+
+      const vpRect = vp.getBoundingClientRect();
+      const relMidX = midX - vpRect.left;
+      const relMidY = midY - vpRect.top;
+      const centerX = cropState.vw / 2;
+      const centerY = cropState.vh / 2;
+
+      const oldBW = cropState.baseW * cropState.zoom;
+      const oldBH = cropState.baseH * cropState.zoom;
+      const oldOffsetX = centerX - oldBW / 2 + (cropPinch.startX / 100) * oldBW;
+      const oldOffsetY = centerY - oldBH / 2 + (cropPinch.startY / 100) * oldBH;
+
+      const imgPointX = (relMidX - oldOffsetX) / oldBW;
+      const imgPointY = (relMidY - oldOffsetY) / oldBH;
+
+      const newBW = cropState.baseW * newZoom;
+      const newBH = cropState.baseH * newZoom;
+      const targetOffsetX = relMidX - imgPointX * newBW;
+      const targetOffsetY = relMidY - imgPointY * newBH;
+
+      cropState.zoom = newZoom;
+      cropState.x = ((targetOffsetX - centerX + newBW / 2) / newBW) * 100;
+      cropState.y = ((targetOffsetY - centerY + newBH / 2) / newBH) * 100;
+
+      applyCropTransform();
+      syncZoomSlider();
+    }
   };
-  vp.onpointerup = ()=>{ cropDrag = null; vp.classList.remove('dragging'); };
-  vp.onpointercancel = ()=>{ cropDrag = null; vp.classList.remove('dragging'); };
+
+  const endPointer = (e)=>{
+    if(!cropState) return;
+    cropPointers.delete(e.pointerId);
+    if(cropPointers.size === 0){
+      cropDrag = null;
+      cropPinch = null;
+      vp.classList.remove('dragging');
+    } else if(cropPointers.size === 1){
+      cropPinch = null;
+      const remaining = Array.from(cropPointers.values())[0];
+      cropDrag = {
+        startX: remaining.x,
+        startY: remaining.y,
+        startOffsetX: cropState.x,
+        startOffsetY: cropState.y
+      };
+      vp.classList.add('dragging');
+    }
+  };
+  vp.onpointerup = endPointer;
+  vp.onpointercancel = endPointer;
+  vp.onpointerleave = endPointer;
+
+  vp.onwheel = (e)=>{
+    if(!cropState) return;
+    e.preventDefault();
+    const delta = -e.deltaY * 0.0015;
+    let newZoom = clampZoom(cropState.zoom * (1 + delta));
+
+    const vpRect = vp.getBoundingClientRect();
+    const relX = e.clientX - vpRect.left;
+    const relY = e.clientY - vpRect.top;
+    const centerX = cropState.vw / 2;
+    const centerY = cropState.vh / 2;
+
+    const oldBW = cropState.baseW * cropState.zoom;
+    const oldBH = cropState.baseH * cropState.zoom;
+    const oldOffsetX = centerX - oldBW / 2 + (cropState.x / 100) * oldBW;
+    const oldOffsetY = centerY - oldBH / 2 + (cropState.y / 100) * oldBH;
+
+    const imgPointX = (relX - oldOffsetX) / oldBW;
+    const imgPointY = (relY - oldOffsetY) / oldBH;
+
+    const newBW = cropState.baseW * newZoom;
+    const newBH = cropState.baseH * newZoom;
+    const targetOffsetX = relX - imgPointX * newBW;
+    const targetOffsetY = relY - imgPointY * newBH;
+
+    cropState.zoom = newZoom;
+    cropState.x = ((targetOffsetX - centerX + newBW / 2) / newBW) * 100;
+    cropState.y = ((targetOffsetY - centerY + newBH / 2) / newBH) * 100;
+
+    applyCropTransform();
+    syncZoomSlider();
+  };
+}
+
+function syncZoomSlider(){
+  if(!cropState) return;
+  $('cropZoom').value = cropState.zoom;
+  $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
 }
 
 $('cropZoom').addEventListener('input', (e)=>{
   if(!cropState) return;
-  cropState.zoom = parseFloat(e.target.value);
+  cropState.zoom = clampZoom(parseFloat(e.target.value));
   $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
   applyCropTransform();
 });
@@ -945,7 +1094,10 @@ function resetCropPosition(){
 }
 
 function cancelCrop(){
-  cropState = null; cropDrag = null;
+  cropState = null;
+  cropDrag = null;
+  cropPinch = null;
+  cropPointers.clear();
   closeModal('cropModal');
 }
 
@@ -960,7 +1112,10 @@ function applyCrop(){
     renderLivePreview();
     showToast('تم تطبيق القص','✂️');
   }
-  cropState = null; cropDrag = null;
+  cropState = null;
+  cropDrag = null;
+  cropPinch = null;
+  cropPointers.clear();
   closeModal('cropModal');
 }
 
@@ -990,14 +1145,14 @@ function renderSettingsContent(){
           <div class="settings-input-group">
             <label><i class="bi bi-arrows-expand-vertical"></i> العرض</label>
             <div class="settings-input-wrapper">
-              <input type="number" id="input-w-${k}" value="${size.w}" min="0.5" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].w}">
+              <input type="number" id="input-w-${k}" value="${size.w}" min="0.1" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].w}">
               <span class="unit">سم</span>
             </div>
           </div>
           <div class="settings-input-group">
             <label><i class="bi bi-arrows-expand"></i> الارتفاع</label>
             <div class="settings-input-wrapper">
-              <input type="number" id="input-h-${k}" value="${size.h}" min="0.5" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].h}">
+              <input type="number" id="input-h-${k}" value="${size.h}" min="0.1" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].h}">
               <span class="unit">سم</span>
             </div>
           </div>
@@ -1019,8 +1174,8 @@ function applyTypeSize(typeKey){
   const newW = parseFloat(wInput.value);
   const newH = parseFloat(hInput.value);
 
-  if(!newW || !newH || newW < 0.5 || newH < 0.5 || newW > 50 || newH > 50){
-    showToast('قيمة غير صحيحة (0.5 - 50 سم)', '⚠️');
+  if(!newW || !newH || newW < 0.1 || newH < 0.1 || newW > 50 || newH > 50){
+    showToast('قيمة غير صحيحة (0.1 - 50 سم)', '⚠️');
     return;
   }
 
@@ -1042,7 +1197,6 @@ function applyTypeSize(typeKey){
 
   renderTypeIconsRow();
   renderLivePreview();
-  if(currentEditingType === typeKey) renderTypeItems();
 
   showToast(`✅ حفظ أبعاد ${TEMPLATES[typeKey].name}: ${newW}×${newH} سم`, '✅');
 }
