@@ -6,6 +6,7 @@
 <title>🖨️ مطبعة الأمير</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root{
   --bg:#f4f6fb; --ink:#1e293b; --muted:#64748b;
@@ -106,7 +107,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .section-sub{font-size:10px;color:var(--muted);margin-top:2px}
 
 /* Type icons row */
-.type-icons-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+.type-icons-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px}
 .type-icon-card{position:relative;background:#fff;border:2px solid var(--border);border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;transition:.2s;box-shadow:var(--shadow)}
 .type-icon-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(200,164,92,.25)}
 .type-icon-card .ti-emoji{font-size:28px;margin-bottom:6px;display:block}
@@ -140,6 +141,11 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .drag-handle{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:6px;background:rgba(15,23,42,.7);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;z-index:10;cursor:grab;pointer-events:auto}
 .sheet-item:hover .drag-handle{display:flex}
 
+/* --- NEW FIXED CROP WRAPPER --- */
+.cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:2px}
+.cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;backface-visibility:hidden;transform-origin:center center}
+/* ------------------------------ */
+
 .print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
 .print-actions .save-img{background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;box-shadow:0 6px 18px rgba(34,197,94,.4)}
@@ -170,13 +176,23 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .id-card-actions button.crop-btn{background:rgba(200,164,92,.95)}
 .id-card-actions button.crop-btn:hover{background:#a17c3a}
 
+/* Office file card inside type modal */
+.office-file-card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;border:1.5px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:12px}
+.office-file-card .ofc-ico{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#ef4444,#dc2626);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;flex-shrink:0}
+.office-file-card .ofc-info{flex:1;min-width:0}
+.office-file-card .ofc-name{font-size:13px;font-weight:900;color:var(--ink);word-break:break-all;margin-bottom:2px}
+.office-file-card .ofc-meta{font-size:10px;color:var(--muted)}
+.office-file-card .ofc-actions{display:flex;gap:4px;flex-shrink:0}
+.office-file-card .ofc-actions button{width:32px;height:32px;border-radius:8px;border:none;cursor:pointer;background:rgba(37,99,235,.1);color:var(--accent);font-size:13px;display:flex;align-items:center;justify-content:center}
+.office-file-card .ofc-actions button.del{background:rgba(239,68,68,.1);color:#ef4444}
+
 .modal-empty{text-align:center;padding:36px 20px;color:var(--muted)}
 .modal-empty .me-ico{font-size:52px;opacity:.3;margin-bottom:12px}
 .modal-empty .me-txt{font-size:13px;font-weight:800;margin-bottom:16px}
 
 .photo-count-selector{display:flex;gap:8px;margin-bottom:14px}
 
-/* Settings — number inputs */
+/* Settings */
 .settings-type-block{background:linear-gradient(135deg,rgba(200,164,92,.06),rgba(200,164,92,.02));border:1.5px solid rgba(200,164,92,.25);border-radius:14px;padding:14px;margin-bottom:14px}
 .settings-type-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px;font-weight:900;color:var(--gold2)}
 .settings-type-head .sth-emoji{font-size:20px}
@@ -199,24 +215,77 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 /* Crop Modal */
 .crop-modal{position:fixed;inset:0;background:rgba(15,23,42,.95);backdrop-filter:blur(6px);display:none;z-index:300;flex-direction:column}
 .crop-modal.on{display:flex}
-.crop-header{padding:14px 18px;background:#fff;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 12px rgba(0,0,0,.15);flex-shrink:0}
+.crop-header{padding:12px 16px;background:#fff;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 12px rgba(0,0,0,.15);flex-shrink:0;gap:8px;flex-wrap:wrap}
 .crop-title{font-size:15px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:8px}
 .crop-title i{color:var(--gold)}
-.crop-actions{display:flex;gap:8px}
-.crop-actions button{padding:9px 18px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;gap:6px;font-family:inherit}
+.crop-actions{display:flex;gap:6px}
+.crop-actions button{padding:9px 14px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;gap:5px;font-family:inherit}
 .crop-actions .cancel{background:#e2e8f0;color:var(--ink)}
 .crop-actions .apply{background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;box-shadow:0 4px 14px rgba(34,197,94,.4)}
-.crop-body{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
+.crop-body{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;position:relative}
+
+/* Crop viewport */
 .crop-viewport{position:relative;background:#111;border:2px solid var(--gold);border-radius:12px;box-shadow:0 0 60px rgba(200,164,92,.4);overflow:hidden;cursor:grab;touch-action:none;max-width:100%;max-height:100%}
 .crop-viewport.dragging{cursor:grabbing}
-.crop-viewport img{position:absolute;top:0;left:0;user-select:none;pointer-events:none;transform-origin:0 0;max-width:none;max-height:none}
-.crop-controls{padding:14px 18px;background:#fff;display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:0 -2px 12px rgba(0,0,0,.15);flex-shrink:0}
-.crop-controls label{font-size:11px;font-weight:800;color:var(--muted);display:flex;align-items:center;gap:6px}
-.crop-controls input[type=range]{flex:1;min-width:100px;height:6px;border-radius:4px;background:rgba(200,164,92,.2);outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
-.crop-controls input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));cursor:pointer;box-shadow:0 2px 8px rgba(200,164,92,.5)}
-.crop-controls input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));cursor:pointer;border:none}
-.crop-controls .zoom-val{min-width:52px;text-align:center;font-size:12px;font-weight:900;color:var(--gold2);background:rgba(200,164,92,.1);padding:6px 10px;border-radius:8px}
-.crop-controls .reset-btn{padding:8px 14px;border-radius:9px;border:none;cursor:pointer;background:rgba(37,99,235,.1);color:var(--accent);font-size:11px;font-weight:900;display:flex;align-items:center;gap:5px;font-family:inherit}
+.crop-image-layer{position:absolute;inset:0;overflow:hidden;border-radius:8px}
+.crop-image-layer img{position:absolute;top:0;left:0;user-select:none;pointer-events:none;transform-origin:center center;max-width:none;max-height:none;will-change:transform}
+
+/* Crop box */
+.crop-box{position:absolute;border:2px dashed #fff;box-shadow:0 0 0 1px rgba(0,0,0,.5);z-index:4;pointer-events:auto;touch-action:none;box-sizing:border-box}
+.crop-box::before{content:"";position:absolute;inset:0;pointer-events:none;border:1px solid rgba(255,255,255,.3)}
+.crop-handle{position:absolute;width:18px;height:18px;background:#fff;border:2px solid var(--gold);border-radius:50%;pointer-events:auto;touch-action:none;z-index:5;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.crop-handle[data-h="nw"]{left:-9px;top:-9px;cursor:nwse-resize}
+.crop-handle[data-h="n"] {left:50%;top:-9px;margin-left:-9px;cursor:ns-resize}
+.crop-handle[data-h="ne"]{right:-9px;top:-9px;cursor:nesw-resize}
+.crop-handle[data-h="e"] {right:-9px;top:50%;margin-top:-9px;cursor:ew-resize}
+.crop-handle[data-h="se"]{right:-9px;bottom:-9px;cursor:nwse-resize}
+.crop-handle[data-h="s"] {left:50%;bottom:-9px;margin-left:-9px;cursor:ns-resize}
+.crop-handle[data-h="sw"]{left:-9px;bottom:-9px;cursor:nesw-resize}
+.crop-handle[data-h="w"] {left:-9px;top:50%;margin-top:-9px;cursor:ew-resize}
+
+.crop-angle-badge{position:absolute;top:8px;right:8px;background:rgba(15,23,42,.9);color:#fff;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:900;z-index:5;pointer-events:none;display:none;border:1px solid rgba(200,164,92,.6)}
+.crop-angle-badge.on{display:block}
+
+.crop-exit-btn{position:absolute;top:8px;left:8px;width:38px;height:38px;border-radius:10px;border:none;cursor:pointer;background:rgba(239,68,68,.95);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;z-index:7;box-shadow:0 4px 14px rgba(239,68,68,.5);transition:.15s}
+.crop-exit-btn:hover{background:#dc2626}
+.crop-exit-btn:active{transform:scale(.94)}
+
+.crop-controls{padding:12px 16px;background:#fff;box-shadow:0 -2px 12px rgba(0,0,0,.15);flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.crop-controls-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.crop-controls-row label{font-size:11px;font-weight:900;color:var(--muted);display:flex;align-items:center;gap:5px;min-width:70px}
+.crop-controls-row label i{color:var(--gold);font-size:13px}
+.crop-controls-row input[type=range]{flex:1;min-width:120px;height:6px;border-radius:4px;background:rgba(200,164,92,.2);outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+.crop-controls-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));cursor:pointer;box-shadow:0 2px 8px rgba(200,164,92,.5);border:2px solid #fff}
+.crop-controls-row input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));cursor:pointer;border:2px solid #fff;box-shadow:0 2px 8px rgba(200,164,92,.5)}
+.crop-controls-row .value-box{min-width:66px;text-align:center;font-size:12px;font-weight:900;color:var(--gold2);background:rgba(200,164,92,.1);padding:6px 10px;border-radius:8px;font-variant-numeric:tabular-nums}
+.crop-controls-row .stepper{display:flex;gap:3px}
+.crop-controls-row .stepper button{width:28px;height:28px;border-radius:7px;border:none;cursor:pointer;background:rgba(200,164,92,.15);color:var(--gold2);font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;transition:.15s}
+.crop-controls-row .stepper button:hover{background:rgba(200,164,92,.35)}
+.crop-controls-row .stepper button:active{transform:scale(.92)}
+.crop-controls-row .reset-btn{padding:7px 12px;border-radius:8px;border:none;cursor:pointer;background:rgba(37,99,235,.1);color:var(--accent);font-size:11px;font-weight:900;display:flex;align-items:center;gap:4px;font-family:inherit;margin-left:auto}
+.crop-controls-row .reset-btn:active{transform:scale(.95)}
+
+.crop-mode-toggle{display:flex;gap:4px;background:rgba(200,164,92,.1);padding:3px;border-radius:10px}
+.crop-mode-toggle button{padding:6px 12px;border-radius:7px;border:none;cursor:pointer;background:transparent;color:var(--gold2);font-size:11px;font-weight:900;display:flex;align-items:center;gap:4px;font-family:inherit;transition:.15s}
+.crop-mode-toggle button.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 2px 6px rgba(200,164,92,.4)}
+
+.crop-quality-panel{padding:10px 16px;background:linear-gradient(135deg,#f8fafc,#fff);border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.crop-quality-panel .qc-label{font-size:11px;font-weight:900;color:var(--muted);display:flex;align-items:center;gap:5px}
+.crop-quality-panel .qc-label i{color:var(--gold)}
+.crop-quality-panel .qc-options{display:flex;gap:4px;flex:1;flex-wrap:wrap}
+.crop-quality-panel .qc-opt{padding:6px 12px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--ink);font-size:11px;font-weight:900;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:4px;font-family:inherit}
+.crop-quality-panel .qc-opt:hover{border-color:var(--gold);background:rgba(200,164,92,.05)}
+.crop-quality-panel .qc-opt.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border-color:var(--gold2);box-shadow:0 2px 8px rgba(200,164,92,.4)}
+
+/* Office viewer modal */
+.office-viewer{position:fixed;inset:0;background:rgba(15,23,42,.97);backdrop-filter:blur(6px);display:none;z-index:400;flex-direction:column}
+.office-viewer.on{display:flex}
+.office-viewer-head{padding:12px 18px;background:#fff;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 12px rgba(0,0,0,.15);flex-shrink:0;gap:8px;flex-wrap:wrap}
+.office-viewer-title{font-size:14px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:8px}
+.office-viewer-title i{color:var(--gold)}
+.office-viewer-body{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.office-page-canvas{max-width:100%;height:auto;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.4);border-radius:6px}
+.office-page-num{color:#c8a45c;font-size:12px;font-weight:900;padding:4px 12px;background:rgba(200,164,92,.15);border-radius:8px}
 
 /* Toast */
 .toast{position:fixed;bottom:130px;left:50%;transform:translate(-50%,20px);background:rgba(15,23,42,.95);color:#fff;padding:13px 22px;border-radius:12px;font-size:13px;font-weight:800;z-index:9999;opacity:0;pointer-events:none;transition:.3s;display:flex;align-items:center;gap:8px;max-width:90vw;box-shadow:0 10px 30px rgba(0,0,0,.3)}
@@ -229,11 +298,25 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .bottom-bar .save{background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.4)}
 .bottom-bar .print{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 20px rgba(200,164,92,.4)}
 
-@media(max-width:420px){
+@media(max-width:520px){
   .type-icons-row{grid-template-columns:repeat(3,1fr)}
   .type-icon-card .ti-emoji{font-size:24px}
   .type-icon-card .ti-name{font-size:10px}
   .settings-inputs-row{grid-template-columns:1fr}
+  .crop-controls-row label{min-width:56px;font-size:10px}
+  .crop-controls-row .value-box{min-width:56px;font-size:11px;padding:5px 8px}
+  .crop-header{padding:10px 12px}
+  .crop-title{font-size:13px}
+  .crop-actions button{padding:8px 12px;font-size:11px}
+  .crop-handle{width:22px;height:22px}
+  .crop-handle[data-h="nw"]{left:-11px;top:-11px}
+  .crop-handle[data-h="ne"]{right:-11px;top:-11px}
+  .crop-handle[data-h="se"]{right:-11px;bottom:-11px}
+  .crop-handle[data-h="sw"]{left:-11px;bottom:-11px}
+  .crop-handle[data-h="n"]{top:-11px;margin-left:-11px}
+  .crop-handle[data-h="s"]{bottom:-11px;margin-left:-11px}
+  .crop-handle[data-h="e"]{right:-11px;margin-top:-11px}
+  .crop-handle[data-h="w"]{left:-11px;margin-top:-11px}
 }
 </style>
 </head>
@@ -410,7 +493,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 
 <div class="crop-modal" id="cropModal">
   <div class="crop-header">
-    <div class="crop-title"><i class="bi bi-crop"></i> قص الصورة</div>
+    <div class="crop-title"><i class="bi bi-crop"></i> قص وتدوير الصورة</div>
     <div class="crop-actions">
       <button class="cancel" onclick="cancelCrop()"><i class="bi bi-x-lg"></i> إلغاء</button>
       <button class="apply" onclick="applyCrop()"><i class="bi bi-check-lg"></i> تطبيق</button>
@@ -418,28 +501,101 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </div>
   <div class="crop-body" id="cropBody">
     <div class="crop-viewport" id="cropViewport">
-      <img id="cropImage" src="" alt="crop">
+      <div class="crop-image-layer" id="cropImageLayer">
+        <img id="cropImage" src="" alt="crop">
+      </div>
+
+      <div class="crop-box" id="cropBox">
+        <div class="crop-handle" data-h="nw"></div>
+        <div class="crop-handle" data-h="n"></div>
+        <div class="crop-handle" data-h="ne"></div>
+        <div class="crop-handle" data-h="e"></div>
+        <div class="crop-handle" data-h="se"></div>
+        <div class="crop-handle" data-h="s"></div>
+        <div class="crop-handle" data-h="sw"></div>
+        <div class="crop-handle" data-h="w"></div>
+      </div>
+
+      <div class="crop-angle-badge" id="cropAngleBadge">0.0°</div>
+      <button class="crop-exit-btn" onclick="cancelCrop()" title="خروج">
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
   </div>
+
   <div class="crop-controls">
-    <label>🔍 تكبير/تصغير</label>
-    <input type="range" id="cropZoom" min="0.1" max="5" step="0.05" value="1">
-    <div class="zoom-val" id="cropZoomVal">1.00x</div>
-    <button class="reset-btn" onclick="resetCropPosition()">
-      <i class="bi bi-arrow-counterclockwise"></i> إعادة تعيين
-    </button>
+    <div class="crop-controls-row">
+      <div class="crop-mode-toggle">
+        <button id="modePan" class="active" onclick="setCropMode('pan')">
+          <i class="bi bi-arrows-move"></i> تحريك
+        </button>
+        <button id="modeBox" onclick="setCropMode('box')">
+          <i class="bi bi-crop"></i> تحديد
+        </button>
+      </div>
+
+      <label><i class="bi bi-zoom-in"></i> تكبير</label>
+      <div class="stepper">
+        <button onclick="nudgeZoom(-0.05)">−</button>
+      </div>
+      <input type="range" id="cropZoom" min="0.1" max="5" step="0.01" value="1">
+      <div class="stepper">
+        <button onclick="nudgeZoom(0.05)">+</button>
+      </div>
+      <div class="value-box" id="cropZoomVal">1.00x</div>
+    </div>
+
+    <div class="crop-controls-row">
+      <label><i class="bi bi-arrow-clockwise"></i> تدوير</label>
+      <div class="stepper">
+        <button onclick="nudgeRotate(-1)">−</button>
+      </div>
+      <input type="range" id="cropRotate" min="-180" max="180" step="0.1" value="0">
+      <div class="stepper">
+        <button onclick="nudgeRotate(1)">+</button>
+      </div>
+      <div class="value-box" id="cropRotateVal">0.0°</div>
+      <button class="reset-btn" onclick="resetCropAll()">
+        <i class="bi bi-arrow-counterclockwise"></i> إعادة الكل
+      </button>
+    </div>
   </div>
+
+  <div class="crop-quality-panel">
+    <div class="qc-label"><i class="bi bi-stars"></i> وضوح الصورة</div>
+    <div class="qc-options">
+      <button class="qc-opt" data-q="auto" onclick="setCropQuality('auto')"><i class="bi bi-magic"></i> تلقائي</button>
+      <button class="qc-opt" data-q="sharp" onclick="setCropQuality('sharp')"><i class="bi bi-sun"></i> حاد</button>
+      <button class="qc-opt active" data-q="smooth" onclick="setCropQuality('smooth')"><i class="bi bi-droplet"></i> ناعم</button>
+      <button class="qc-opt" data-q="high" onclick="setCropQuality('high')"><i class="bi bi-star-fill"></i> جودة عالية</button>
+    </div>
+  </div>
+</div>
+
+<div class="office-viewer" id="officeViewer">
+  <div class="office-viewer-head">
+    <div class="office-viewer-title">
+      <i class="bi bi-file-earmark-text-fill"></i>
+      <span id="officeViewerName">الملف</span>
+    </div>
+    <div class="crop-actions">
+      <button class="cancel" onclick="closeOfficeViewer()"><i class="bi bi-x-lg"></i> إغلاق</button>
+    </div>
+  </div>
+  <div class="office-viewer-body" id="officeViewerBody"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <input type="file" id="fileInputFront" accept="image/*" style="display:none">
 <input type="file" id="fileInputBack" accept="image/*" style="display:none">
+<input type="file" id="officeFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" style="display:none">
 
 <script>
-/* ============================================================
-   State
-============================================================ */
+if(window.pdfjsLib){
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
 let projects = [];
 let currentProject = null;
 let selectedPaper = 'A4';
@@ -449,27 +605,23 @@ let dragSourceEl = null;
 const STORAGE_KEY = 'amir_press_projects_v7';
 const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v4';
 
-/* Crop zoom bounds */
 const CROP_MIN_ZOOM = 0.1;
 const CROP_MAX_ZOOM = 5;
+const CROP_MIN_BOX_PX = 24;
 
-/* Fixed gaps */
 const PAIR_GAP_PX = 6;
 const PHOTO_GAP_PX = 6;
 const ITEM_GAP_PX = 6;
 
-/* ============================================================
-   Default sizes
-============================================================ */
 const DEFAULT_SIZES = {
   id:        { w: 5.56, h: 3.1 },
   residency: { w: 8.5,  h: 5.5 },
   passport:  { w: 8.8,  h: 12.5 },
   photos:    { w: 1.5,  h: 2.5 },
-  full:      { w: 0,    h: 0 }
+  full:      { w: 0,    h: 0 },
+  office:    { w: 0,    h: 0 }
 };
 
-/* Global sizes — loaded from localStorage */
 let GLOBAL_SIZES = JSON.parse(JSON.stringify(DEFAULT_SIZES));
 try{
   const raw = localStorage.getItem(GLOBAL_SIZES_KEY);
@@ -486,7 +638,8 @@ const TEMPLATES = {
   residency: { key:'residency', name:'بطاقة سكن',   icon:'🏠', kind:'pair',   addLabel:'إضافة بطاقة سكن' },
   passport:  { key:'passport',  name:'جواز سفر',    icon:'🛂', kind:'pair',   addLabel:'إضافة جواز سفر' },
   photos:    { key:'photos',    name:'صور شخصية',   icon:'📸', kind:'photos', addLabel:'إضافة صورة شخصية' },
-  full:      { key:'full',      name:'صورة كاملة',  icon:'🖼️', kind:'full',   addLabel:'إضافة صورة كاملة' }
+  full:      { key:'full',      name:'صورة كاملة',  icon:'🖼️', kind:'full',   addLabel:'إضافة صورة كاملة' },
+  office:    { key:'office',    name:'ملف أوفس',    icon:'📄', kind:'office', addLabel:'إضافة ملف (PDF / Word / PPT)' }
 };
 
 const $ = id => document.getElementById(id);
@@ -501,7 +654,6 @@ function showToast(msg, ico='✅'){
 function closeModal(id){ $(id).classList.remove('on'); }
 function openModal(id){ $(id).classList.add('on'); }
 
-/* Storage */
 function loadProjects(){
   try{ const raw = localStorage.getItem(STORAGE_KEY); projects = raw ? JSON.parse(raw) : []; }
   catch(e){ projects = []; }
@@ -521,7 +673,6 @@ function persistProjects(){
   catch(e){ showToast('مساحة التخزين ممتلئة!', '⚠️'); }
 }
 
-/* Splash */
 function enterApp(){
   $('splash').classList.add('hide');
   setTimeout(()=>{ $('splash').style.display='none'; }, 500);
@@ -529,7 +680,6 @@ function enterApp(){
   renderProjects();
 }
 
-/* Projects list */
 function renderProjects(){
   const list = $('projectsList');
   const empty = $('emptyState');
@@ -562,7 +712,6 @@ function deleteProject(id){
   persistProjects(); renderProjects(); showToast('تم حذف المشروع','🗑️');
 }
 
-/* New project */
 function openNewProject(){
   $('newProjName').value = '';
   selectedPaper = 'A4';
@@ -592,7 +741,6 @@ function createProject(){
   openProject(project.id);
 }
 
-/* Editor */
 function openProject(id){
   currentProject = projects.find(p=>p.id === id);
   if(!currentProject) return;
@@ -632,7 +780,6 @@ function updateEditorHeader(){
     <span class="tag"><i class="bi bi-list-check"></i> ${currentProject.ids.length} عنصر</span>`;
 }
 
-/* Effective size — for sheet/print only */
 function getEffectiveSize(key){
   if(currentProject && currentProject.sizes && currentProject.sizes[key] &&
      typeof currentProject.sizes[key].w === 'number' && currentProject.sizes[key].w > 0 &&
@@ -645,21 +792,21 @@ function getEffectiveSize(key){
   return { w: DEFAULT_SIZES[key].w, h: DEFAULT_SIZES[key].h };
 }
 
-/* Card size — modal cards always use DEFAULT_SIZES */
 function getCardSize(key){
   if(DEFAULT_SIZES[key]) return { w: DEFAULT_SIZES[key].w, h: DEFAULT_SIZES[key].h };
   return { w: 5.56, h: 3.1 };
 }
 
-/* Type icons */
 function renderTypeIconsRow(){
   const row = $('typeIconsRow');
-  const keys = ['id','residency','passport','photos','full'];
+  const keys = ['id','residency','passport','photos','full','office'];
   row.innerHTML = keys.map(k=>{
     const tpl = TEMPLATES[k];
     const count = currentProject.ids.filter(it => it.template === k).length;
     const size = getEffectiveSize(k);
-    const dimText = tpl.kind === 'full' ? 'كامل' : `${size.w}×${size.h}`;
+    let dimText = 'كامل';
+    if(tpl.kind !== 'full' && tpl.kind !== 'office') dimText = `${size.w}×${size.h}`;
+    if(tpl.kind === 'office') dimText = 'ملفات';
     return `
       <div class="type-icon-card" onclick="openTypeEditor('${k}')">
         <div class="ti-badge ${count>0?'':'empty'}">${count}</div>
@@ -671,7 +818,6 @@ function renderTypeIconsRow(){
   }).join('');
 }
 
-/* Type editor */
 function openTypeEditor(typeKey){
   currentEditingType = typeKey;
   const tpl = TEMPLATES[typeKey];
@@ -696,7 +842,6 @@ function renderTypeItems(){
   const cont = $('typeItemsList');
   const items = currentProject.ids.filter(it => it.template === currentEditingType);
   const tpl = TEMPLATES[currentEditingType];
-  const size = getCardSize(currentEditingType);
 
   if(!items.length){
     cont.innerHTML = `
@@ -707,6 +852,34 @@ function renderTypeItems(){
     `;
     return;
   }
+
+  if(tpl.kind === 'office'){
+    cont.innerHTML = items.map((item, idx)=>{
+      const name = item.fileName || 'ملف';
+      const size = item.fileSize ? formatBytes(item.fileSize) : '';
+      const type = item.fileType || '';
+      return `
+        <div class="office-file-card">
+          <div class="ofc-ico"><i class="bi bi-file-earmark-text-fill"></i></div>
+          <div class="ofc-info">
+            <div class="ofc-name">${escapeHtml(name)}</div>
+            <div class="ofc-meta">${escapeHtml(type)} • ${size}</div>
+          </div>
+          <div class="ofc-actions">
+            <button onclick="previewOfficeFile('${item.id}')" title="معاينة">
+              <i class="bi bi-eye-fill"></i>
+            </button>
+            <button class="del" onclick="deleteItem('${item.id}')" title="حذف">
+              <i class="bi bi-trash-fill"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+    return;
+  }
+
+  const size = getCardSize(currentEditingType);
 
   cont.innerHTML = items.map((pair, idx)=>`
     <div class="id-pair">
@@ -727,8 +900,14 @@ function renderCard(pair, side, label, icon, size){
   const isHidden = !!pair['hide' + (side==='front'?'Front':'Back')];
   const showActions = !!img || isHidden;
   const aspect = size.w > 0 ? `${size.w} / ${size.h}` : '210 / 297';
-  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1 };
-  const imgStyle = `object-fit:cover; transform: translate(${crop.x}%, ${crop.y}%) scale(${crop.zoom});`;
+  
+  // Build the cropped HTML identical to sheet rendering to see exactly what we get
+  let innerHTML = '';
+  if(img){
+    innerHTML = buildCroppedImageHTML(pair, side);
+  } else {
+    innerHTML = `<i class="bi bi-plus-circle"></i><span>اضغط لإضافة صورة</span>`;
+  }
 
   return `
     <div class="id-card">
@@ -736,14 +915,14 @@ function renderCard(pair, side, label, icon, size){
       <div class="id-card-img ${img ? '' : 'empty'} ${isHidden ? 'hidden-card' : ''}"
            style="aspect-ratio:${aspect}"
            onclick="pickImage('${pair.id}','${side}')">
-        ${ img ? `<img src="${img}" style="${imgStyle}" alt="${label}">` : `<i class="bi bi-plus-circle"></i><span>اضغط لإضافة صورة</span>` }
+        ${ innerHTML }
       </div>
       ${ showActions ? `
         <div class="id-card-actions">
           <button class="eye-btn ${isHidden ? 'active' : ''}" onclick="event.stopPropagation();toggleHide('${pair.id}','${side}')" title="${isHidden ? 'إظهار' : 'إخفاء'}">
             <i class="bi ${isHidden ? 'bi-eye-slash-fill' : 'bi-eye-fill'}"></i>
           </button>
-          ${img ? `<button class="crop-btn" onclick="event.stopPropagation();openCrop('${pair.id}','${side}')" title="قص الصورة">
+          ${img ? `<button class="crop-btn" onclick="event.stopPropagation();openCrop('${pair.id}','${side}')" title="قص وتدوير">
             <i class="bi bi-crop"></i>
           </button>` : ''}
         </div>` : '' }
@@ -751,8 +930,32 @@ function renderCard(pair, side, label, icon, size){
   `;
 }
 
+function getQualityFilter(q){
+  switch(q){
+    case 'sharp':  return 'contrast(1.08) saturate(1.08) brightness(1.02)';
+    case 'smooth': return 'contrast(1.02) saturate(1.03)';
+    case 'high':   return 'contrast(1.12) saturate(1.15) brightness(1.03)';
+    case 'auto':
+    default:       return 'none';
+  }
+}
+
+function formatBytes(bytes){
+  if(!bytes) return '';
+  const kb = bytes / 1024;
+  if(kb < 1024) return kb.toFixed(1) + ' KB';
+  return (kb/1024).toFixed(2) + ' MB';
+}
+
 function addItemToType(){
   if(!currentProject) return;
+
+  if(currentEditingType === 'office'){
+    $('officeFileInput').value = '';
+    $('officeFileInput').click();
+    return;
+  }
+
   const newId = uid();
   currentProject.ids.push({
     id: newId,
@@ -770,6 +973,43 @@ function addItemToType(){
   updateEditorHeader();
   showToast(`أضفت ${TEMPLATES[currentEditingType].name} جديد`, '➕');
 }
+
+$('officeFileInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file || !currentProject) return;
+
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  const allowed = ['pdf','doc','docx','ppt','pptx','xls','xlsx'];
+  if(!allowed.includes(ext)){
+    showToast('صيغة غير مدعومة. اختر PDF, Word, PowerPoint, Excel', '⚠️');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const dataUrl = ev.target.result;
+    const newId = uid();
+    const item = {
+      id: newId,
+      template: 'office',
+      fileName: file.name,
+      fileType: ext.toUpperCase() + ' File',
+      fileSize: file.size,
+      fileData: dataUrl,
+      fileExt: ext
+    };
+    currentProject.ids.push(item);
+    if(!currentProject.order) currentProject.order = [];
+    currentProject.order.push(newId);
+    persistProjects();
+    renderTypeItems();
+    renderTypeIconsRow();
+    renderLivePreview();
+    updateEditorHeader();
+    showToast(`تمت إضافة ${file.name}`, '📄');
+  };
+  reader.readAsDataURL(file);
+});
 
 function deleteItem(itemId){
   if(!confirm('حذف هذا العنصر؟')) return;
@@ -808,7 +1048,6 @@ function pickPhotoCount(n){
   showToast(`عدد الصور: ${n}`, '✅');
 }
 
-/* Image picker */
 function pickImage(pairId, side){
   pickerTarget = { pairId, side };
   const input = side === 'front' ? $('fileInputFront') : $('fileInputBack');
@@ -827,7 +1066,7 @@ function handleFile(e){
     if(pair){
       pair[pickerTarget.side] = ev.target.result;
       if(!pair.crops) pair.crops = {};
-      pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1 };
+      pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1, rotate:0, quality:'smooth', box:null };
       persistProjects();
       renderTypeItems();
       renderLivePreview();
@@ -838,17 +1077,16 @@ function handleFile(e){
   reader.readAsDataURL(file);
 }
 
-/* ============================================================
-   Crop — pinch-to-zoom, wheel, negative pan, min zoom 0.1
-============================================================ */
 let cropState = null;
 let cropPointers = new Map();
 let cropDrag = null;
 let cropPinch = null;
+let cropBoxDrag = null;
+let cropMode = 'pan';
+let cropShiftPressed = false;
 
-function clampZoom(z){
-  return Math.max(CROP_MIN_ZOOM, Math.min(CROP_MAX_ZOOM, z));
-}
+function clampZoom(z){ return Math.max(CROP_MIN_ZOOM, Math.min(CROP_MAX_ZOOM, z)); }
+function clampRotate(r){ while(r > 180) r -= 360; while(r < -180) r += 360; return r; }
 
 function openCrop(pairId, side){
   const pair = currentProject.ids.find(p=>p.id === pairId);
@@ -857,23 +1095,23 @@ function openCrop(pairId, side){
   const imgSrc = pair[side];
   const size = getEffectiveSize(pair.template);
   const aspect = size.w / size.h;
-  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1 };
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'smooth', box:null };
 
   cropState = {
     pairId, side, imgSrc, aspect,
-    x: crop.x, y: crop.y, zoom: clampZoom(crop.zoom)
+    x: crop.x || 0, y: crop.y || 0,
+    zoom: clampZoom(crop.zoom || 1),
+    rotate: crop.rotate || 0,
+    quality: crop.quality || 'smooth',
+    box: crop.box ? { ...crop.box } : null,
+    baseW: 0, baseH: 0, vw: 0, vh: 0
   };
 
-  const maxW = Math.min(window.innerWidth * 0.85, 500);
-  const maxH = Math.min(window.innerHeight * 0.6, 500);
+  const maxW = Math.min(window.innerWidth * 0.88, 500);
+  const maxH = Math.min(window.innerHeight * 0.55, 500);
   let vw, vh;
-  if(aspect > maxW / maxH){
-    vw = maxW;
-    vh = maxW / aspect;
-  } else {
-    vh = maxH;
-    vw = maxH * aspect;
-  }
+  if(aspect > maxW / maxH){ vw = maxW; vh = maxW / aspect; }
+  else { vh = maxH; vw = maxH * aspect; }
 
   const vp = $('cropViewport');
   vp.style.width = vw + 'px';
@@ -888,26 +1126,49 @@ function openCrop(pairId, side){
 
     let baseW, baseH;
     if(imageRatio > viewportRatio){
-      baseH = vh;
-      baseW = vh * imageRatio;
+      baseH = vh; baseW = vh * imageRatio;
     } else {
-      baseW = vw;
-      baseH = vw / imageRatio;
+      baseW = vw; baseH = vw / imageRatio;
     }
 
     cropState.baseW = baseW;
     cropState.baseH = baseH;
     cropState.vw = vw;
     cropState.vh = vh;
+
+    if(!cropState.box){
+      cropState.box = { x: 0, y: 0, w: 1, h: 1 };
+    } else {
+      cropState.box.x = Math.max(0, Math.min(cropState.box.x, 1 - 0.05));
+      cropState.box.y = Math.max(0, Math.min(cropState.box.y, 1 - 0.05));
+      cropState.box.w = Math.max(0.05, Math.min(cropState.box.w, 1 - cropState.box.x));
+      cropState.box.h = Math.max(0.05, Math.min(cropState.box.h, 1 - cropState.box.y));
+    }
+
+    updateCropBoxPosition();
     applyCropTransform();
   };
   img.src = imgSrc;
 
   $('cropZoom').value = cropState.zoom;
   $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
+  $('cropRotate').value = cropState.rotate;
+  $('cropRotateVal').textContent = cropState.rotate.toFixed(1) + '°';
 
+  document.querySelectorAll('.qc-opt').forEach(b=>{
+    b.classList.toggle('active', b.dataset.q === cropState.quality);
+  });
+
+  setCropMode('pan');
+  applyQualityToImage();
   openModal('cropModal');
   setupCropInteractions();
+}
+
+function applyQualityToImage(){
+  if(!cropState) return;
+  const img = $('cropImage');
+  img.style.filter = getQualityFilter(cropState.quality);
 }
 
 function applyCropTransform(){
@@ -916,19 +1177,100 @@ function applyCropTransform(){
   const z = cropState.zoom;
   const bw = cropState.baseW * z;
   const bh = cropState.baseH * z;
-  const offsetX = (cropState.vw - bw) / 2 + (cropState.x / 100) * bw;
-  const offsetY = (cropState.vh - bh) / 2 + (cropState.y / 100) * bh;
+
+  const centerX = cropState.vw / 2;
+  const centerY = cropState.vh / 2;
+
+  const panOffsetX = (cropState.x / 100) * bw;
+  const panOffsetY = (cropState.y / 100) * bh;
+
   img.style.width = bw + 'px';
   img.style.height = bh + 'px';
-  img.style.left = offsetX + 'px';
-  img.style.top = offsetY + 'px';
+  img.style.left = (centerX - bw / 2 + panOffsetX) + 'px';
+  img.style.top  = (centerY - bh / 2 + panOffsetY) + 'px';
+  img.style.transformOrigin = 'center center';
+  img.style.transform = `rotate(${cropState.rotate}deg)`;
+
+  const badge = $('cropAngleBadge');
+  if(cropState.rotate !== 0){
+    badge.classList.add('on');
+    badge.textContent = cropState.rotate.toFixed(1) + '°';
+  } else {
+    badge.classList.remove('on');
+  }
+}
+
+function updateCropBoxPosition(){
+  if(!cropState || !cropState.box) return;
+  const box = $('cropBox');
+  const px = cropState.box.x * cropState.vw;
+  const py = cropState.box.y * cropState.vh;
+  const pw = cropState.box.w * cropState.vw;
+  const ph = cropState.box.h * cropState.vh;
+  box.style.left = px + 'px';
+  box.style.top = py + 'px';
+  box.style.width = pw + 'px';
+  box.style.height = ph + 'px';
+}
+
+function setCropMode(mode){
+  cropMode = mode;
+  $('modePan').classList.toggle('active', mode === 'pan');
+  $('modeBox').classList.toggle('active', mode === 'box');
+  const vp = $('cropViewport');
+  vp.style.cursor = mode === 'box' ? 'default' : 'grab';
+}
+
+function nudgeZoom(d){
+  if(!cropState) return;
+  cropState.zoom = clampZoom(cropState.zoom + d);
+  $('cropZoom').value = cropState.zoom;
+  $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
+  applyCropTransform();
+}
+
+function nudgeRotate(d){
+  if(!cropState) return;
+  const step = cropShiftPressed ? d * 0.1 : d;
+  cropState.rotate = clampRotate(cropState.rotate + step);
+  $('cropRotate').value = cropState.rotate;
+  $('cropRotateVal').textContent = cropState.rotate.toFixed(1) + '°';
+  applyCropTransform();
+}
+
+function setCropQuality(q){
+  if(!cropState) return;
+  cropState.quality = q;
+  document.querySelectorAll('.qc-opt').forEach(b=>{
+    b.classList.toggle('active', b.dataset.q === q);
+  });
+  applyQualityToImage();
+  showToast(`وضوح الصورة: ${({auto:'تلقائي',sharp:'حاد',smooth:'ناعم',high:'جودة عالية'})[q]}`, '✨');
 }
 
 function setupCropInteractions(){
   const vp = $('cropViewport');
+  const box = $('cropBox');
+
+  const onKeyDown = (e)=>{
+    if(e.key === 'Shift') cropShiftPressed = true;
+    if(cropState){
+      if(e.key === 'ArrowLeft'){ e.preventDefault(); nudgeRotate(-1); }
+      if(e.key === 'ArrowRight'){ e.preventDefault(); nudgeRotate(1); }
+      if(e.key === 'ArrowUp'){ e.preventDefault(); nudgeZoom(0.05); }
+      if(e.key === 'ArrowDown'){ e.preventDefault(); nudgeZoom(-0.05); }
+    }
+  };
+  const onKeyUp = (e)=>{ if(e.key === 'Shift') cropShiftPressed = false; };
+  window.addEventListener('keydown', onKeyDown);
+  window.addEventListener('keyup', onKeyUp);
+  window._cropKeyHandlers = { onKeyDown, onKeyUp };
 
   vp.onpointerdown = (e)=>{
     if(!cropState) return;
+    if(e.target.closest('.crop-handle') || e.target === box) return;
+    if(cropMode === 'box') return;
+
     e.preventDefault();
     try{ vp.setPointerCapture(e.pointerId); }catch(err){}
 
@@ -937,10 +1279,8 @@ function setupCropInteractions(){
     if(cropPointers.size === 1){
       vp.classList.add('dragging');
       cropDrag = {
-        startX: e.clientX,
-        startY: e.clientY,
-        startOffsetX: cropState.x,
-        startOffsetY: cropState.y
+        startX: e.clientX, startY: e.clientY,
+        startOffsetX: cropState.x, startOffsetY: cropState.y
       };
     } else if(cropPointers.size === 2){
       vp.classList.remove('dragging');
@@ -951,11 +1291,7 @@ function setupCropInteractions(){
       const dist = Math.hypot(dx, dy);
       cropPinch = {
         startDist: dist || 1,
-        startZoom: cropState.zoom,
-        startX: cropState.x,
-        startY: cropState.y,
-        midX: (pts[0].x + pts[1].x) / 2,
-        midY: (pts[0].y + pts[1].y) / 2
+        startZoom: cropState.zoom
       };
     }
   };
@@ -964,7 +1300,6 @@ function setupCropInteractions(){
     if(!cropState) return;
     if(!cropPointers.has(e.pointerId)) return;
     e.preventDefault();
-
     cropPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     if(cropPointers.size === 1 && cropDrag){
@@ -975,43 +1310,16 @@ function setupCropInteractions(){
       cropState.x = cropDrag.startOffsetX + (dx / bw) * 100;
       cropState.y = cropDrag.startOffsetY + (dy / bh) * 100;
       applyCropTransform();
-      syncZoomSlider();
     } else if(cropPointers.size === 2 && cropPinch){
       const pts = Array.from(cropPointers.values());
       const dx = pts[0].x - pts[1].x;
       const dy = pts[0].y - pts[1].y;
       const dist = Math.hypot(dx, dy) || 1;
       const scale = dist / cropPinch.startDist;
-      let newZoom = clampZoom(cropPinch.startZoom * scale);
-
-      const midX = (pts[0].x + pts[1].x) / 2;
-      const midY = (pts[0].y + pts[1].y) / 2;
-
-      const vpRect = vp.getBoundingClientRect();
-      const relMidX = midX - vpRect.left;
-      const relMidY = midY - vpRect.top;
-      const centerX = cropState.vw / 2;
-      const centerY = cropState.vh / 2;
-
-      const oldBW = cropState.baseW * cropState.zoom;
-      const oldBH = cropState.baseH * cropState.zoom;
-      const oldOffsetX = centerX - oldBW / 2 + (cropPinch.startX / 100) * oldBW;
-      const oldOffsetY = centerY - oldBH / 2 + (cropPinch.startY / 100) * oldBH;
-
-      const imgPointX = (relMidX - oldOffsetX) / oldBW;
-      const imgPointY = (relMidY - oldOffsetY) / oldBH;
-
-      const newBW = cropState.baseW * newZoom;
-      const newBH = cropState.baseH * newZoom;
-      const targetOffsetX = relMidX - imgPointX * newBW;
-      const targetOffsetY = relMidY - imgPointY * newBH;
-
-      cropState.zoom = newZoom;
-      cropState.x = ((targetOffsetX - centerX + newBW / 2) / newBW) * 100;
-      cropState.y = ((targetOffsetY - centerY + newBH / 2) / newBH) * 100;
-
+      cropState.zoom = clampZoom(cropPinch.startZoom * scale);
+      $('cropZoom').value = cropState.zoom;
+      $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
       applyCropTransform();
-      syncZoomSlider();
     }
   };
 
@@ -1019,17 +1327,14 @@ function setupCropInteractions(){
     if(!cropState) return;
     cropPointers.delete(e.pointerId);
     if(cropPointers.size === 0){
-      cropDrag = null;
-      cropPinch = null;
+      cropDrag = null; cropPinch = null;
       vp.classList.remove('dragging');
     } else if(cropPointers.size === 1){
       cropPinch = null;
       const remaining = Array.from(cropPointers.values())[0];
       cropDrag = {
-        startX: remaining.x,
-        startY: remaining.y,
-        startOffsetX: cropState.x,
-        startOffsetY: cropState.y
+        startX: remaining.x, startY: remaining.y,
+        startOffsetX: cropState.x, startOffsetY: cropState.y
       };
       vp.classList.add('dragging');
     }
@@ -1041,41 +1346,108 @@ function setupCropInteractions(){
   vp.onwheel = (e)=>{
     if(!cropState) return;
     e.preventDefault();
-    const delta = -e.deltaY * 0.0015;
-    let newZoom = clampZoom(cropState.zoom * (1 + delta));
-
-    const vpRect = vp.getBoundingClientRect();
-    const relX = e.clientX - vpRect.left;
-    const relY = e.clientY - vpRect.top;
-    const centerX = cropState.vw / 2;
-    const centerY = cropState.vh / 2;
-
-    const oldBW = cropState.baseW * cropState.zoom;
-    const oldBH = cropState.baseH * cropState.zoom;
-    const oldOffsetX = centerX - oldBW / 2 + (cropState.x / 100) * oldBW;
-    const oldOffsetY = centerY - oldBH / 2 + (cropState.y / 100) * oldBH;
-
-    const imgPointX = (relX - oldOffsetX) / oldBW;
-    const imgPointY = (relY - oldOffsetY) / oldBH;
-
-    const newBW = cropState.baseW * newZoom;
-    const newBH = cropState.baseH * newZoom;
-    const targetOffsetX = relX - imgPointX * newBW;
-    const targetOffsetY = relY - imgPointY * newBH;
-
-    cropState.zoom = newZoom;
-    cropState.x = ((targetOffsetX - centerX + newBW / 2) / newBW) * 100;
-    cropState.y = ((targetOffsetY - centerY + newBH / 2) / newBH) * 100;
-
+    const delta = -e.deltaY * (cropShiftPressed ? 0.0005 : 0.0015);
+    cropState.zoom = clampZoom(cropState.zoom * (1 + delta));
+    $('cropZoom').value = cropState.zoom;
+    $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
     applyCropTransform();
-    syncZoomSlider();
   };
-}
 
-function syncZoomSlider(){
-  if(!cropState) return;
-  $('cropZoom').value = cropState.zoom;
-  $('cropZoomVal').textContent = cropState.zoom.toFixed(2) + 'x';
+  box.addEventListener('pointerdown', (e)=>{
+    if(!cropState || cropMode !== 'box') return;
+    if(e.target.closest('.crop-handle')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    cropBoxDrag = {
+      type: 'move',
+      startX: e.clientX, startY: e.clientY,
+      startBoxX: cropState.box.x, startBoxY: cropState.box.y,
+      pointerId: e.pointerId
+    };
+    try{ box.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  box.addEventListener('pointermove', (e)=>{
+    if(!cropBoxDrag || cropBoxDrag.type !== 'move') return;
+    if(e.pointerId !== cropBoxDrag.pointerId) return;
+    e.preventDefault();
+    const dx = (e.clientX - cropBoxDrag.startX) / cropState.vw;
+    const dy = (e.clientY - cropBoxDrag.startY) / cropState.vh;
+    let nx = cropBoxDrag.startBoxX + dx;
+    let ny = cropBoxDrag.startBoxY + dy;
+    nx = Math.max(0, Math.min(nx, 1 - cropState.box.w));
+    ny = Math.max(0, Math.min(ny, 1 - cropState.box.h));
+    cropState.box.x = nx;
+    cropState.box.y = ny;
+    updateCropBoxPosition();
+  });
+  const endBoxDrag = (e)=>{
+    if(cropBoxDrag && cropBoxDrag.type === 'move' && e.pointerId === cropBoxDrag.pointerId){
+      cropBoxDrag = null;
+    }
+  };
+  box.addEventListener('pointerup', endBoxDrag);
+  box.addEventListener('pointercancel', endBoxDrag);
+
+  box.querySelectorAll('.crop-handle').forEach(h=>{
+    h.addEventListener('pointerdown', (e)=>{
+      if(!cropState) return;
+      e.preventDefault();
+      e.stopPropagation();
+      cropBoxDrag = {
+        type: 'resize',
+        dir: h.dataset.h,
+        startX: e.clientX, startY: e.clientY,
+        startBox: { ...cropState.box },
+        pointerId: e.pointerId
+      };
+      try{ h.setPointerCapture(e.pointerId); }catch(err){}
+    });
+    h.addEventListener('pointermove', (e)=>{
+      if(!cropBoxDrag || cropBoxDrag.type !== 'resize') return;
+      if(e.pointerId !== cropBoxDrag.pointerId) return;
+      e.preventDefault();
+      const dx = (e.clientX - cropBoxDrag.startX) / cropState.vw;
+      const dy = (e.clientY - cropBoxDrag.startY) / cropState.vh;
+      const s = cropBoxDrag.startBox;
+      let nx = s.x, ny = s.y, nw = s.w, nh = s.h;
+      const dir = cropBoxDrag.dir;
+      const minW = CROP_MIN_BOX_PX / cropState.vw;
+      const minH = CROP_MIN_BOX_PX / cropState.vh;
+
+      if(dir.includes('w')){ nx = s.x + dx; nw = s.w - dx; }
+      if(dir.includes('e')){ nw = s.w + dx; }
+      if(dir.includes('n')){ ny = s.y + dy; nh = s.h - dy; }
+      if(dir.includes('s')){ nh = s.h + dy; }
+
+      if(nw < minW){
+        if(dir.includes('w')) nx = s.x + s.w - minW;
+        nw = minW;
+      }
+      if(nh < minH){
+        if(dir.includes('n')) ny = s.y + s.h - minH;
+        nh = minH;
+      }
+      if(nx < 0){ nw += nx; nx = 0; }
+      if(ny < 0){ nh += ny; ny = 0; }
+      if(nx + nw > 1){ nw = 1 - nx; }
+      if(ny + nh > 1){ nh = 1 - ny; }
+      if(nw < minW) nw = minW;
+      if(nh < minH) nh = minH;
+
+      cropState.box.x = nx;
+      cropState.box.y = ny;
+      cropState.box.w = nw;
+      cropState.box.h = nh;
+      updateCropBoxPosition();
+    });
+    const endH = (e)=>{
+      if(cropBoxDrag && cropBoxDrag.type === 'resize' && e.pointerId === cropBoxDrag.pointerId){
+        cropBoxDrag = null;
+      }
+    };
+    h.addEventListener('pointerup', endH);
+    h.addEventListener('pointercancel', endH);
+  });
 }
 
 $('cropZoom').addEventListener('input', (e)=>{
@@ -1085,19 +1457,35 @@ $('cropZoom').addEventListener('input', (e)=>{
   applyCropTransform();
 });
 
-function resetCropPosition(){
+$('cropRotate').addEventListener('input', (e)=>{
   if(!cropState) return;
-  cropState.x = 0; cropState.y = 0; cropState.zoom = 1;
+  cropState.rotate = parseFloat(e.target.value);
+  $('cropRotateVal').textContent = cropState.rotate.toFixed(1) + '°';
+  applyCropTransform();
+});
+
+function resetCropAll(){
+  if(!cropState) return;
+  cropState.x = 0; cropState.y = 0; cropState.zoom = 1; cropState.rotate = 0;
+  cropState.box = { x: 0, y: 0, w: 1, h: 1 };
   $('cropZoom').value = 1;
   $('cropZoomVal').textContent = '1.00x';
+  $('cropRotate').value = 0;
+  $('cropRotateVal').textContent = '0.0°';
+  updateCropBoxPosition();
   applyCropTransform();
+  showToast('تمت إعادة تعيين القص','🔄');
 }
 
 function cancelCrop(){
   cropState = null;
-  cropDrag = null;
-  cropPinch = null;
+  cropDrag = null; cropPinch = null; cropBoxDrag = null;
   cropPointers.clear();
+  if(window._cropKeyHandlers){
+    window.removeEventListener('keydown', window._cropKeyHandlers.onKeyDown);
+    window.removeEventListener('keyup', window._cropKeyHandlers.onKeyUp);
+    window._cropKeyHandlers = null;
+  }
   closeModal('cropModal');
 }
 
@@ -1106,20 +1494,29 @@ function applyCrop(){
   const pair = currentProject.ids.find(p=>p.id === cropState.pairId);
   if(pair){
     if(!pair.crops) pair.crops = {};
-    pair.crops[cropState.side] = { x: cropState.x, y: cropState.y, zoom: cropState.zoom };
+    pair.crops[cropState.side] = {
+      x: cropState.x, y: cropState.y,
+      zoom: cropState.zoom,
+      rotate: cropState.rotate,
+      quality: cropState.quality,
+      box: cropState.box ? { ...cropState.box } : null
+    };
     persistProjects();
     renderTypeItems();
     renderLivePreview();
-    showToast('تم تطبيق القص','✂️');
+    showToast('تم تطبيق القص والتدوير','✂️');
   }
   cropState = null;
-  cropDrag = null;
-  cropPinch = null;
+  cropDrag = null; cropPinch = null; cropBoxDrag = null;
   cropPointers.clear();
+  if(window._cropKeyHandlers){
+    window.removeEventListener('keydown', window._cropKeyHandlers.onKeyDown);
+    window.removeEventListener('keyup', window._cropKeyHandlers.onKeyUp);
+    window._cropKeyHandlers = null;
+  }
   closeModal('cropModal');
 }
 
-/* Settings */
 function openSettingsModal(){
   if(!currentProject) return;
   renderSettingsContent();
@@ -1185,11 +1582,9 @@ function applyTypeSize(typeKey){
 
   currentProject.sizes[typeKey].w = newW;
   currentProject.sizes[typeKey].h = newH;
-
   GLOBAL_SIZES[typeKey].w = newW;
   GLOBAL_SIZES[typeKey].h = newH;
   saveGlobalSizes();
-
   persistProjects();
 
   const tag = $('sth-current-' + typeKey);
@@ -1197,7 +1592,6 @@ function applyTypeSize(typeKey){
 
   renderTypeIconsRow();
   renderLivePreview();
-
   showToast(`✅ حفظ أبعاد ${TEMPLATES[typeKey].name}: ${newW}×${newH} سم`, '✅');
 }
 
@@ -1213,7 +1607,6 @@ function resetSettingsDefaults(){
   showToast('تمت استعادة كل الأبعاد','🔄');
 }
 
-/* Sheet builder */
 function getSortedItems(){
   const items = currentProject.ids;
   if(!currentProject.order || !currentProject.order.length) return items.slice();
@@ -1226,9 +1619,32 @@ function getSortedItems(){
   });
 }
 
-function imgStyleForPair(pair, side){
-  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1 };
-  return `object-fit:cover; transform: translate(${crop.x}%, ${crop.y}%) scale(${crop.zoom});`;
+/* 
+  ★★★ THE FIX ★★★
+  This builds a proper container that clips the rotated image.
+  The frame (container) NEVER rotates. Only the image inside rotates.
+  We use absolute positioning for the image and a clip wrapper.
+*/
+function buildCroppedImageHTML(pair, side){
+  const img = pair[side];
+  if(!img) return '';
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'smooth', box:null };
+  const rot = crop.rotate || 0;
+  const q = crop.quality || 'smooth';
+
+  let clipPath = 'none';
+  if(crop.box && (crop.box.w < 0.999 || crop.box.h < 0.999 || crop.box.x > 0.001 || crop.box.y > 0.001)){
+    const bx = (crop.box.x * 100).toFixed(3);
+    const by = (crop.box.y * 100).toFixed(3);
+    const bw = (crop.box.w * 100).toFixed(3);
+    const bh = (crop.box.h * 100).toFixed(3);
+    clipPath = `inset(${by}% ${(100 - parseFloat(bx) - parseFloat(bw)).toFixed(3)}% ${(100 - parseFloat(by) - parseFloat(bh)).toFixed(3)}% ${bx}%)`;
+  }
+
+  // Use absolute positioning to perfectly center and contain the rotation
+  return `<div class="cropped-img-wrap" style="clip-path:${clipPath};">
+    <img src="${img}" style="position:absolute; top:50%; left:50%; width:100%; height:100%; object-fit:cover; transform: translate(-50%, -50%) translate(${crop.x}%, ${crop.y}%) rotate(${rot}deg) scale(${crop.zoom}); filter:${getQualityFilter(q)};">
+  </div>`;
 }
 
 function buildSheetHTML(editable){
@@ -1237,8 +1653,7 @@ function buildSheetHTML(editable){
 
   const fullItem = allItems.find(it => it.template === 'full' && it.front && !it.hideFront);
   if(fullItem){
-    const style = imgStyleForPair(fullItem, 'front');
-    return `<div class="full-image-wrap"><img src="${fullItem.front}" style="${style}"></div>`;
+    return `<div class="full-image-wrap">${buildCroppedImageHTML(fullItem, 'front')}</div>`;
   }
 
   const photoItems = allItems.filter(it => it.template === 'photos');
@@ -1248,6 +1663,22 @@ function buildSheetHTML(editable){
   allItems.forEach((it)=>{
     const tpl = TEMPLATES[it.template];
     if(!tpl) return;
+
+    if(tpl.kind === 'office'){
+      const name = it.fileName || 'ملف';
+      const type = it.fileType || '';
+      html.push(`
+        <div class="sheet-item" data-id="${it.id}" ${editable ? `draggable="true"` : ''} style="margin-bottom:${ITEM_GAP_PX}px">
+          ${editable ? `<div class="drag-handle"><i class="bi bi-grip-vertical"></i></div>` : ''}
+          <div class="sheet-office">
+            <div class="of-ico">📄</div>
+            <div class="of-name">${escapeHtml(name)}</div>
+            <div class="of-meta">${escapeHtml(type)} • سيُطبع محتوى الملف كاملاً</div>
+          </div>
+        </div>
+      `);
+      return;
+    }
 
     if(tpl.kind === 'photos'){
       if(photoRendered) return;
@@ -1264,8 +1695,7 @@ function buildSheetHTML(editable){
           if(isHidden){
             cells.push(`<div class="s-img hidden-card" style="aspect-ratio:${aspect}"></div>`);
           } else {
-            const st = imgStyleForPair(pair, 'front');
-            cells.push(`<div class="s-img" style="aspect-ratio:${aspect}"><img src="${pair.front}" style="${st}"></div>`);
+            cells.push(`<div class="s-img" style="aspect-ratio:${aspect}">${buildCroppedImageHTML(pair,'front')}</div>`);
           }
         } else {
           cells.push(`<div class="s-img blank" style="aspect-ratio:${aspect}"></div>`);
@@ -1288,10 +1718,10 @@ function buildSheetHTML(editable){
 
       const frontHtml = (it.hideFront || !it.front)
         ? `<div class="s-img ${it.hideFront ? 'hidden-card' : 'blank'}" style="aspect-ratio:${aspect}"></div>`
-        : `<div class="s-img" style="aspect-ratio:${aspect}"><img src="${it.front}" style="${imgStyleForPair(it,'front')}"></div>`;
+        : `<div class="s-img" style="aspect-ratio:${aspect}">${buildCroppedImageHTML(it,'front')}</div>`;
       const backHtml = (it.hideBack || !it.back)
         ? `<div class="s-img ${it.hideBack ? 'hidden-card' : 'blank'}" style="aspect-ratio:${aspect}"></div>`
-        : `<div class="s-img" style="aspect-ratio:${aspect}"><img src="${it.back}" style="${imgStyleForPair(it,'back')}"></div>`;
+        : `<div class="s-img" style="aspect-ratio:${aspect}">${buildCroppedImageHTML(it,'back')}</div>`;
 
       html.push(`
         <div class="sheet-item" data-id="${it.id}"
@@ -1486,6 +1916,95 @@ function waitForImages(rootEl){
   });
 }
 
+async function previewOfficeFile(itemId){
+  const item = currentProject.ids.find(it => it.id === itemId);
+  if(!item) return;
+
+  $('officeViewerName').textContent = item.fileName || 'ملف';
+  const body = $('officeViewerBody');
+  body.innerHTML = '<div style="color:#fff;font-size:14px;padding:40px">جاري التحميل...</div>';
+  openModal('officeViewer');
+
+  const ext = (item.fileExt || '').toLowerCase();
+
+  if(ext === 'pdf'){
+    try{
+      const arrayBuffer = dataURLToArrayBuffer(item.fileData);
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      body.innerHTML = '';
+      for(let i = 1; i <= pdf.numPages; i++){
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        canvas.className = 'office-page-canvas';
+        const ctx = canvas.getContext('2d');
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        const pageNum = document.createElement('div');
+        pageNum.className = 'office-page-num';
+        pageNum.textContent = `صفحة ${i} / ${pdf.numPages}`;
+
+        body.appendChild(pageNum);
+        body.appendChild(canvas);
+      }
+    }catch(err){
+      console.error(err);
+      body.innerHTML = `<div style="color:#fff;text-align:center;padding:40px">تعذّر عرض PDF. يمكنك تنزيله وطباعته من المتصفح.</div>`;
+    }
+  } else if(ext === 'doc' || ext === 'docx' || ext === 'ppt' || ext === 'pptx' || ext === 'xls' || ext === 'xlsx'){
+    body.innerHTML = `
+      <div style="color:#fff;text-align:center;padding:40px;max-width:500px">
+        <div style="font-size:60px;margin-bottom:16px">📄</div>
+        <div style="font-size:16px;font-weight:900;margin-bottom:8px">${escapeHtml(item.fileName)}</div>
+        <div style="font-size:13px;opacity:.8;line-height:1.7;margin-bottom:20px">
+          ملفات Office لا يمكن عرضها مباشرة في المتصفح.<br>
+          عند الطباعة، يُفتح الملف في نافذة جديدة ليتمكن المتصفح من طباعته بكل صفحاته.
+        </div>
+        <button onclick="openOfficeFileInNewTab('${item.id}')" style="padding:14px 32px;border:none;border-radius:12px;background:linear-gradient(135deg,#c8a45c,#a17c3a);color:#fff;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 6px 20px rgba(200,164,92,.5)">
+          <i class="bi bi-box-arrow-up-right"></i> فتح الملف للطباعة
+        </button>
+      </div>
+    `;
+  }
+}
+
+function closeOfficeViewer(){
+  closeModal('officeViewer');
+  $('officeViewerBody').innerHTML = '';
+}
+
+function dataURLToArrayBuffer(dataURL){
+  const base64 = dataURL.split(',')[1];
+  const binary = atob(base64);
+  const len = binary.length;
+  const bytes = new Uint8Array(len);
+  for(let i = 0; i < len; i++){ bytes[i] = binary.charCodeAt(i); }
+  return bytes.buffer;
+}
+
+function openOfficeFileInNewTab(itemId){
+  const item = currentProject.ids.find(it => it.id === itemId);
+  if(!item) return;
+  const win = window.open('', '_blank');
+  if(!win){ showToast('اسمح بالنوافذ المنبثقة','⚠️'); return; }
+  win.document.write(`
+    <html><head><title>${escapeHtml(item.fileName)}</title></head>
+    <body style="margin:0;font-family:sans-serif;background:#f8fafc;padding:20px;text-align:center">
+      <div style="margin-bottom:16px;padding:14px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)">
+        <div style="font-size:16px;font-weight:900;color:#1e293b">${escapeHtml(item.fileName)}</div>
+        <div style="font-size:12px;color:#64748b;margin-top:4px">اضغط تنزيل ثم افتح الملف في برنامجه الأصلي لطباعته بكل صفحاته</div>
+        <a href="${item.fileData}" download="${escapeHtml(item.fileName)}"
+           style="display:inline-block;margin-top:12px;padding:12px 28px;background:linear-gradient(135deg,#c8a45c,#a17c3a);color:#fff;text-decoration:none;border-radius:10px;font-weight:900">
+          ⬇️ تنزيل الملف
+        </a>
+      </div>
+    </body></html>
+  `);
+  win.document.close();
+}
+
 function openPrintWindow(){
   if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
   if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
@@ -1494,7 +2013,16 @@ function openPrintWindow(){
   const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
   const p = paperMM[sizeKey] || paperMM.A4;
 
-  const paperHtml = buildSheetHTML(false);
+  const officeItems = currentProject.ids.filter(it => it.template === 'office');
+  const nonOfficeItems = currentProject.ids.filter(it => it.template !== 'office');
+
+  if(officeItems.length && !nonOfficeItems.length){
+    printOfficeFiles(officeItems);
+    return;
+  }
+
+  const tempProject = { ...currentProject, ids: nonOfficeItems };
+  const paperHtml = buildSheetHTMLForProject(tempProject, false);
 
   const html = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -1517,6 +2045,8 @@ function openPrintWindow(){
   .s-img.blank{background:#fff}
   .full-image-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
   .full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+  .cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .cropped-img-wrap img{position:absolute; top:50%; left:50%; width:100%; height:100%; object-fit:cover; display:block; backface-visibility:hidden}
   .drag-handle{display:none !important}
   @media screen{
     body{padding:0;background:#f1f5f9;min-height:100vh}
@@ -1535,7 +2065,7 @@ function openPrintWindow(){
 </style>
 </head>
 <body>
-  <div class="hint">💡 اضغط زر الطباعة أو Ctrl+P</div>
+  <div class="hint">💡 اضغط زر الطباعة أو Ctrl+P${officeItems.length ? ` — عدد ${officeItems.length} ملف أوفس ستُفتح نوافذ منفصلة لها` : ''}</div>
   <div class="toolbar">
     <button class="btn-print" onclick="window.print()">🖨️ طباعة</button>
     <button class="btn-close" onclick="window.close()">✕ إغلاق</button>
@@ -1568,6 +2098,48 @@ function openPrintWindow(){
   win.document.write(html);
   win.document.close();
   win.focus();
+
+  if(officeItems.length){
+    setTimeout(()=>{ printOfficeFiles(officeItems); }, 600);
+  }
+}
+
+function buildSheetHTMLForProject(project, editable){
+  const savedCurrent = currentProject;
+  currentProject = project;
+  const html = buildSheetHTML(editable);
+  currentProject = savedCurrent;
+  return html;
+}
+
+function printOfficeFiles(officeItems){
+  officeItems.forEach(item=>{
+    const ext = (item.fileExt || '').toLowerCase();
+    if(ext === 'pdf'){
+      const win = window.open('', '_blank');
+      if(!win) return;
+      win.document.write(`
+        <html><head><title>${escapeHtml(item.fileName)}</title>
+        <style>body{margin:0;font-family:sans-serif;background:#111}</style></head>
+        <body>
+          <div style="background:#fff;padding:12px;text-align:center">
+            <button onclick="document.getElementById('f').contentWindow.focus(); document.getElementById('f').contentWindow.print();"
+              style="padding:12px 28px;border:none;border-radius:10px;background:#c8a45c;color:#fff;font-size:14px;font-weight:900;cursor:pointer">
+              🖨️ طباعة الملف
+            </button>
+            <a href="${item.fileData}" download="${escapeHtml(item.fileName)}"
+              style="margin-left:10px;padding:12px 20px;background:#e2e8f0;color:#1e293b;text-decoration:none;border-radius:10px;font-weight:900;display:inline-block">
+              ⬇️ تنزيل
+            </a>
+          </div>
+          <iframe id="f" src="${item.fileData}" style="width:100%;height:calc(100vh - 60px);border:none"></iframe>
+        </body></html>
+      `);
+      win.document.close();
+    } else {
+      openOfficeFileInNewTab(item.id);
+    }
+  });
 }
 
 document.addEventListener('keydown', function(e){
