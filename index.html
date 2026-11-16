@@ -100,6 +100,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .btn-sm.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 4px 14px rgba(200,164,92,.4)}
 .btn-sm.gray{background:#e2e8f0;color:var(--ink)}
 .btn-sm.red{background:rgba(239,68,68,.12);color:#ef4444}
+.btn-icon{padding:9px;width:38px;height:38px;justify-content:center}
 .section-box{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
 .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap}
 .section-title{font-size:14px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:7px}
@@ -133,18 +134,16 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
 .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
 .s-img{width:100%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:none;position:relative}
-.s-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .1s}
+.s-img img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .1s}
 .s-img.blank{background:#fff}
 .s-img.hidden-card{background:#fff !important;border:none}
 .full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.full-image-wrap img{width:100%;height:100%;object-fit:contain;display:block}
 .drag-handle{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:6px;background:rgba(15,23,42,.7);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;z-index:10;cursor:grab;pointer-events:auto}
 .sheet-item:hover .drag-handle{display:flex}
 
-/* --- NEW FIXED CROP WRAPPER --- */
 .cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:2px}
-.cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;backface-visibility:hidden;transform-origin:center center}
-/* ------------------------------ */
+.cropped-img-wrap img{width:100%;height:100%;object-fit:contain;display:block;backface-visibility:hidden;transform-origin:center center}
 
 .print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
@@ -161,7 +160,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .id-card{background:#fff;border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;border:1px solid var(--border)}
 .id-card-label{font-size:10px;font-weight:900;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:4px}
 .id-card-img{width:100%;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;position:relative;border:1.5px dashed var(--border)}
-.id-card-img img{width:100%;height:100%;object-fit:cover;display:block}
+.id-card-img img{width:100%;height:100%;object-fit:contain;display:block}
 .id-card-img.empty{color:var(--muted);font-size:11px;text-align:center;padding:10px;flex-direction:column;gap:4px}
 .id-card-img.empty i{font-size:22px;opacity:.5}
 .id-card-img.hidden-card{background:#fff !important;border:1px dashed #cbd5e1}
@@ -298,6 +297,29 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .bottom-bar .save{background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.4)}
 .bottom-bar .print{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 20px rgba(200,164,92,.4)}
 
+/* Floating Print Button */
+.floating-print-btn {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  border: none;
+  box-shadow: 0 8px 24px rgba(37,99,235,.5);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.floating-print-btn:active { transform: scale(0.9); }
+.floating-print-btn.on { display: flex; }
+
 @media(max-width:520px){
   .type-icons-row{grid-template-columns:repeat(3,1fr)}
   .type-icon-card .ti-emoji{font-size:24px}
@@ -372,10 +394,10 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
         <div class="editor-tags" id="edProjectTags"></div>
       </div>
       <div class="editor-btns">
-        <button class="btn-sm gold" onclick="openSettingsModal()" title="إعدادات عامة">
-          <i class="bi bi-gear-fill"></i> إعدادات
+        <button class="btn-sm gold btn-icon" onclick="openSettingsModal()" title="إعدادات عامة">
+          <i class="bi bi-gear-fill"></i>
         </button>
-        <button class="btn-sm gray" onclick="backToProjects()"><i class="bi bi-arrow-right"></i> رجوع</button>
+        <button class="btn-sm gray btn-icon" onclick="backToProjects()" title="رجوع"><i class="bi bi-arrow-right"></i></button>
       </div>
     </div>
 
@@ -394,21 +416,32 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
       <div class="print-sheet a4" id="livePreview"></div>
 
       <div class="print-actions">
-        <button class="save-img" id="btnSaveSheet" onclick="saveSheetImage()">
-          <i class="bi bi-download"></i> حفظ الصورة
+        <button class="save-img" id="btnSaveSheet" onclick="saveSheetImage()" title="حفظ الصورة">
+          <i class="bi bi-download"></i>
         </button>
-        <button class="print-now" onclick="openPrintWindow()">
-          <i class="bi bi-printer-fill"></i> طباعة
+        <button class="print-now" onclick="openPrintWindow()" title="طباعة">
+          <i class="bi bi-printer-fill"></i>
         </button>
+        <div style="display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:0 12px">
+          <label style="font-size:11px;font-weight:900;color:var(--muted);white-space:nowrap">عدد النسخ</label>
+          <input type="number" id="copyCount" value="1" min="1" max="99" style="width:52px;padding:10px 4px;border:none;background:transparent;font-size:15px;font-weight:900;color:var(--ink);outline:none;text-align:center;-moz-appearance:textfield" onchange="updateCopyCount()">
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="bottom-bar" id="bottomBar">
-  <button class="save" onclick="saveCurrentProject()"><i class="bi bi-check-circle-fill"></i> حفظ المشروع</button>
-  <button class="print" onclick="openPrintWindow()"><i class="bi bi-printer-fill"></i> طباعة</button>
+  <button class="save" onclick="saveCurrentProject()" title="حفظ"><i class="bi bi-check-circle-fill"></i></button>
+  <button class="print" onclick="openPrintWindow()" style="background: #2563eb;" title="طباعة">
+    <i class="bi bi-printer-fill"></i>
+  </button>
 </div>
+
+<!-- Floating Print Button -->
+<button class="floating-print-btn" id="floatingPrintBtn" onclick="openPrintWindow()" title="طباعة">
+  <i class="bi bi-printer-fill"></i>
+</button>
 
 <div class="modal" id="newProjectModal">
   <div class="modal-card">
@@ -562,12 +595,11 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </div>
 
   <div class="crop-quality-panel">
-    <div class="qc-label"><i class="bi bi-stars"></i> وضوح الصورة</div>
+    <div class="qc-label"><i class="bi bi-stars"></i> جودة الصورة</div>
     <div class="qc-options">
-      <button class="qc-opt" data-q="auto" onclick="setCropQuality('auto')"><i class="bi bi-magic"></i> تلقائي</button>
-      <button class="qc-opt" data-q="sharp" onclick="setCropQuality('sharp')"><i class="bi bi-sun"></i> حاد</button>
-      <button class="qc-opt active" data-q="smooth" onclick="setCropQuality('smooth')"><i class="bi bi-droplet"></i> ناعم</button>
-      <button class="qc-opt" data-q="high" onclick="setCropQuality('high')"><i class="bi bi-star-fill"></i> جودة عالية</button>
+      <button class="qc-opt active" data-q="high" onclick="setCropQuality('high')"><i class="bi bi-star-fill"></i> عالية</button>
+      <button class="qc-opt" data-q="medium" onclick="setCropQuality('medium')"><i class="bi bi-droplet"></i> متوسطة</button>
+      <button class="qc-opt" data-q="normal" onclick="setCropQuality('normal')"><i class="bi bi-circle"></i> عادية</button>
     </div>
   </div>
 </div>
@@ -614,7 +646,7 @@ const PHOTO_GAP_PX = 6;
 const ITEM_GAP_PX = 6;
 
 const DEFAULT_SIZES = {
-  id:        { w: 5.56, h: 3.1 },
+  id:        { w: 5.0, h: 2.8 },
   residency: { w: 8.5,  h: 5.5 },
   passport:  { w: 8.8,  h: 12.5 },
   photos:    { w: 1.5,  h: 2.5 },
@@ -666,6 +698,7 @@ function loadProjects(){
     if(!p.photoCount) p.photoCount = 6;
     if(!p.order) p.order = p.ids.map(it => it.id);
     if(!p.sizes) p.sizes = JSON.parse(JSON.stringify(GLOBAL_SIZES));
+    if(!p.copyCount) p.copyCount = 1;
   });
 }
 function persistProjects(){
@@ -675,7 +708,7 @@ function persistProjects(){
 
 function enterApp(){
   $('splash').classList.add('hide');
-  setTimeout(()=>{ $('splash').style.display='none'; }, 500);
+  setTimeout(()=>{ $('splash').style.display = 'none'; }, 500);
   $('app').classList.add('on');
   renderProjects();
 }
@@ -733,7 +766,7 @@ function createProject(){
     id: uid(), name, size: selectedPaper, color,
     photoCount: 6, ids: [], createdAt: Date.now(),
     sizes: JSON.parse(JSON.stringify(GLOBAL_SIZES)),
-    order: []
+    order: [], copyCount: 1
   };
   projects.unshift(project);
   persistProjects(); closeModal('newProjectModal'); renderProjects();
@@ -747,21 +780,25 @@ function openProject(id){
   if(!currentProject.sizes) currentProject.sizes = JSON.parse(JSON.stringify(GLOBAL_SIZES));
   if(!currentProject.order) currentProject.order = currentProject.ids.map(it => it.id);
   if(!currentProject.ids) currentProject.ids = [];
+  if(!currentProject.copyCount) currentProject.copyCount = 1;
   currentProject.ids.forEach(it => { if(!it.crops) it.crops = {}; });
 
   $('projectsView').style.display = 'none';
   $('editorView').classList.add('on');
   $('bottomBar').classList.add('on');
+  $('floatingPrintBtn').classList.add('on');
   $('edProjectName').textContent = currentProject.name;
   renderTypeIconsRow();
   renderLivePreview();
   updateEditorHeader();
+  $('copyCount').value = currentProject.copyCount || 1;
   window.scrollTo({top:0, behavior:'smooth'});
 }
 function backToProjects(){
   currentProject = null;
   $('editorView').classList.remove('on');
   $('bottomBar').classList.remove('on');
+  $('floatingPrintBtn').classList.remove('on');
   $('projectsView').style.display = 'block';
   renderProjects();
 }
@@ -794,7 +831,7 @@ function getEffectiveSize(key){
 
 function getCardSize(key){
   if(DEFAULT_SIZES[key]) return { w: DEFAULT_SIZES[key].w, h: DEFAULT_SIZES[key].h };
-  return { w: 5.56, h: 3.1 };
+  return { w: 5.0, h: 2.8 };
 }
 
 function renderTypeIconsRow(){
@@ -901,7 +938,6 @@ function renderCard(pair, side, label, icon, size){
   const showActions = !!img || isHidden;
   const aspect = size.w > 0 ? `${size.w} / ${size.h}` : '210 / 297';
   
-  // Build the cropped HTML identical to sheet rendering to see exactly what we get
   let innerHTML = '';
   if(img){
     innerHTML = buildCroppedImageHTML(pair, side);
@@ -932,11 +968,10 @@ function renderCard(pair, side, label, icon, size){
 
 function getQualityFilter(q){
   switch(q){
-    case 'sharp':  return 'contrast(1.08) saturate(1.08) brightness(1.02)';
-    case 'smooth': return 'contrast(1.02) saturate(1.03)';
-    case 'high':   return 'contrast(1.12) saturate(1.15) brightness(1.03)';
-    case 'auto':
-    default:       return 'none';
+    case 'high':   return 'contrast(1.15) saturate(1.2) brightness(1.05)';
+    case 'medium': return 'contrast(1.06) saturate(1.08) brightness(1.02)';
+    case 'normal': return 'contrast(1.0) saturate(1.0) brightness(1.0)';
+    default:       return 'contrast(1.02) saturate(1.03)';
   }
 }
 
@@ -1066,7 +1101,7 @@ function handleFile(e){
     if(pair){
       pair[pickerTarget.side] = ev.target.result;
       if(!pair.crops) pair.crops = {};
-      pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1, rotate:0, quality:'smooth', box:null };
+      pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
       persistProjects();
       renderTypeItems();
       renderLivePreview();
@@ -1095,14 +1130,14 @@ function openCrop(pairId, side){
   const imgSrc = pair[side];
   const size = getEffectiveSize(pair.template);
   const aspect = size.w / size.h;
-  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'smooth', box:null };
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
 
   cropState = {
     pairId, side, imgSrc, aspect,
     x: crop.x || 0, y: crop.y || 0,
     zoom: clampZoom(crop.zoom || 1),
     rotate: crop.rotate || 0,
-    quality: crop.quality || 'smooth',
+    quality: crop.quality || 'high',
     box: crop.box ? { ...crop.box } : null,
     baseW: 0, baseH: 0, vw: 0, vh: 0
   };
@@ -1245,7 +1280,7 @@ function setCropQuality(q){
     b.classList.toggle('active', b.dataset.q === q);
   });
   applyQualityToImage();
-  showToast(`وضوح الصورة: ${({auto:'تلقائي',sharp:'حاد',smooth:'ناعم',high:'جودة عالية'})[q]}`, '✨');
+  showToast(`جودة الصورة: ${({high:'عالية',medium:'متوسطة',normal:'عادية'})[q]}`, '✨');
 }
 
 function setupCropInteractions(){
@@ -1542,14 +1577,14 @@ function renderSettingsContent(){
           <div class="settings-input-group">
             <label><i class="bi bi-arrows-expand-vertical"></i> العرض</label>
             <div class="settings-input-wrapper">
-              <input type="number" id="input-w-${k}" value="${size.w}" min="0.1" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].w}">
+              <input type="number" id="input-w-${k}" value="${size.w}" min="0.1" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].w}" oninput="previewTypeSize('${k}')">
               <span class="unit">سم</span>
             </div>
           </div>
           <div class="settings-input-group">
             <label><i class="bi bi-arrows-expand"></i> الارتفاع</label>
             <div class="settings-input-wrapper">
-              <input type="number" id="input-h-${k}" value="${size.h}" min="0.1" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].h}">
+              <input type="number" id="input-h-${k}" value="${size.h}" min="0.1" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].h}" oninput="previewTypeSize('${k}')">
               <span class="unit">سم</span>
             </div>
           </div>
@@ -1562,6 +1597,18 @@ function renderSettingsContent(){
   });
 
   cont.innerHTML = html;
+}
+
+function previewTypeSize(typeKey){
+  const wInput = $('input-w-' + typeKey);
+  const hInput = $('input-h-' + typeKey);
+  const tag = $('sth-current-' + typeKey);
+  if(!wInput || !hInput || !tag) return;
+  const w = parseFloat(wInput.value);
+  const h = parseFloat(hInput.value);
+  if(w > 0 && h > 0){
+    tag.textContent = `${w.toFixed(2).replace(/\.?0+$/,'')}×${h.toFixed(2).replace(/\.?0+$/,'')} سم`;
+  }
 }
 
 function applyTypeSize(typeKey){
@@ -1619,18 +1666,12 @@ function getSortedItems(){
   });
 }
 
-/* 
-  ★★★ THE FIX ★★★
-  This builds a proper container that clips the rotated image.
-  The frame (container) NEVER rotates. Only the image inside rotates.
-  We use absolute positioning for the image and a clip wrapper.
-*/
 function buildCroppedImageHTML(pair, side){
   const img = pair[side];
   if(!img) return '';
-  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'smooth', box:null };
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
   const rot = crop.rotate || 0;
-  const q = crop.quality || 'smooth';
+  const q = crop.quality || 'high';
 
   let clipPath = 'none';
   if(crop.box && (crop.box.w < 0.999 || crop.box.h < 0.999 || crop.box.x > 0.001 || crop.box.y > 0.001)){
@@ -1641,9 +1682,8 @@ function buildCroppedImageHTML(pair, side){
     clipPath = `inset(${by}% ${(100 - parseFloat(bx) - parseFloat(bw)).toFixed(3)}% ${(100 - parseFloat(by) - parseFloat(bh)).toFixed(3)}% ${bx}%)`;
   }
 
-  // Use absolute positioning to perfectly center and contain the rotation
   return `<div class="cropped-img-wrap" style="clip-path:${clipPath};">
-    <img src="${img}" style="position:absolute; top:50%; left:50%; width:100%; height:100%; object-fit:cover; transform: translate(-50%, -50%) translate(${crop.x}%, ${crop.y}%) rotate(${rot}deg) scale(${crop.zoom}); filter:${getQualityFilter(q)};">
+    <img src="${img}" style="position:absolute; top:50%; left:50%; width:100%; height:100%; object-fit:contain; transform: translate(-50%, -50%) translate(${crop.x}%, ${crop.y}%) rotate(${rot}deg) scale(${crop.zoom}); filter:${getQualityFilter(q)};">
   </div>`;
 }
 
@@ -1834,7 +1874,7 @@ async function saveSheetImage(){
   const btn = $('btnSaveSheet');
   const oldHtml = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> جاري التجهيز...';
+  btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
 
   try{
     const wrapper = document.createElement('div');
@@ -2005,6 +2045,16 @@ function openOfficeFileInNewTab(itemId){
   win.document.close();
 }
 
+function updateCopyCount(){
+  if(!currentProject) return;
+  const val = parseInt($('copyCount').value) || 1;
+  currentProject.copyCount = Math.max(1, Math.min(99, val));
+  $('copyCount').value = currentProject.copyCount;
+  persistProjects();
+  showToast(`عدد النسخ: ${currentProject.copyCount}`, '📄');
+}
+
+// ★★★ الطباعة مع عدد النسخ وبدون تكرار ★★★
 function openPrintWindow(){
   if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
   if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
@@ -2021,83 +2071,55 @@ function openPrintWindow(){
     return;
   }
 
+  const copyCount = currentProject.copyCount || 1;
   const tempProject = { ...currentProject, ids: nonOfficeItems };
   const paperHtml = buildSheetHTMLForProject(tempProject, false);
+  
+  // بناء الصفحات المتكررة (عدد النسخ)
+  let pagesHtml = '';
+  for(let i = 0; i < copyCount; i++){
+    pagesHtml += `<div class="print-page" style="page-break-after: always; display: flex; align-items: center; justify-content: center;">
+      <div style="width: ${p.w}mm; height: ${p.h}mm; background: #fff; box-sizing: border-box; padding: 10px; display: flex; flex-direction: column;">
+        ${paperHtml}
+      </div>
+    </div>`;
+  }
 
-  const html = `<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>طباعة - ${escapeHtml(currentProject.name)}</title>
-<style>
-  @page{ size: ${sizeKey} portrait; margin: 0; }
-  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact}
-  .paper{width:${p.w}mm;min-height:${p.h}mm;background:${currentProject.color};padding:10px;margin:0 auto;display:flex;flex-direction:column;box-sizing:border-box}
-  .sheet-item{display:flex;flex-direction:column;page-break-inside:avoid;break-inside:avoid}
-  .sheet-item-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .sheet-photos-grid{display:grid;gap:6px}
-  .sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
-  .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
-  .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
-  .s-img{width:100%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:none;position:relative}
-  .s-img img{width:100%;height:100%;object-fit:cover;display:block}
-  .s-img.blank{background:#fff}
-  .full-image-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-  .full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-  .cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}
-  .cropped-img-wrap img{position:absolute; top:50%; left:50%; width:100%; height:100%; object-fit:cover; display:block; backface-visibility:hidden}
-  .drag-handle{display:none !important}
-  @media screen{
-    body{padding:0;background:#f1f5f9;min-height:100vh}
-    .toolbar{position:sticky;top:0;background:#fff;padding:14px 16px;display:flex;justify-content:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.1);z-index:10}
-    .toolbar button{padding:12px 26px;border:none;border-radius:10px;cursor:pointer;font-size:14px;font-weight:900;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
-    .btn-print{background:#c8a45c;color:#fff;box-shadow:0 4px 14px rgba(200,164,92,.4)}
-    .btn-close{background:#e2e8f0;color:#1e293b}
-    .paper{box-shadow:0 6px 30px rgba(0,0,0,.15);margin:20px auto}
-    .hint{text-align:center;font-size:12px;color:#64748b;padding:10px;background:#fffbea;border-bottom:1px solid #fde68a}
-  }
-  @media print{
-    html,body{background:#fff}
-    .toolbar,.hint{display:none !important}
-    .paper{box-shadow:none;margin:0;width:100%;padding:10px}
-  }
-</style>
-</head>
-<body>
-  <div class="hint">💡 اضغط زر الطباعة أو Ctrl+P${officeItems.length ? ` — عدد ${officeItems.length} ملف أوفس ستُفتح نوافذ منفصلة لها` : ''}</div>
-  <div class="toolbar">
-    <button class="btn-print" onclick="window.print()">🖨️ طباعة</button>
-    <button class="btn-close" onclick="window.close()">✕ إغلاق</button>
-  </div>
-  <div class="paper">${paperHtml}</div>
-  <script>
-    window.addEventListener('load', function(){
-      var imgs = document.querySelectorAll('img');
-      var pending = imgs.length;
-      var fired = false;
-      function firePrint(){
-        if(fired) return;
-        fired = true;
-        setTimeout(function(){ try{ window.focus(); window.print(); }catch(e){} }, 400);
+  const printOverlay = document.createElement('div');
+  printOverlay.id = 'customPrintOverlay';
+  printOverlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(15, 23, 42, 0.95); z-index: 10000;
+    display: flex; flex-direction: column; align-items: center; overflow-y: auto;
+  `;
+
+  printOverlay.innerHTML = `
+    <div style="position: sticky; top: 0; width: 100%; background: #fff; padding: 15px; display: flex; justify-content: center; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10001;">
+      <button onclick="window.print()" style="padding: 15px 40px; border-radius: 12px; border: none; background: #2563eb; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(37,99,235,0.4); display: flex; align-items: center; gap: 8px;">
+        <i class="bi bi-printer-fill"></i> تنفيذ الطباعة الآن
+      </button>
+      <button onclick="document.getElementById('customPrintOverlay').remove()" style="padding: 15px 30px; border-radius: 12px; border: none; background: #ef4444; color: white; font-size: 16px; font-weight: bold; cursor: pointer;">
+        ✕ إلغاء
+      </button>
+    </div>
+    <div id="printPreviewArea" style="background: #fff; margin: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3); width: ${p.w}mm; min-height: ${p.h}mm; box-sizing: border-box;">
+      ${pagesHtml}
+    </div>
+    <style>
+      @media print {
+        body * { visibility: hidden; }
+        #customPrintOverlay, #customPrintOverlay * { visibility: visible; }
+        #customPrintOverlay { position: absolute; left: 0; top: 0; background: transparent; }
+        #customPrintOverlay div[style*="sticky"] { display: none !important; }
+        #printPreviewArea { margin: 0 !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
+        .print-page { page-break-after: always; display: flex; align-items: center; justify-content: center; }
+        .print-page:last-child { page-break-after: auto; }
+        @page { size: ${sizeKey} portrait; margin: 0; }
       }
-      if(pending === 0){ firePrint(); return; }
-      imgs.forEach(function(img){
-        if(img.complete && img.naturalWidth > 0){ pending--; if(pending===0) firePrint(); }
-        else { img.onload = img.onerror = function(){ pending--; if(pending===0) firePrint(); }; }
-      });
-      setTimeout(firePrint, 2500);
-    });
-  <\/script>
-</body>
-</html>`;
+    </style>
+  `;
 
-  const win = window.open('', '_blank');
-  if(!win){ showToast('اسمح بالنوافذ المنبثقة للطباعة','⚠️'); return; }
-  win.document.open();
-  win.document.write(html);
-  win.document.close();
-  win.focus();
+  document.body.appendChild(printOverlay);
 
   if(officeItems.length){
     setTimeout(()=>{ printOfficeFiles(officeItems); }, 600);
