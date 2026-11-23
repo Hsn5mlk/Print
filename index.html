@@ -128,13 +128,13 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .sheet-item:last-child{margin-bottom:0}
 .sheet-item.dragging{opacity:.4;cursor:grabbing;transform:scale(.98)}
 .sheet-item.drag-over{outline:2px dashed var(--gold);outline-offset:4px;background:rgba(200,164,92,.05)}
-.sheet-item-pair{display:flex;flex-wrap:wrap;gap:6px} /* تعديل: flex بدل grid */
+.sheet-item-pair{display:flex;flex-wrap:nowrap;justify-content:center;align-items:flex-start;direction:ltr;gap:6px}
 .sheet-photos-grid{display:grid;gap:6px}
 .sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
 .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
 .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
 
-.s-img{background:#fff;display:block;overflow:hidden;border:none;position:relative} /* تعديل: إزالة العرض الافتراضي */
+.s-img{background:#fff;display:block;overflow:hidden;border:none;position:relative}
 .s-img.blank{background:#fff}
 .s-img.hidden-card{background:#fff !important;border:none}
 .full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -144,6 +144,11 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 
 .cropped-img-wrap{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;border-radius:2px}
 .cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;backface-visibility:hidden;transform-origin:center center}
+
+/* ★ عنصر الصورة الكاملة: بلا زوم، الصورة كاملة ★ */
+.s-img.full-item-img{background:#fff;overflow:hidden;border:none;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.s-img.full-item-img .cropped-img-wrap{position:relative;inset:auto;width:100%;height:100%}
+.s-img.full-item-img img{width:100%;height:auto;object-fit:contain;display:block}
 
 .print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
@@ -262,6 +267,11 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .crop-controls-row .stepper button:active{transform:scale(.92)}
 .crop-controls-row .reset-btn{padding:7px 12px;border-radius:8px;border:none;cursor:pointer;background:rgba(37,99,235,.1);color:var(--accent);font-size:11px;font-weight:900;display:flex;align-items:center;gap:4px;font-family:inherit;margin-left:auto}
 .crop-controls-row .reset-btn:active{transform:scale(.95)}
+
+/* ★ أزرار التدوير 90° ★ */
+.rot90-btn{padding:8px 14px;border-radius:9px;border:none;cursor:pointer;background:rgba(200,164,92,.15);color:var(--gold2);font-size:12px;font-weight:900;display:flex;align-items:center;gap:5px;font-family:inherit;transition:.15s}
+.rot90-btn:hover{background:rgba(200,164,92,.3)}
+.rot90-btn:active{transform:scale(.95)}
 
 .crop-mode-toggle{display:flex;gap:4px;background:rgba(200,164,92,.1);padding:3px;border-radius:10px}
 .crop-mode-toggle button{padding:6px 12px;border-radius:7px;border:none;cursor:pointer;background:transparent;color:var(--gold2);font-size:11px;font-weight:900;display:flex;align-items:center;gap:4px;font-family:inherit;transition:.15s}
@@ -661,6 +671,17 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
         <i class="bi bi-arrow-counterclockwise"></i> إعادة الكل
       </button>
     </div>
+
+    <!-- ★ أزرار التدوير 90° يمين/يسار ★ -->
+    <div class="crop-controls-row">
+      <label><i class="bi bi-arrow-repeat"></i> تدوير سريع</label>
+      <button class="rot90-btn" onclick="rotate90(-1)" title="تدوير 90° لليسار">
+        <i class="bi bi-arrow-counterclockwise"></i> 90°
+      </button>
+      <button class="rot90-btn" onclick="rotate90(1)" title="تدوير 90° لليمين">
+        <i class="bi bi-arrow-clockwise"></i> 90°
+      </button>
+    </div>
   </div>
 
   <div class="crop-quality-panel">
@@ -693,7 +714,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 <input type="file" id="officeFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" style="display:none">
 
 <script>
-if(window.pdfjsLib){
+  if(window.pdfjsLib){
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
 
@@ -714,11 +735,6 @@ const PAIR_GAP_PX = 6;
 const PHOTO_GAP_PX = 6;
 const ITEM_GAP_PX = 6;
 
-/* 
-  ★ التعديل الجذري ★
-  w = المسافة الأفقية (الطول في سياقك)
-  h = المسافة العمودية (الارتفاع)
-*/
 const DEFAULT_SIZES = {
   id:        { w: 3.5, h: 2.0 },
   residency: { w: 8.5, h: 5.5 },
@@ -916,7 +932,6 @@ function renderTypeIconsRow(){
     const count = currentProject.ids.filter(it => it.template === k).length;
     const size = getEffectiveSize(k);
     let dimText = 'كامل';
-    /* عرض القياسات: الطول × العرض (حيث w هو الطول) */
     if(tpl.kind !== 'full' && tpl.kind !== 'office') dimText = `${size.w}×${size.h}`;
     if(tpl.kind === 'office') dimText = 'ملفات';
     return `
@@ -1011,10 +1026,8 @@ function renderCard(pair, side, label, icon, size){
   const img = pair[side];
   const isHidden = !!pair['hide' + (side==='front'?'Front':'Back')];
   const showActions = !!img || isHidden;
-  
-  /* عرض القياسات: العرض الأصلي (w) والطول (h) */
   const aspect = size.w > 0 ? `${size.w} / ${size.h}` : '210 / 297';
-  
+
   let innerHTML = '';
   if(img){
     innerHTML = buildCroppedImageHTML(pair, side);
@@ -1125,7 +1138,8 @@ function addItemToType(){
   showToast(`أضفت ${TEMPLATES[currentEditingType].name} جديد`, '➕');
 }
 
-$('officeFileInput').addEventListener('change', (e)=>{
+/* ★ استيراد ملفات PDF كصفحات عمل متعددة ★ */
+$('officeFileInput').addEventListener('change', async (e)=>{
   const file = e.target.files[0];
   if(!file || !currentProject) return;
 
@@ -1136,6 +1150,12 @@ $('officeFileInput').addEventListener('change', (e)=>{
     return;
   }
 
+  if(ext === 'pdf'){
+    await importPdfAsPages(file);
+    return;
+  }
+
+  // الأنواع الأخرى: نحفظها كملف واحد مع معاينة
   const reader = new FileReader();
   reader.onload = (ev)=>{
     const dataUrl = ev.target.result;
@@ -1161,6 +1181,96 @@ $('officeFileInput').addEventListener('change', (e)=>{
   };
   reader.readAsDataURL(file);
 });
+
+async function importPdfAsPages(file){
+  showToast('جاري تحويل صفحات PDF...', '⏳');
+
+  try{
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const numPages = pdf.numPages;
+
+    if(numPages === 0){ showToast('ملف فارغ', '⚠️'); return; }
+
+    const MAX_PAGES = 200;
+    const pagesToRender = Math.min(numPages, MAX_PAGES);
+
+    if(numPages > MAX_PAGES){
+      showToast(`الملف يحتوي ${numPages} صفحة، سيتم استيراد أول ${MAX_PAGES} فقط`, '⚠️');
+    }
+
+    for(let i=1; i<=pagesToRender; i++){
+      const page = await pdf.getPage(i);
+      const scale = 2;
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(viewport.width);
+      canvas.height = Math.round(viewport.height);
+      const ctx = canvas.getContext('2d');
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      const dataUrl = canvas.toDataURL('image/png');
+
+      const newId = uid();
+      const item = {
+        id: newId,
+        template: 'full',
+        front: dataUrl,
+        back: null,
+        hideFront: false,
+        hideBack: false,
+        crops: { front: { x:0,y:0,zoom:1,rotate:0,quality:'high',box:null } },
+        final_front: null,
+        isOfficePage: true,
+        pageNumber: i,
+        totalPages: numPages,
+        sourceFileName: file.name
+      };
+
+      currentProject.ids.push(item);
+      if(!currentProject.order) currentProject.order = [];
+      currentProject.order.push(newId);
+    }
+
+    persistProjects();
+    renderTypeItems();
+    renderTypeIconsRow();
+    renderLivePreview();
+    updateEditorHeader();
+    showToast(`تم استيراد ${pagesToRender} صفحة من ${file.name}`, '✅');
+  }catch(err){
+    console.error(err);
+    showToast('تعذّر تحويل PDF: ' + (err.message || ''), '❌');
+  }
+}
+
+function previewOfficeFile(itemId){
+  const item = currentProject.ids.find(p=>p.id === itemId);
+  if(!item) return;
+  const viewer = $('officeViewer');
+  const body = $('officeViewerBody');
+  $('officeViewerName').textContent = item.fileName || 'الملف';
+
+  if(item.fileExt === 'pdf' && item.fileData){
+    body.innerHTML = '<div style="color:#fff;font-size:14px">جاري التحميل...</div>';
+    openModal('officeViewer');
+    // استيراد مباشر كصفحات إن لم يتم من قبل
+    if(!item.isOfficePage){
+      showToast('يُفضل استيراد PDF من زر الإضافة لتحويله لصفحات','ℹ️');
+    }
+    return;
+  }
+
+  body.innerHTML = `<div style="color:#fff;text-align:center;padding:30px;font-size:13px">
+    <i class="bi bi-file-earmark-text" style="font-size:48px;opacity:.6;display:block;margin-bottom:12px"></i>
+    معاينة ${escapeHtml(item.fileName || 'الملف')}<br>
+    <small style="opacity:.6">هذا النوع لا يدعم المعاينة المباشرة. للطباعة، حوّل الملف إلى PDF.</small>
+  </div>`;
+  viewer.classList.add('on');
+}
+
+function closeOfficeViewer(){
+  $('officeViewer').classList.remove('on');
+}
 
 function deleteItem(itemId){
   if(!confirm('حذف هذا العنصر؟')) return;
@@ -1239,30 +1349,28 @@ function openSizeEditor(pairId, side){
   const sz = getEffectiveSize(pair.template);
   sizeEditorCtx = { pairId, side, template: pair.template };
   $('sizeEditorTitle').textContent = `قياس ${tpl.name}`;
-  $('sizeEdH').value = sz.h; /* ارتفاع */
-  $('sizeEdW').value = sz.w; /* طول */
+  $('sizeEdH').value = sz.h;
+  $('sizeEdW').value = sz.w;
   previewSizeEditor();
   openModal('sizeEditorModal');
 }
 
 function previewSizeEditor(){
   if(!sizeEditorCtx) return;
-  const w = parseFloat($('sizeEdW').value) || 0.1; /* الطول */
-  const h = parseFloat($('sizeEdH').value) || 0.1; /* الارتفاع */
+  const w = parseFloat($('sizeEdW').value) || 0.1;
+  const h = parseFloat($('sizeEdH').value) || 0.1;
   const pv = $('sizeEditorPreview');
   const maxW = 180, maxH = 180;
   const ratio = w / h;
   let pw, ph;
   if(ratio > 1){ pw = maxW; ph = maxW / ratio; }
   else { ph = maxH; pw = maxH * ratio; }
-  
-  /* عرض القياسات: الطول × العرض */
   pv.innerHTML = `<div class="sp-box" style="width:${pw}px;height:${ph}px">${w.toFixed(1)} × ${h.toFixed(1)} سم</div>`;
 }
 
 function quickSize(dw, dh){
-  const w = (parseFloat($('sizeEdW').value) || 1) + dw; /* الطول */
-  const h = (parseFloat($('sizeEdH').value) || 1) + dh; /* الارتفاع */
+  const w = (parseFloat($('sizeEdW').value) || 1) + dw;
+  const h = (parseFloat($('sizeEdH').value) || 1) + dh;
   $('sizeEdW').value = Math.max(0.1, Math.min(50, w)).toFixed(2);
   $('sizeEdH').value = Math.max(0.1, Math.min(50, h)).toFixed(2);
   previewSizeEditor();
@@ -1270,8 +1378,8 @@ function quickSize(dw, dh){
 
 function applySizeEditor(){
   if(!sizeEditorCtx) return;
-  const w = parseFloat($('sizeEdW').value); /* الطول */
-  const h = parseFloat($('sizeEdH').value); /* الارتفاع */
+  const w = parseFloat($('sizeEdW').value);
+  const h = parseFloat($('sizeEdH').value);
   if(!w || !h || w < 0.1 || h < 0.1 || w > 50 || h > 50){
     showToast('قيمة غير صحيحة (0.1 - 50 سم)', '⚠️');
     return;
@@ -1320,7 +1428,15 @@ function openCrop(pairId, side){
 
   const imgSrc = pair[side];
   const size = getEffectiveSize(pair.template);
-  const aspect = size.w / size.h; /* العرض / الارتفاع */
+
+  let aspect;
+  if(pair.template === 'full'){
+    // ★ الصورة الكاملة: استخدم نسبة الصورة الأصلية مبدئياً
+    aspect = 1;
+  } else {
+    aspect = size.w / size.h;
+  }
+
   const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
 
   cropState = {
@@ -1330,7 +1446,8 @@ function openCrop(pairId, side){
     rotate: crop.rotate || 0,
     quality: crop.quality || 'high',
     box: crop.box ? { ...crop.box } : null,
-    baseW: 0, baseH: 0, vw: 0, vh: 0
+    baseW: 0, baseH: 0, vw: 0, vh: 0,
+    isFullTemplate: pair.template === 'full'
   };
 
   const maxW = Math.min(window.innerWidth * 0.88, 500);
@@ -1347,28 +1464,48 @@ function openCrop(pairId, side){
   img.onload = ()=>{
     const iw = img.naturalWidth;
     const ih = img.naturalHeight;
-    const viewportRatio = vw / vh;
-    const imageRatio = iw / ih;
 
-    let baseW, baseH;
-    if(imageRatio > viewportRatio){
-      baseH = vh; baseW = vh * imageRatio;
-    } else {
-      baseW = vw; baseH = vw / imageRatio;
-    }
+    // ★ احتواء كامل (contain) — الصورة كلها ظاهرة داخل viewport
+    const scale = Math.min(vw / iw, vh / ih);
+    const baseW = iw * scale;
+    const baseH = ih * scale;
 
     cropState.baseW = baseW;
     cropState.baseH = baseH;
     cropState.vw = vw;
     cropState.vh = vh;
 
+    // ★ الصورة الكاملة: نعيد ضبط viewport ليطابق نسبة الصورة (بدون فراغات)
+    if(cropState.isFullTemplate){
+      const imgRatio = iw / ih;
+      let newVw, newVh;
+      if(imgRatio > maxW / maxH){ newVw = maxW; newVh = maxW / imgRatio; }
+      else { newVh = maxH; newVw = maxH * imgRatio; }
+      vp.style.width = newVw + 'px';
+      vp.style.height = newVh + 'px';
+      // إعادة حساب baseW/baseH بعد تغيير viewport
+      const scale2 = Math.min(newVw / iw, newVh / ih);
+      cropState.baseW = iw * scale2;
+      cropState.baseH = ih * scale2;
+      cropState.vw = newVw;
+      cropState.vh = newVh;
+    }
+
     if(!cropState.box){
-      cropState.box = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
+      // ★ صندوق يغطي الصورة كاملة
+      const imgLeft = (cropState.vw - cropState.baseW) / 2;
+      const imgTop  = (cropState.vh - cropState.baseH) / 2;
+      cropState.box = {
+        x: imgLeft / cropState.vw,
+        y: imgTop  / cropState.vh,
+        w: cropState.baseW / cropState.vw,
+        h: cropState.baseH / cropState.vh
+      };
     } else {
-      cropState.box.x = Math.max(0, Math.min(cropState.box.x, 1 - 0.1));
-      cropState.box.y = Math.max(0, Math.min(cropState.box.y, 1 - 0.1));
-      cropState.box.w = Math.max(0.1, Math.min(cropState.box.w, 1 - cropState.box.x));
-      cropState.box.h = Math.max(0.1, Math.min(cropState.box.h, 1 - cropState.box.y));
+      cropState.box.x = Math.max(0, Math.min(cropState.box.x, 1 - 0.05));
+      cropState.box.y = Math.max(0, Math.min(cropState.box.y, 1 - 0.05));
+      cropState.box.w = Math.max(0.05, Math.min(cropState.box.w, 1 - cropState.box.x));
+      cropState.box.h = Math.max(0.05, Math.min(cropState.box.h, 1 - cropState.box.y));
     }
 
     updateCropBoxPosition();
@@ -1462,6 +1599,19 @@ function nudgeRotate(d){
   $('cropRotate').value = cropState.rotate;
   $('cropRotateVal').textContent = cropState.rotate.toFixed(1) + '°';
   applyCropTransform();
+}
+
+/* ★ دالة التدوير 90° ★ */
+function rotate90(direction){
+  if(!cropState) return;
+  let newRot = cropState.rotate + (direction * 90);
+  while(newRot > 180) newRot -= 360;
+  while(newRot < -180) newRot += 360;
+  cropState.rotate = newRot;
+  $('cropRotate').value = cropState.rotate;
+  $('cropRotateVal').textContent = cropState.rotate.toFixed(1) + '°';
+  applyCropTransform();
+  showToast(`تدوير ${direction>0?'يمين':'يسار'} 90°`, '🔄');
 }
 
 function setCropQuality(q){
@@ -1692,7 +1842,15 @@ $('cropRotate').addEventListener('input', (e)=>{
 function resetCropAll(){
   if(!cropState) return;
   cropState.x = 0; cropState.y = 0; cropState.zoom = 1; cropState.rotate = 0;
-  cropState.box = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
+  // إعادة الصندوق ليغطي الصورة كاملة
+  const imgLeft = (cropState.vw - cropState.baseW) / 2;
+  const imgTop  = (cropState.vh - cropState.baseH) / 2;
+  cropState.box = {
+    x: imgLeft / cropState.vw,
+    y: imgTop  / cropState.vh,
+    w: cropState.baseW / cropState.vw,
+    h: cropState.baseH / cropState.vh
+  };
   $('cropZoom').value = 1;
   $('cropZoomVal').textContent = '1.00x';
   $('cropRotate').value = 0;
@@ -1754,16 +1912,10 @@ async function renderFinalImage(pair, side, outW, outH){
   wctx.fillStyle = '#ffffff';
   wctx.fillRect(0, 0, workW, workH);
 
-  const viewportRatio = workW / workH;
-  const imageRatio = iw / ih;
-  let baseW, baseH;
-  if(imageRatio > viewportRatio){
-    baseH = workH;
-    baseW = workH * imageRatio;
-  } else {
-    baseW = workW;
-    baseH = workW / imageRatio;
-  }
+  // ★ احتواء (contain) بدل تغطية (cover) — الصورة كاملة بدون قص
+  const scale = Math.min(workW / iw, workH / ih);
+  const baseW = iw * scale;
+  const baseH = ih * scale;
 
   const bw = baseW * zoom;
   const bh = baseH * zoom;
@@ -1803,8 +1955,19 @@ async function applyCrop(){
   if(!pair){ cancelCrop(); return; }
 
   const size = getEffectiveSize(pair.template);
-  const targetW = Math.max(200, Math.round(size.w * 300 / 2.54));
-  const targetH = Math.max(200, Math.round(size.h * 300 / 2.54));
+  let targetW, targetH;
+
+  if(pair.template === 'full'){
+    // ★ الصورة الكاملة: استخدم نسبة الصندوق المحدد، بجودة عالية
+    const box = cropState.box || {w:1,h:1};
+    const boxRatio = box.w / box.h;
+    const baseMax = 2400;
+    if(boxRatio >= 1){ targetW = baseMax; targetH = Math.round(baseMax / boxRatio); }
+    else { targetH = baseMax; targetW = Math.round(baseMax * boxRatio); }
+  } else {
+    targetW = Math.max(200, Math.round(size.w * 300 / 2.54));
+    targetH = Math.max(200, Math.round(size.h * 300 / 2.54));
+  }
 
   if(!pair.crops) pair.crops = {};
   pair.crops[cropState.side] = {
@@ -1896,8 +2059,8 @@ function previewTypeSize(typeKey){
   const hInput = $('input-h-' + typeKey);
   const tag = $('sth-current-' + typeKey);
   if(!wInput || !hInput || !tag) return;
-  const w = parseFloat(wInput.value); /* الطول */
-  const h = parseFloat(hInput.value); /* العرض */
+  const w = parseFloat(wInput.value);
+  const h = parseFloat(hInput.value);
   if(w > 0 && h > 0){
     tag.textContent = `${w.toFixed(2).replace(/\.?0+$/,'')}×${h.toFixed(2).replace(/\.?0+$/,'')} سم`;
   }
@@ -1909,8 +2072,8 @@ function autoApplyTypeSize(typeKey){
   const wInput = $('input-w-' + typeKey);
   const hInput = $('input-h-' + typeKey);
   if(!wInput || !hInput) return;
-  const w = parseFloat(wInput.value); /* الطول */
-  const h = parseFloat(hInput.value); /* العرض */
+  const w = parseFloat(wInput.value);
+  const h = parseFloat(hInput.value);
   if(!w || !h || w < 0.1 || h < 0.1 || w > 50 || h > 50) return;
 
   if(!currentProject.sizes) currentProject.sizes = {};
@@ -1936,8 +2099,8 @@ function applyTypeSize(typeKey){
   if(!currentProject) return;
   const wInput = $('input-w-' + typeKey);
   const hInput = $('input-h-' + typeKey);
-  const newW = parseFloat(wInput.value); /* الطول */
-  const newH = parseFloat(hInput.value); /* العرض */
+  const newW = parseFloat(wInput.value);
+  const newH = parseFloat(hInput.value);
 
   if(!newW || !newH || newW < 0.1 || newH < 0.1 || newW > 50 || newH > 50){
     showToast('قيمة غير صحيحة (0.1 - 50 سم)', '⚠️');
@@ -2001,40 +2164,32 @@ function buildSheetHTML(editable){
   const allItems = getSortedItems();
   const photoCount = currentProject.photoCount || 6;
 
-  const fullItem = allItems.find(it => it.template === 'full' && it.front && !it.hideFront);
-  if(fullItem){
-    return `<div class="full-image-wrap">${buildCroppedImageHTML(fullItem, 'front')}</div>`;
-  }
-
-  const photoItems = allItems.filter(it => it.template === 'photos');
   const html = [];
   let photoRendered = false;
+
+  // ★ الصور الكاملة: عنصر مستقل لكل صورة بدون زوم
+  const fullItems = allItems.filter(it => it.template === 'full' && it.front && !it.hideFront);
+  const fullBlocksHtml = fullItems.map((it)=>{
+    return `
+      <div class="sheet-item" data-id="${it.id}" ${editable ? `draggable="true"` : ''} style="margin-bottom:${ITEM_GAP_PX}px">
+        ${editable ? `<div class="drag-handle"><i class="bi bi-grip-vertical"></i></div>` : ''}
+        <div class="s-img full-item-img">
+          ${buildCroppedImageHTML(it,'front')}
+        </div>
+      </div>`;
+  }).join('');
 
   allItems.forEach((it)=>{
     const tpl = TEMPLATES[it.template];
     if(!tpl) return;
-
-    if(tpl.kind === 'office'){
-      const name = it.fileName || 'ملف';
-      const type = it.fileType || '';
-      html.push(`
-        <div class="sheet-item" data-id="${it.id}" ${editable ? `draggable="true"` : ''} style="margin-bottom:${ITEM_GAP_PX}px">
-          ${editable ? `<div class="drag-handle"><i class="bi bi-grip-vertical"></i></div>` : ''}
-          <div class="sheet-office">
-            <div class="of-ico">📄</div>
-            <div class="of-name">${escapeHtml(name)}</div>
-            <div class="of-meta">${escapeHtml(type)} • سيُطبع محتوى الملف كاملاً</div>
-          </div>
-        </div>
-      `);
-      return;
-    }
+    if(tpl.kind === 'full') return;
+    if(tpl.kind === 'office') return;
 
     if(tpl.kind === 'photos'){
       if(photoRendered) return;
       photoRendered = true;
 
-      const limited = photoItems.slice(0, photoCount);
+      const limited = allItems.filter(x => x.template === 'photos').slice(0, photoCount);
       const cells = [];
       const size = getEffectiveSize('photos');
       const aspect = `${size.w} / ${size.h}`;
@@ -2064,8 +2219,6 @@ function buildSheetHTML(editable){
 
     if(tpl.kind === 'pair'){
       const size = getEffectiveSize(it.template);
-      
-      /* ★ التعديل الأهم: استخدام w للعرض و h للارتفاع مباشرة، وإزالة الـ grid ★ */
       const finalW = size.w > 0 ? size.w : 3.5;
       const finalH = size.h > 0 ? size.h : 2.0;
       const finalAspect = `${finalW} / ${finalH}`;
@@ -2073,7 +2226,7 @@ function buildSheetHTML(editable){
       const frontHtml = (it.hideFront || !it.front)
         ? `<div class="s-img ${it.hideFront ? 'hidden-card' : 'blank'}" style="aspect-ratio:${finalAspect}; width: 45%; max-width: 100%;"></div>`
         : `<div class="s-img" style="aspect-ratio:${finalAspect}; width: 45%; max-width: 100%;">${buildCroppedImageHTML(it,'front')}</div>`;
-        
+
       const backHtml = (it.hideBack || !it.back)
         ? `<div class="s-img ${it.hideBack ? 'hidden-card' : 'blank'}" style="aspect-ratio:${finalAspect}; width: 45%; max-width: 100%;"></div>`
         : `<div class="s-img" style="aspect-ratio:${finalAspect}; width: 45%; max-width: 100%;">${buildCroppedImageHTML(it,'back')}</div>`;
@@ -2083,13 +2236,13 @@ function buildSheetHTML(editable){
              ${editable ? `draggable="true"` : ''}
              style="margin-bottom:${ITEM_GAP_PX}px">
           ${editable ? `<div class="drag-handle"><i class="bi bi-grip-vertical"></i></div>` : ''}
-          <div class="sheet-item-pair" style="gap:${PAIR_GAP_PX}px; display: flex; justify-content: flex-start;">${frontHtml}${backHtml}</div>
+          <div class="sheet-item-pair" style="gap:${PAIR_GAP_PX}px; display:flex; justify-content:center; align-items:flex-start; flex-wrap:nowrap; direction:ltr;">${frontHtml}${backHtml}</div>
         </div>
       `);
     }
   });
 
-  return html.join('');
+  return fullBlocksHtml + html.join('');
 }
 
 function renderLivePreview(){
@@ -2286,15 +2439,36 @@ function openPrintWindow(){
   const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
   const p = paperMM[currentProject.size] || paperMM.A4;
   const copies = currentProject.copyCount || 1;
-  const sheetHtml = buildSheetHTML(false);
+
+  // ★ كل صورة كاملة = صفحة مستقلة
+  const fullPages = getSortedItems().filter(it => it.template === 'full' && it.front && !it.hideFront);
+  const otherSheetHtml = buildSheetHTML(false);
+
+  let pagesHtml = '';
+
+  if(fullPages.length){
+    fullPages.forEach(it=>{
+      const onePage = `
+        <div class="sheet-item" style="margin-bottom:0">
+          <div class="s-img full-item-img">
+            ${buildCroppedImageHTML(it,'front')}
+          </div>
+        </div>`;
+      for(let c=0;c<copies;c++){
+        pagesHtml += `<div class="print-page">${onePage}</div>`;
+      }
+    });
+  }
+
+  const hasNonFull = currentProject.ids.some(it => it.template !== 'full');
+  if(hasNonFull && otherSheetHtml.trim()){
+    for(let c=0;c<copies;c++){
+      pagesHtml += `<div class="print-page">${otherSheetHtml}</div>`;
+    }
+  }
 
   const win = window.open('', '_blank');
   if(!win){ showToast('اسمح بالنوافذ المنبثقة للطباعة','⚠️'); return; }
-
-  let pagesHtml = '';
-  for(let i=0;i<copies;i++){
-    pagesHtml += `<div class="print-page">${sheetHtml}</div>`;
-  }
 
   win.document.write(`
     <!DOCTYPE html>
@@ -2318,7 +2492,7 @@ function openPrintWindow(){
         .print-page:last-child{page-break-after:auto;break-after:auto}
         .sheet-item{display:flex;flex-direction:column;margin-bottom:${ITEM_GAP_PX}px}
         .sheet-item:last-child{margin-bottom:0}
-        .sheet-item-pair{display:flex;flex-wrap:wrap;gap:${PAIR_GAP_PX}px}
+        .sheet-item-pair{display:flex;flex-wrap:nowrap;justify-content:center;align-items:flex-start;direction:ltr;gap:${PAIR_GAP_PX}px}
         .sheet-photos-grid{display:grid;gap:${PHOTO_GAP_PX}px}
         .sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
         .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
@@ -2326,120 +2500,28 @@ function openPrintWindow(){
         .s-img{background:#fff;display:block;overflow:hidden;position:relative}
         .s-img.blank{background:#fff}
         .s-img.hidden-card{background:#fff !important}
-        .full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-        .full-image-wrap img{width:100%;height:100%;object-fit:contain;display:block}
-        .cropped-img-wrap{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+        .s-img.full-item-img{display:flex;align-items:center;justify-content:center;width:100%;height:auto}
+        .s-img.full-item-img .cropped-img-wrap{position:relative;width:100%;height:auto}
+        .s-img.full-item-img img{width:100%;height:auto;object-fit:contain;display:block}
+        .cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden}
         .cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-        .drag-handle{display:none !important}
-        .sheet-office{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;padding:12px;text-align:center}
-        .sheet-office .of-ico{font-size:28px;margin-bottom:6px}
-        .sheet-office .of-name{font-size:12px;font-weight:900;color:#1e293b;margin-bottom:4px}
-        .sheet-office .of-meta{font-size:10px;color:#64748b}
-        @media print{ body{background:#fff} .print-page{box-shadow:none} }
+        .sheet-item-pair .s-img{width:45%;max-width:100%}
+        .sheet-item-pair .s-img .cropped-img-wrap{position:absolute;inset:0;width:100%;height:100%}
       </style>
     </head>
     <body>${pagesHtml}</body>
     </html>
   `);
   win.document.close();
-  setTimeout(()=>{ win.focus(); win.print(); }, 600);
+
+  setTimeout(()=>{
+    win.focus();
+    win.print();
+  }, 700);
 }
 
-function previewOfficeFile(itemId){
-  const item = currentProject.ids.find(it => it.id === itemId);
-  if(!item) return;
-
-  $('officeViewerName').textContent = item.fileName || 'ملف';
-  const body = $('officeViewerBody');
-  body.innerHTML = '<div style="color:#fff;font-size:14px;padding:40px">جاري التحميل...</div>';
-  openModal('officeViewer');
-
-  const ext = (item.fileExt || '').toLowerCase();
-
-  if(ext === 'pdf'){
-    try{
-      const arrayBuffer = dataURLToArrayBuffer(item.fileData);
-      pdfjsLib.getDocument({ data: arrayBuffer }).promise.then(pdf=>{
-        body.innerHTML = '';
-        const renderPage = (i)=>{
-          if(i > pdf.numPages) return;
-          pdf.getPage(i).then(page=>{
-            const viewport = page.getViewport({ scale: 1.5 });
-            const canvas = document.createElement('canvas');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-            canvas.className = 'office-page-canvas';
-            const ctx = canvas.getContext('2d');
-            page.render({ canvasContext: ctx, viewport }).promise.then(()=>{
-              const pageNum = document.createElement('div');
-              pageNum.className = 'office-page-num';
-              pageNum.textContent = `صفحة ${i} / ${pdf.numPages}`;
-              body.appendChild(pageNum);
-              body.appendChild(canvas);
-              renderPage(i+1);
-            });
-          });
-        };
-        renderPage(1);
-      }).catch(err=>{
-        console.error(err);
-        body.innerHTML = `<div style="color:#fff;text-align:center;padding:40px">تعذّر عرض PDF.</div>`;
-      });
-    }catch(err){
-      console.error(err);
-      body.innerHTML = `<div style="color:#fff;text-align:center;padding:40px">تعذّر عرض PDF.</div>`;
-    }
-  } else {
-    body.innerHTML = `
-      <div style="color:#fff;text-align:center;padding:40px;max-width:500px">
-        <div style="font-size:60px;margin-bottom:16px">📄</div>
-        <div style="font-size:16px;font-weight:900;margin-bottom:8px">${escapeHtml(item.fileName)}</div>
-        <div style="font-size:13px;opacity:.8;line-height:1.7;margin-bottom:20px">
-          ملفات Office لا يمكن عرضها مباشرة في المتصفح.<br>
-          عند الطباعة، يُفتح الملف في نافذة جديدة ليتمكن المتصفح من طباعته بكل صفحاته.
-        </div>
-        <button onclick="openOfficeFileInNewTab('${item.id}')" style="padding:14px 32px;border:none;border-radius:12px;background:linear-gradient(135deg,#c8a45c,#a17c3a);color:#fff;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 6px 20px rgba(200,164,92,.5)">
-          <i class="bi bi-box-arrow-up-right"></i> فتح الملف للطباعة
-        </button>
-      </div>
-    `;
-  }
-}
-
-function closeOfficeViewer(){
-  closeModal('officeViewer');
-  $('officeViewerBody').innerHTML = '';
-}
-
-function dataURLToArrayBuffer(dataURL){
-  const base64 = dataURL.split(',')[1];
-  const binary = atob(base64);
-  const len = binary.length;
-  const bytes = new Uint8Array(len);
-  for(let i = 0; i < len; i++){ bytes[i] = binary.charCodeAt(i); }
-  return bytes.buffer;
-}
-
-function openOfficeFileInNewTab(itemId){
-  const item = currentProject.ids.find(it => it.id === itemId);
-  if(!item) return;
-  const win = window.open('', '_blank');
-  if(!win){ showToast('اسمح بالنوافذ المنبثقة','⚠️'); return; }
-  win.document.write(`
-    <html><head><title>${escapeHtml(item.fileName)}</title></head>
-    <body style="margin:0;font-family:sans-serif;background:#f8fafc;padding:20px;text-align:center">
-      <div style="margin-bottom:16px;padding:14px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)">
-        <div style="font-size:16px;font-weight:900;color:#1e293b">${escapeHtml(item.fileName)}</div>
-        <div style="font-size:12px;color:#64748b;margin-top:4px">اضغط تنزيل ثم افتح الملف في برنامجه الأصلي لطباعته</div>
-        <a href="${item.fileData}" download="${escapeHtml(item.fileName)}" style="display:inline-block;margin-top:12px;padding:12px 28px;background:linear-gradient(135deg,#c8a45c,#a17c3a);color:#fff;text-decoration:none;border-radius:10px;font-weight:900">تنزيل الملف</a>
-      </div>
-    </body></html>
-  `);
-  win.document.close();
-}
-
+/* Boot */
 loadProjects();
 </script>
-
 </body>
 </html>
