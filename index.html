@@ -108,7 +108,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .section-sub{font-size:10px;color:var(--muted);margin-top:2px}
 
 /* Type icons row */
-.type-icons-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px}
+.type-icons-row{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:14px}
 .type-icon-card{position:relative;background:#fff;border:2px solid var(--border);border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;transition:.2s;box-shadow:var(--shadow)}
 .type-icon-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(200,164,92,.25)}
 .type-icon-card .ti-emoji{font-size:28px;margin-bottom:6px;display:block}
@@ -317,6 +317,268 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .floating-print-btn{position:fixed;bottom:90px;left:20px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1e40af);color:white;border:none;box-shadow:0 8px 24px rgba(37,99,235,.5);z-index:999;display:none;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:transform 0.2s}
 .floating-print-btn:active{transform:scale(0.9)}
 .floating-print-btn.on{display:flex}
+
+/* === قسم طباعة الكتاب === */
+.book-section-block {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.book-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--border);
+}
+.book-section-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--gold2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.book-textarea {
+  width: 100%;
+  min-height: 70px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: #f8fafc;
+  color: var(--ink);
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 600;
+  resize: vertical;
+  outline: none;
+  margin-bottom: 10px;
+}
+.book-textarea:focus {
+  border-color: var(--gold);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(200,164,92,.15);
+}
+.book-style-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.book-style-row label {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.book-style-row input[type=color] {
+  width: 40px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  padding: 2px;
+}
+.book-style-row input[type=number],
+.book-style-row select {
+  padding: 7px 9px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--ink);
+  font-family: inherit;
+  outline: none;
+}
+.align-btns {
+  display: flex;
+  gap: 3px;
+  background: rgba(200,164,92,.08);
+  padding: 3px;
+  border-radius: 8px;
+}
+.align-btns button {
+  width: 30px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--gold2);
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.align-btns button.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #fff;
+}
+
+/* عرض الكتاب في ورقة العمل */
+.book-render {
+  width: 100%;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.book-render .bk-title {
+  font-weight: 900;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.book-render .bk-body {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-weight: 600;
+}
+.book-render .bk-sign {
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-weight: 800;
+  margin-top: 6px;
+}
+
+/* === أدوات تعديل الصورة المتقدمة === */
+.adv-tools-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+.adv-tool-group {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+}
+.adv-tool-group .atg-label {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--gold2);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 7px;
+}
+.adv-tool-group input[type=text],
+.adv-tool-group textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 700;
+  outline: none;
+  margin-bottom: 6px;
+}
+.adv-tool-group input[type=color] {
+  width: 38px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  padding: 2px;
+}
+.adv-tool-group input[type=range] {
+  width: 100%;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(200,164,92,.2);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.adv-tool-group input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(200,164,92,.5);
+  cursor: pointer;
+}
+.adv-tool-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.adv-tool-row .atr-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted);
+  min-width: 55px;
+}
+.adv-tool-row .atr-val {
+  min-width: 40px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--gold2);
+  background: rgba(200,164,92,.1);
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+.adv-tool-group .toggle-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.adv-tool-group .toggle-row button {
+  flex: 1;
+  padding: 7px 8px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+}
+.adv-tool-group .toggle-row button.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #fff;
+  border-color: var(--gold2);
+}
+
+.s-img .adv-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.s-img .adv-overlay .adv-caption {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 900;
+  text-shadow: 0 1px 3px rgba(0,0,0,.8);
+  background: rgba(0,0,0,.4);
+  padding: 2px 4px;
+  border-radius: 3px;
+  text-align: center;
+}
 
 @media(max-width:520px){
   .type-icons-row{grid-template-columns:repeat(3,1fr)}
@@ -575,7 +837,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 
 <!-- نافذة خيارات الصورة -->
 <div class="modal" id="imageOptionsModal">
-  <div class="modal-card" style="max-width:380px">
+  <div class="modal-card" style="max-width:420px">
     <div class="modal-head">
       <div class="modal-title">
         <i class="bi bi-image-fill"></i>
@@ -592,11 +854,124 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
         <button class="btn-main" style="background:linear-gradient(135deg,#2563eb,#1e40af);box-shadow:0 6px 18px rgba(37,99,235,.4)" onclick="imgOptAction('size')">
           <i class="bi bi-aspect-ratio-fill"></i> تعديل قياس القالب
         </button>
+        <button class="btn-main" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);box-shadow:0 6px 18px rgba(139,92,246,.4)" onclick="imgOptAction('advanced')">
+          <i class="bi bi-sliders2"></i> أدوات متقدمة
+        </button>
         <button class="btn-main" style="background:linear-gradient(135deg,#22c55e,#15803d);box-shadow:0 6px 18px rgba(34,197,94,.4)" onclick="imgOptAction('replace')">
           <i class="bi bi-arrow-repeat"></i> تغيير الصورة
         </button>
         <button class="btn-main" style="background:rgba(239,68,68,.12);color:#ef4444;box-shadow:none" onclick="imgOptAction('hide')">
           <i class="bi bi-eye-slash-fill"></i> <span id="imgOptHideLabel">إخفاء الصورة</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة الأدوات المتقدمة للصورة -->
+<div class="modal" id="advancedImageModal">
+  <div class="modal-card" style="max-width:520px">
+    <div class="modal-head">
+      <div class="modal-title">
+        <i class="bi bi-sliders2"></i>
+        <span>أدوات متقدمة للصورة</span>
+      </div>
+      <button class="modal-close" onclick="closeModal('advancedImageModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div id="advPreviewWrap" style="width:100%;aspect-ratio:1.75/1;background:#f1f5f9;border-radius:12px;overflow:hidden;margin-bottom:14px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);position:relative">
+        <img id="advPreviewImg" src="" style="max-width:100%;max-height:100%;object-fit:contain">
+        <div id="advOverlayCaption" class="adv-caption" style="display:none;position:absolute;bottom:6px;left:6px;right:6px;color:#fff;font-size:11px;font-weight:900;text-shadow:0 1px 3px rgba(0,0,0,.8);background:rgba(0,0,0,.5);padding:4px 8px;border-radius:6px;text-align:center"></div>
+      </div>
+
+      <div class="adv-tools-grid">
+
+        <!-- 1) نص توضيحي -->
+        <div class="adv-tool-group">
+          <div class="atg-label"><i class="bi bi-chat-text-fill"></i> نص توضيحي على الصورة</div>
+          <input type="text" id="advCaptionText" placeholder="اكتب نصاً يظهر أسفل الصورة" oninput="applyAdvLive()">
+          <div class="adv-tool-row">
+            <span class="atr-label">الحجم</span>
+            <input type="range" id="advCaptionSize" min="6" max="30" value="12" oninput="applyAdvLive()">
+            <span class="atr-val" id="advCaptionSizeVal">12</span>
+            <input type="color" id="advCaptionColor" value="#ffffff" oninput="applyAdvLive()">
+          </div>
+          <div class="toggle-row">
+            <button onclick="setAdvAlign('right')" id="advAlignRight">يمين</button>
+            <button onclick="setAdvAlign('center')" id="advAlignCenter" class="active">وسط</button>
+            <button onclick="setAdvAlign('left')" id="advAlignLeft">يسار</button>
+          </div>
+        </div>
+
+        <!-- 2) تمييز الوجه -->
+        <div class="adv-tool-group">
+          <div class="atg-label"><i class="bi bi-emoji-smile-fill"></i> تمييز الوجه</div>
+          <div class="toggle-row" style="margin-bottom:8px">
+            <button onclick="setAdvFace(false)" id="advFaceOff" class="active">إيقاف</button>
+            <button onclick="setAdvFace(true)" id="advFaceOn">تشغيل</button>
+          </div>
+          <div id="advFaceControls" style="display:none">
+            <div class="adv-tool-row">
+              <span class="atr-label">الحجم</span>
+              <input type="range" id="advFaceSize" min="20" max="90" value="50" oninput="applyAdvLive()">
+              <span class="atr-val" id="advFaceSizeVal">50</span>
+            </div>
+            <div class="adv-tool-row">
+              <span class="atr-label">اللون</span>
+              <input type="color" id="advFaceColor" value="#c8a45c" oninput="applyAdvLive()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3) فلتر لون -->
+        <div class="adv-tool-group">
+          <div class="atg-label"><i class="bi bi-palette-fill"></i> فلتر لون الصورة</div>
+          <div class="adv-tool-row">
+            <span class="atr-label">اللون</span>
+            <input type="color" id="advTintColor" value="#ffffff" oninput="applyAdvLive()">
+            <span class="atr-label">الشدة</span>
+            <input type="range" id="advTintAmount" min="0" max="100" value="0" oninput="applyAdvLive()">
+            <span class="atr-val" id="advTintAmountVal">0%</span>
+          </div>
+        </div>
+
+        <!-- 4) إطار -->
+        <div class="adv-tool-group">
+          <div class="atg-label"><i class="bi bi-square-fill"></i> إطار الصورة</div>
+          <div class="adv-tool-row">
+            <span class="atr-label">السمك</span>
+            <input type="range" id="advBorderWidth" min="0" max="20" value="0" oninput="applyAdvLive()">
+            <span class="atr-val" id="advBorderWidthVal">0</span>
+            <input type="color" id="advBorderColor" value="#c8a45c" oninput="applyAdvLive()">
+          </div>
+        </div>
+
+        <!-- 5) تباين -->
+        <div class="adv-tool-group">
+          <div class="atg-label"><i class="bi bi-circle-half"></i> تباين الصورة</div>
+          <div class="adv-tool-row">
+            <input type="range" id="advContrast" min="50" max="200" value="100" oninput="applyAdvLive()">
+            <span class="atr-val" id="advContrastVal">100%</span>
+          </div>
+        </div>
+
+        <!-- 6) سطوع -->
+        <div class="adv-tool-group">
+          <div class="atg-label"><i class="bi bi-brightness-high-fill"></i> سطوع الصورة</div>
+          <div class="adv-tool-row">
+            <input type="range" id="advBrightness" min="50" max="200" value="100" oninput="applyAdvLive()">
+            <span class="atr-val" id="advBrightnessVal">100%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <button class="btn-main" style="background:linear-gradient(135deg,#22c55e,#15803d)" onclick="applyAdvancedTools()">
+          <i class="bi bi-check-circle-fill"></i> تطبيق
+        </button>
+        <button class="btn-main" style="background:rgba(239,68,68,.12);color:#ef4444;box-shadow:none" onclick="resetAdvancedTools()">
+          <i class="bi bi-arrow-counterclockwise"></i> إعادة تعيين
         </button>
       </div>
     </div>
@@ -724,8 +1099,8 @@ let selectedPaper = 'A4';
 let pickerTarget = null;
 let currentEditingType = 'id';
 let dragSourceEl = null;
-const STORAGE_KEY = 'amir_press_projects_v15_freeflow';
-const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v15_freeflow';
+const STORAGE_KEY = 'amir_press_projects_v16_book_adv';
+const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v16_book_adv';
 
 const CROP_MIN_ZOOM = 0.1;
 const CROP_MAX_ZOOM = 5;
@@ -741,7 +1116,8 @@ const DEFAULT_SIZES = {
   passport:  { w: 8.8, h: 12.5 },
   photos:    { w: 1.5, h: 2.5 },
   full:      { w: 0,   h: 0 },
-  office:    { w: 0,   h: 0 }
+  office:    { w: 0,   h: 0 },
+  book:      { w: 0,   h: 0 }
 };
 
 let GLOBAL_SIZES = JSON.parse(JSON.stringify(DEFAULT_SIZES));
@@ -761,7 +1137,8 @@ const TEMPLATES = {
   passport:  { key:'passport',  name:'جواز سفر',    icon:'🛂', kind:'pair',   addLabel:'إضافة جواز سفر' },
   photos:    { key:'photos',    name:'صور شخصية',   icon:'📸', kind:'photos', addLabel:'إضافة صورة شخصية' },
   full:      { key:'full',      name:'صورة كاملة',  icon:'🖼️', kind:'full',   addLabel:'إضافة صورة كاملة' },
-  office:    { key:'office',    name:'ملف أوفس',    icon:'📄', kind:'office', addLabel:'إضافة ملف (PDF / Word / PPT)' }
+  office:    { key:'office',    name:'ملف أوفس',    icon:'📄', kind:'office', addLabel:'إضافة ملف (PDF / Word / PPT)' },
+  book:      { key:'book',      name:'كتاب',        icon:'📖', kind:'book',   addLabel:'إضافة صفحة كتاب' }
 };
 
 const $ = id => document.getElementById(id);
@@ -784,6 +1161,7 @@ function loadProjects(){
     p.ids.forEach(it=>{
       if(!it.template) it.template = 'id';
       if(!it.crops) it.crops = {};
+      if(!it.advanced) it.advanced = {};
     });
     if(!p.photoCount) p.photoCount = 6;
     if(!p.order) p.order = p.ids.map(it => it.id);
@@ -871,7 +1249,7 @@ function openProject(id){
   if(!currentProject.order) currentProject.order = currentProject.ids.map(it => it.id);
   if(!currentProject.ids) currentProject.ids = [];
   if(!currentProject.copyCount) currentProject.copyCount = 1;
-  currentProject.ids.forEach(it => { if(!it.crops) it.crops = {}; });
+  currentProject.ids.forEach(it => { if(!it.crops) it.crops = {}; if(!it.advanced) it.advanced = {}; });
 
   $('projectsView').style.display = 'none';
   $('editorView').classList.add('on');
@@ -926,14 +1304,15 @@ function getCardSize(key){
 
 function renderTypeIconsRow(){
   const row = $('typeIconsRow');
-  const keys = ['id','residency','passport','photos','full','office'];
+  const keys = ['id','residency','passport','photos','full','office','book'];
   row.innerHTML = keys.map(k=>{
     const tpl = TEMPLATES[k];
     const count = currentProject.ids.filter(it => it.template === k).length;
     const size = getEffectiveSize(k);
     let dimText = 'كامل';
-    if(tpl.kind !== 'full' && tpl.kind !== 'office') dimText = `${size.w}×${size.h}`;
+    if(tpl.kind !== 'full' && tpl.kind !== 'office' && tpl.kind !== 'book') dimText = `${size.w}×${size.h}`;
     if(tpl.kind === 'office') dimText = 'ملفات';
+    if(tpl.kind === 'book') dimText = 'نص';
     return `
       <div class="type-icon-card" onclick="openTypeEditor('${k}')">
         <div class="ti-badge ${count>0?'':'empty'}">${count}</div>
@@ -1006,6 +1385,19 @@ function renderTypeItems(){
     return;
   }
 
+  if(tpl.kind === 'book'){
+    cont.innerHTML = items.map((item, idx)=>`
+      <div class="id-pair">
+        <div class="id-pair-head">
+          <div class="id-pair-title"><i class="bi bi-book-fill"></i> صفحة كتاب #${idx+1}</div>
+          <button class="id-pair-del" onclick="deleteItem('${item.id}')"><i class="bi bi-trash-fill"></i></button>
+        </div>
+        ${renderBookEditor(item)}
+      </div>
+    `).join('');
+    return;
+  }
+
   const size = getCardSize(currentEditingType);
 
   cont.innerHTML = items.map((pair, idx)=>`
@@ -1020,6 +1412,86 @@ function renderTypeItems(){
       </div>
     </div>
   `).join('');
+}
+
+/* === محرر الكتاب: 3 أقسام === */
+function renderBookEditor(item){
+  if(!item.book) item.book = {};
+  const b = item.book;
+  const def = {
+    title: { text:'', color:'#1e293b', size:24, align:'center' },
+    body:  { text:'', color:'#1e293b', size:14, align:'right' },
+    sign:  { text:'', color:'#1e293b', size:14, align:'left' }
+  };
+  const title = b.title || def.title;
+  const body  = b.body  || def.body;
+  const sign  = b.sign  || def.sign;
+
+  return `
+    <!-- 1) العنوان -->
+    <div class="book-section-block">
+      <div class="book-section-head">
+        <div class="book-section-title"><i class="bi bi-type-h1"></i> العنوان (وسط الصفحة)</div>
+      </div>
+      <textarea class="book-textarea" placeholder="اكتب عنوان الكتاب هنا..." oninput="updateBookField('${item.id}','title','text',this.value)">${escapeHtml(title.text)}</textarea>
+      <div class="book-style-row">
+        <label><i class="bi bi-palette-fill"></i></label>
+        <input type="color" value="${title.color}" onchange="updateBookField('${item.id}','title','color',this.value)">
+        <label><i class="bi bi-textarea-resize"></i> الحجم</label>
+        <input type="number" value="${title.size}" min="8" max="72" onchange="updateBookField('${item.id}','title','size',parseInt(this.value)||24)">
+      </div>
+    </div>
+
+    <!-- 2) النص -->
+    <div class="book-section-block">
+      <div class="book-section-head">
+        <div class="book-section-title"><i class="bi bi-text-paragraph"></i> النص</div>
+      </div>
+      <textarea class="book-textarea" placeholder="اكتب النص هنا..." style="min-height:110px" oninput="updateBookField('${item.id}','body','text',this.value)">${escapeHtml(body.text)}</textarea>
+      <div class="book-style-row">
+        <label><i class="bi bi-palette-fill"></i></label>
+        <input type="color" value="${body.color}" onchange="updateBookField('${item.id}','body','color',this.value)">
+        <label><i class="bi bi-textarea-resize"></i> الحجم</label>
+        <input type="number" value="${body.size}" min="8" max="48" onchange="updateBookField('${item.id}','body','size',parseInt(this.value)||14)">
+        <label><i class="bi bi-text-center"></i> المحاذاة</label>
+        <div class="align-btns">
+          <button class="${body.align==='right'?'active':''}" onclick="updateBookField('${item.id}','body','align','right')" title="يمين"><i class="bi bi-text-right"></i></button>
+          <button class="${body.align==='center'?'active':''}" onclick="updateBookField('${item.id}','body','align','center')" title="وسط"><i class="bi bi-text-center"></i></button>
+          <button class="${body.align==='left'?'active':''}" onclick="updateBookField('${item.id}','body','align','left')" title="يسار"><i class="bi bi-text-left"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3) الاسم والتوقيع -->
+    <div class="book-section-block">
+      <div class="book-section-head">
+        <div class="book-section-title"><i class="bi bi-pen-fill"></i> الاسم والتوقيع</div>
+      </div>
+      <textarea class="book-textarea" placeholder="الاسم والتوقيع..." style="min-height:60px" oninput="updateBookField('${item.id}','sign','text',this.value)">${escapeHtml(sign.text)}</textarea>
+      <div class="book-style-row">
+        <label><i class="bi bi-palette-fill"></i></label>
+        <input type="color" value="${sign.color}" onchange="updateBookField('${item.id}','sign','color',this.value)">
+        <label><i class="bi bi-textarea-resize"></i> الحجم</label>
+        <input type="number" value="${sign.size}" min="8" max="48" onchange="updateBookField('${item.id}','sign','size',parseInt(this.value)||14)">
+        <label><i class="bi bi-text-center"></i> المحاذاة</label>
+        <div class="align-btns">
+          <button class="${sign.align==='right'?'active':''}" onclick="updateBookField('${item.id}','sign','align','right')" title="يمين"><i class="bi bi-text-right"></i></button>
+          <button class="${sign.align==='center'?'active':''}" onclick="updateBookField('${item.id}','sign','align','center')" title="وسط"><i class="bi bi-text-center"></i></button>
+          <button class="${sign.align==='left'?'active':''}" onclick="updateBookField('${item.id}','sign','align','left')" title="يسار"><i class="bi bi-text-left"></i></button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function updateBookField(itemId, section, field, value){
+  const item = currentProject.ids.find(p=>p.id === itemId);
+  if(!item) return;
+  if(!item.book) item.book = {};
+  if(!item.book[section]) item.book[section] = { text:'', color:'#1e293b', size:14, align:'right' };
+  item.book[section][field] = value;
+  persistProjects();
+  renderLivePreview();
 }
 
 function renderCard(pair, side, label, icon, size){
@@ -1050,6 +1522,9 @@ function renderCard(pair, side, label, icon, size){
           </button>
           ${img ? `<button class="crop-btn" onclick="event.stopPropagation();openCrop('${pair.id}','${side}')" title="قص وتدوير">
             <i class="bi bi-crop"></i>
+          </button>
+          <button class="crop-btn" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)" onclick="event.stopPropagation();openAdvancedImage('${pair.id}','${side}')" title="أدوات متقدمة">
+            <i class="bi bi-sliders2"></i>
           </button>` : ''}
         </div>` : '' }
     </div>
@@ -1090,9 +1565,285 @@ function imgOptAction(action){
   setTimeout(()=>{
     if(action === 'crop') openCrop(pairId, side);
     else if(action === 'size') openSizeEditor(pairId, side);
+    else if(action === 'advanced') openAdvancedImage(pairId, side);
     else if(action === 'replace') pickImage(pairId, side);
     else if(action === 'hide') toggleHide(pairId, side);
   }, 150);
+}
+
+/* === الأدوات المتقدمة للصورة === */
+let advCtx = null;
+
+function getDefaultAdvanced(){
+  return {
+    caption: { text:'', size:12, color:'#ffffff', align:'center' },
+    face:    { on:false, size:50, color:'#c8a45c' },
+    tint:    { color:'#ffffff', amount:0 },
+    border:  { width:0, color:'#c8a45c' },
+    contrast: 100,
+    brightness: 100
+  };
+}
+
+function openAdvancedImage(pairId, side){
+  const pair = currentProject.ids.find(p=>p.id === pairId);
+  if(!pair || !pair[side]) return;
+
+  if(!pair.advanced) pair.advanced = {};
+  if(!pair.advanced[side]) pair.advanced[side] = getDefaultAdvanced();
+
+  advCtx = { pairId, side };
+  const adv = pair.advanced[side];
+  const src = pair['final_' + side] || pair[side];
+
+  $('advPreviewImg').src = src;
+  $('advCaptionText').value = adv.caption.text || '';
+  $('advCaptionSize').value = adv.caption.size || 12;
+  $('advCaptionSizeVal').textContent = adv.caption.size || 12;
+  $('advCaptionColor').value = adv.caption.color || '#ffffff';
+  setAdvAlign(adv.caption.align || 'center', true);
+
+  setAdvFace(adv.face.on || false, true);
+  $('advFaceSize').value = adv.face.size || 50;
+  $('advFaceSizeVal').textContent = adv.face.size || 50;
+  $('advFaceColor').value = adv.face.color || '#c8a45c';
+
+  $('advTintColor').value = adv.tint.color || '#ffffff';
+  $('advTintAmount').value = adv.tint.amount || 0;
+  $('advTintAmountVal').textContent = (adv.tint.amount || 0) + '%';
+
+  $('advBorderWidth').value = adv.border.width || 0;
+  $('advBorderWidthVal').textContent = adv.border.width || 0;
+  $('advBorderColor').value = adv.border.color || '#c8a45c';
+
+  $('advContrast').value = adv.contrast || 100;
+  $('advContrastVal').textContent = (adv.contrast || 100) + '%';
+
+  $('advBrightness').value = adv.brightness || 100;
+  $('advBrightnessVal').textContent = (adv.brightness || 100) + '%';
+
+  applyAdvLive();
+  openModal('advancedImageModal');
+}
+
+function setAdvAlign(align, silent){
+  ['right','center','left'].forEach(a=>{
+    const btn = $('advAlign' + a.charAt(0).toUpperCase() + a.slice(1));
+    if(btn) btn.classList.toggle('active', a === align);
+  });
+  if(!silent) applyAdvLive();
+}
+
+function setAdvFace(on, silent){
+  const onBtn = $('advFaceOn');
+  const offBtn = $('advFaceOff');
+  if(on){ onBtn.classList.add('active'); offBtn.classList.remove('active'); }
+  else { offBtn.classList.add('active'); onBtn.classList.remove('active'); }
+  $('advFaceControls').style.display = on ? 'block' : 'none';
+  if(!silent) applyAdvLive();
+}
+
+function applyAdvLive(){
+  if(!advCtx) return;
+  const pair = currentProject.ids.find(p=>p.id === advCtx.pairId);
+  if(!pair) return;
+  const adv = pair.advanced[advCtx.side];
+
+  // قراءة القيم
+  adv.caption.text = $('advCaptionText').value;
+  adv.caption.size = parseInt($('advCaptionSize').value) || 12;
+  $('advCaptionSizeVal').textContent = adv.caption.size;
+  adv.caption.color = $('advCaptionColor').value;
+  // align من الأزرار النشطة
+  ['right','center','left'].forEach(a=>{
+    const btn = $('advAlign' + a.charAt(0).toUpperCase() + a.slice(1));
+    if(btn && btn.classList.contains('active')) adv.caption.align = a;
+  });
+
+  adv.face.on = $('advFaceOn').classList.contains('active');
+  adv.face.size = parseInt($('advFaceSize').value) || 50;
+  $('advFaceSizeVal').textContent = adv.face.size;
+  adv.face.color = $('advFaceColor').value;
+
+  adv.tint.color = $('advTintColor').value;
+  adv.tint.amount = parseInt($('advTintAmount').value) || 0;
+  $('advTintAmountVal').textContent = adv.tint.amount + '%';
+
+  adv.border.width = parseInt($('advBorderWidth').value) || 0;
+  $('advBorderWidthVal').textContent = adv.border.width;
+  adv.border.color = $('advBorderColor').value;
+
+  adv.contrast = parseInt($('advContrast').value) || 100;
+  $('advContrastVal').textContent = adv.contrast + '%';
+
+  adv.brightness = parseInt($('advBrightness').value) || 100;
+  $('advBrightnessVal').textContent = adv.brightness + '%';
+
+  // تطبيق المعاينة على الصورة
+  const img = $('advPreviewImg');
+  let filters = [];
+  if(adv.contrast !== 100) filters.push(`contrast(${adv.contrast}%)`);
+  if(adv.brightness !== 100) filters.push(`brightness(${adv.brightness}%)`);
+  img.style.filter = filters.length ? filters.join(' ') : 'none';
+
+  // معاينة الإطار
+  if(adv.border.width > 0){
+    img.style.border = `${adv.border.width}px solid ${adv.border.color}`;
+  } else {
+    img.style.border = 'none';
+  }
+
+  // معاينة النص
+  const cap = $('advOverlayCaption');
+  if(adv.caption.text){
+    cap.style.display = 'block';
+    cap.textContent = adv.caption.text;
+    cap.style.fontSize = adv.caption.size + 'px';
+    cap.style.color = adv.caption.color;
+    cap.style.textAlign = adv.caption.align;
+  } else {
+    cap.style.display = 'none';
+  }
+}
+
+function resetAdvancedTools(){
+  if(!advCtx) return;
+  const pair = currentProject.ids.find(p=>p.id === advCtx.pairId);
+  if(!pair) return;
+  pair.advanced[advCtx.side] = getDefaultAdvanced();
+  persistProjects();
+  openAdvancedImage(advCtx.pairId, advCtx.side);
+  showToast('تمت إعادة تعيين الأدوات', '🔄');
+}
+
+function applyAdvancedTools(){
+  if(!advCtx) return;
+  const pair = currentProject.ids.find(p=>p.id === advCtx.pairId);
+  if(!pair) return;
+  applyAdvLive(); // حفظ القيم الحالية
+
+  // إعادة توليد الصورة النهائية مع الأدوات
+  regenerateFinalWithAdvanced(pair, advCtx.side);
+
+  persistProjects();
+  renderTypeItems();
+  renderLivePreview();
+  closeModal('advancedImageModal');
+  showToast('✅ تم تطبيق الأدوات المتقدمة', '✨');
+}
+
+async function regenerateFinalWithAdvanced(pair, side){
+  const src = pair[side];
+  if(!src) return;
+  const adv = (pair.advanced && pair.advanced[side]) || getDefaultAdvanced();
+  const crop = (pair.crops && pair.crops[side]) || null;
+
+  const img = await loadImageEl(src);
+  const iw = img.naturalWidth;
+  const ih = img.naturalHeight;
+
+  // نستخدم أبعاد القص النهائية إن وجدت، وإلا نسبة الأصلية
+  let W, H;
+  if(crop && crop.box && crop.box.w && crop.box.h){
+    const boxRatio = (crop.box.w * iw) / (crop.box.h * ih);
+    const baseMax = 2400;
+    if(boxRatio >= 1){ W = baseMax; H = Math.round(baseMax / boxRatio); }
+    else { H = baseMax; W = Math.round(baseMax * boxRatio); }
+  } else {
+    const ratio = iw / ih;
+    const baseMax = 2400;
+    if(ratio >= 1){ W = baseMax; H = Math.round(baseMax / ratio); }
+    else { H = baseMax; W = Math.round(baseMax * ratio); }
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  // الخلفية
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+
+  // فلتر التباين/السطوع
+  let fParts = [];
+  if(adv.contrast !== 100) fParts.push(`contrast(${adv.contrast}%)`);
+  if(adv.brightness !== 100) fParts.push(`brightness(${adv.brightness}%)`);
+  if('filter' in ctx) ctx.filter = fParts.length ? fParts.join(' ') : 'none';
+
+  // حساب منطقة القص (إن وجدت)
+  let sx = 0, sy = 0, sw = iw, sh = ih;
+  if(crop && crop.box){
+    sx = crop.box.x * iw;
+    sy = crop.box.y * ih;
+    sw = crop.box.w * iw;
+    sh = crop.box.h * ih;
+  }
+
+  // رسم الصورة
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
+  if('filter' in ctx) ctx.filter = 'none';
+
+  // فلتر اللون
+  if(adv.tint.amount > 0){
+    const tint = adv.tint.color;
+    ctx.globalAlpha = adv.tint.amount / 100 * 0.5;
+    ctx.fillStyle = tint;
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+  }
+
+  // الإطار
+  if(adv.border.width > 0){
+    const bw = Math.max(1, Math.round(adv.border.width * (W / 600)));
+    ctx.strokeStyle = adv.border.color;
+    ctx.lineWidth = bw;
+    ctx.strokeRect(bw/2, bw/2, W - bw, H - bw);
+  }
+
+  // تمييز الوجه (دائرة/إطار)
+  if(adv.face.on){
+    const fsize = (adv.face.size / 100) * Math.min(W, H);
+    const cx = W / 2;
+    const cy = H / 2;
+    ctx.strokeStyle = adv.face.color;
+    ctx.lineWidth = Math.max(2, fsize * 0.03);
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, fsize / 2, fsize / 2, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // النص التوضيحي
+  if(adv.caption.text && adv.caption.text.trim()){
+    const fontSize = Math.max(10, Math.round(adv.caption.size * (W / 600)));
+    ctx.font = `900 ${fontSize}px 'Segoe UI', Tahoma, sans-serif`;
+    ctx.fillStyle = adv.caption.color;
+    ctx.textBaseline = 'bottom';
+    if(adv.caption.align === 'right') ctx.textAlign = 'right';
+    else if(adv.caption.align === 'left') ctx.textAlign = 'left';
+    else ctx.textAlign = 'center';
+
+    const pad = Math.round(W * 0.03);
+    let x = W / 2;
+    if(adv.caption.align === 'right') x = W - pad;
+    else if(adv.caption.align === 'left') x = pad;
+
+    // خلفية النص
+    const metrics = ctx.measureText(adv.caption.text);
+    const tw = metrics.width;
+    let bx = x - tw / 2;
+    if(adv.caption.align === 'right') bx = x - tw;
+    else if(adv.caption.align === 'left') bx = x;
+    const bh = fontSize + pad / 2;
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(bx - 6, H - bh - 6, tw + 12, bh + 4);
+    ctx.fillStyle = adv.caption.color;
+    ctx.fillText(adv.caption.text, x, H - pad);
+  }
+
+  pair['final_' + side] = canvas.toDataURL('image/png');
 }
 
 function getQualityFilter(q){
@@ -1121,13 +1872,22 @@ function addItemToType(){
   }
 
   const newId = uid();
-  currentProject.ids.push({
+  const newItem = {
     id: newId,
     template: currentEditingType,
     front: null, back: null,
     hideFront: false, hideBack: false,
-    crops: {}
-  });
+    crops: {},
+    advanced: {}
+  };
+  if(currentEditingType === 'book'){
+    newItem.book = {
+      title: { text:'', color:'#1e293b', size:24, align:'center' },
+      body:  { text:'', color:'#1e293b', size:14, align:'right' },
+      sign:  { text:'', color:'#1e293b', size:14, align:'left' }
+    };
+  }
+  currentProject.ids.push(newItem);
   if(!currentProject.order) currentProject.order = [];
   currentProject.order.push(newId);
   persistProjects();
@@ -1219,6 +1979,7 @@ async function importPdfAsPages(file){
         hideFront: false,
         hideBack: false,
         crops: { front: { x:0,y:0,zoom:1,rotate:0,quality:'high',box:null } },
+        advanced: {},
         final_front: null,
         isOfficePage: true,
         pageNumber: i,
@@ -1253,7 +2014,6 @@ function previewOfficeFile(itemId){
   if(item.fileExt === 'pdf' && item.fileData){
     body.innerHTML = '<div style="color:#fff;font-size:14px">جاري التحميل...</div>';
     openModal('officeViewer');
-    // استيراد مباشر كصفحات إن لم يتم من قبل
     if(!item.isOfficePage){
       showToast('يُفضل استيراد PDF من زر الإضافة لتحويله لصفحات','ℹ️');
     }
@@ -1329,6 +2089,8 @@ function handleFile(e){
       pair['final_' + pickerTarget.side] = null;
       if(!pair.crops) pair.crops = {};
       pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
+      if(!pair.advanced) pair.advanced = {};
+      pair.advanced[pickerTarget.side] = getDefaultAdvanced();
       persistProjects();
       renderTypeItems();
       renderLivePreview();
@@ -1431,7 +2193,6 @@ function openCrop(pairId, side){
 
   let aspect;
   if(pair.template === 'full'){
-    // ★ الصورة الكاملة: استخدم نسبة الصورة الأصلية مبدئياً
     aspect = 1;
   } else {
     aspect = size.w / size.h;
@@ -1465,7 +2226,6 @@ function openCrop(pairId, side){
     const iw = img.naturalWidth;
     const ih = img.naturalHeight;
 
-    // ★ احتواء كامل (contain) — الصورة كلها ظاهرة داخل viewport
     const scale = Math.min(vw / iw, vh / ih);
     const baseW = iw * scale;
     const baseH = ih * scale;
@@ -1475,7 +2235,6 @@ function openCrop(pairId, side){
     cropState.vw = vw;
     cropState.vh = vh;
 
-    // ★ الصورة الكاملة: نعيد ضبط viewport ليطابق نسبة الصورة (بدون فراغات)
     if(cropState.isFullTemplate){
       const imgRatio = iw / ih;
       let newVw, newVh;
@@ -1483,7 +2242,6 @@ function openCrop(pairId, side){
       else { newVh = maxH; newVw = maxH * imgRatio; }
       vp.style.width = newVw + 'px';
       vp.style.height = newVh + 'px';
-      // إعادة حساب baseW/baseH بعد تغيير viewport
       const scale2 = Math.min(newVw / iw, newVh / ih);
       cropState.baseW = iw * scale2;
       cropState.baseH = ih * scale2;
@@ -1492,7 +2250,6 @@ function openCrop(pairId, side){
     }
 
     if(!cropState.box){
-      // ★ صندوق يغطي الصورة كاملة
       const imgLeft = (cropState.vw - cropState.baseW) / 2;
       const imgTop  = (cropState.vh - cropState.baseH) / 2;
       cropState.box = {
@@ -1601,7 +2358,6 @@ function nudgeRotate(d){
   applyCropTransform();
 }
 
-/* ★ دالة التدوير 90° ★ */
 function rotate90(direction){
   if(!cropState) return;
   let newRot = cropState.rotate + (direction * 90);
@@ -1842,7 +2598,6 @@ $('cropRotate').addEventListener('input', (e)=>{
 function resetCropAll(){
   if(!cropState) return;
   cropState.x = 0; cropState.y = 0; cropState.zoom = 1; cropState.rotate = 0;
-  // إعادة الصندوق ليغطي الصورة كاملة
   const imgLeft = (cropState.vw - cropState.baseW) / 2;
   const imgTop  = (cropState.vh - cropState.baseH) / 2;
   cropState.box = {
@@ -1912,7 +2667,6 @@ async function renderFinalImage(pair, side, outW, outH){
   wctx.fillStyle = '#ffffff';
   wctx.fillRect(0, 0, workW, workH);
 
-  // ★ احتواء (contain) بدل تغطية (cover) — الصورة كاملة بدون قص
   const scale = Math.min(workW / iw, workH / ih);
   const baseW = iw * scale;
   const baseH = ih * scale;
@@ -1958,7 +2712,6 @@ async function applyCrop(){
   let targetW, targetH;
 
   if(pair.template === 'full'){
-    // ★ الصورة الكاملة: استخدم نسبة الصندوق المحدد، بجودة عالية
     const box = cropState.box || {w:1,h:1};
     const boxRatio = box.w / box.h;
     const baseMax = 2400;
@@ -1984,6 +2737,14 @@ async function applyCrop(){
     const dataUrl = await renderFinalImage(pair, side, targetW, targetH);
     if(dataUrl){
       pair['final_' + side] = dataUrl;
+      // بعد القص، أعد تطبيق الأدوات المتقدمة إن وجدت
+      if(pair.advanced && pair.advanced[side]){
+        const adv = pair.advanced[side];
+        const hasAdv = (adv.caption.text || adv.face.on || adv.tint.amount > 0 || adv.border.width > 0 || adv.contrast !== 100 || adv.brightness !== 100);
+        if(hasAdv){
+          await regenerateFinalWithAdvanced(pair, side);
+        }
+      }
     }
   }catch(err){
     console.error('فشل توليد الصورة النهائية', err);
@@ -2160,6 +2921,29 @@ function buildCroppedImageHTML(pair, side){
   return `<div class="cropped-img-wrap"><img src="${img}" alt=""></div>`;
 }
 
+function buildBookHTML(item){
+  const b = item.book || {};
+  const title = b.title || { text:'', color:'#1e293b', size:24, align:'center' };
+  const body  = b.body  || { text:'', color:'#1e293b', size:14, align:'right' };
+  const sign  = b.sign  || { text:'', color:'#1e293b', size:14, align:'left' };
+
+  const fs = (v, d)=> parseInt(v) || d;
+  const al = (a, d)=> (a==='right'||a==='center'||a==='left') ? a : d;
+
+  let html = '<div class="book-render">';
+  if(title.text && title.text.trim()){
+    html += `<div class="bk-title" style="color:${title.color};font-size:${fs(title.size,24)}px;text-align:${al(title.align,'center')}">${escapeHtml(title.text)}</div>`;
+  }
+  if(body.text && body.text.trim()){
+    html += `<div class="bk-body" style="color:${body.color};font-size:${fs(body.size,14)}px;text-align:${al(body.align,'right')}">${escapeHtml(body.text)}</div>`;
+  }
+  if(sign.text && sign.text.trim()){
+    html += `<div class="bk-sign" style="color:${sign.color};font-size:${fs(sign.size,14)}px;text-align:${al(sign.align,'left')}">${escapeHtml(sign.text)}</div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
 function buildSheetHTML(editable){
   const allItems = getSortedItems();
   const photoCount = currentProject.photoCount || 6;
@@ -2167,7 +2951,6 @@ function buildSheetHTML(editable){
   const html = [];
   let photoRendered = false;
 
-  // ★ الصور الكاملة: عنصر مستقل لكل صورة بدون زوم
   const fullItems = allItems.filter(it => it.template === 'full' && it.front && !it.hideFront);
   const fullBlocksHtml = fullItems.map((it)=>{
     return `
@@ -2184,6 +2967,16 @@ function buildSheetHTML(editable){
     if(!tpl) return;
     if(tpl.kind === 'full') return;
     if(tpl.kind === 'office') return;
+
+    if(tpl.kind === 'book'){
+      html.push(`
+        <div class="sheet-item" data-id="${it.id}" ${editable ? `draggable="true"` : ''} style="margin-bottom:${ITEM_GAP_PX}px">
+          ${editable ? `<div class="drag-handle"><i class="bi bi-grip-vertical"></i></div>` : ''}
+          ${buildBookHTML(it)}
+        </div>
+      `);
+      return;
+    }
 
     if(tpl.kind === 'photos'){
       if(photoRendered) return;
@@ -2310,9 +3103,17 @@ function handleDrop(e){
   showToast('تم إعادة الترتيب','🔄');
 }
 function handleDragEnd(){
-  this.classList.remove('dragging');
-  document.querySelectorAll('.sheet-item.drag-over').forEach(el=>el.classList.remove('drag-over'));
+  if(dragSourceEl) dragSourceEl.classList.remove('dragging');
   dragSourceEl = null;
+  document.querySelectorAll('.sheet-item.drag-over').forEach(el=>el.classList.remove('drag-over'));
+}
+
+function updateCopyCount(){
+  if(!currentProject) return;
+  const n = Math.max(1, Math.min(99, parseInt($('copyCount').value) || 1));
+  currentProject.copyCount = n;
+  $('copyCount').value = n;
+  persistProjects();
 }
 
 function saveCurrentProject(){
@@ -2321,206 +3122,114 @@ function saveCurrentProject(){
   showToast('تم حفظ المشروع','💾');
 }
 
-function updateCopyCount(){
-  if(!currentProject) return;
-  const v = parseInt($('copyCount').value) || 1;
-  currentProject.copyCount = Math.max(1, Math.min(99, v));
-  $('copyCount').value = currentProject.copyCount;
-  persistProjects();
-}
+function buildPrintHTML(){
+  const copyCount = currentProject.copyCount || 1;
+  const color = currentProject.color || '#ffffff';
+  const size = currentProject.size || 'A4';
 
-function buildPrintableSheet(paperW, paperH){
-  const sheet = document.createElement('div');
-  sheet.style.background = currentProject.color;
-  sheet.style.width = paperW + 'px';
-  sheet.style.height = paperH + 'px';
-  sheet.style.padding = '10px';
-  sheet.style.boxSizing = 'border-box';
-  sheet.style.display = 'flex';
-  sheet.style.flexDirection = 'column';
-  sheet.style.overflow = 'hidden';
-  sheet.innerHTML = buildSheetHTML(false);
-  return sheet;
-}
+  const pageSize = size === 'A4' ? 'A4' : (size === 'A5' ? 'A5' : 'A3');
+  const paperBg = color;
 
-async function saveSheetImage(){
-  if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
-  if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
-
-  const btn = $('btnSaveSheet');
-  const oldHtml = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
-
-  try{
-    const wrapper = document.createElement('div');
-    wrapper.style.position = 'fixed';
-    wrapper.style.left = '-99999px';
-    wrapper.style.top = '0';
-
-    const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
-    const p = paperMM[currentProject.size] || paperMM.A4;
-    const dpi = 300;
-    const targetW = Math.round(p.w / 25.4 * dpi);
-    const targetH = Math.round(p.h / 25.4 * dpi);
-
-    const sheetEl = buildPrintableSheet(targetW, targetH);
-    wrapper.appendChild(sheetEl);
-    document.body.appendChild(wrapper);
-
-    await waitForImages(wrapper);
-
-    const canvas = await html2canvas(sheetEl, {
-      scale: 1, width: targetW, height: targetH,
-      backgroundColor: currentProject.color,
-      useCORS: true, allowTaint: true, logging: false
-    });
-
-    document.body.removeChild(wrapper);
-
-    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-    if(!blob){ showToast('فشل الحفظ','❌'); return; }
-
-    const safeName = (currentProject.name || 'paper').replace(/[^\w\u0600-\u06FF\- ]+/g,'_');
-    const fileName = `${safeName}_${currentProject.size}_${Date.now()}.png`;
-    const file = new File([blob], fileName, { type: 'image/png' });
-
-    if(navigator.canShare && navigator.canShare({ files: [file] })){
-      try{
-        await navigator.share({ files: [file], title: currentProject.name });
-        showToast('تم حفظ الصورة في المعرض','📱');
-        return;
-      }catch(err){
-        if(err.name === 'AbortError'){ showToast('تم الإلغاء','ℹ️'); return; }
-      }
-    }
-    downloadBlob(blob, fileName);
-    showToast('تم تنزيل الصورة','⬇️');
-  }catch(err){
-    console.error(err);
-    showToast('فشل تجهيز الصورة','❌');
-  }finally{
-    btn.disabled = false;
-    btn.innerHTML = oldHtml;
+  let contentHTML = buildSheetHTML(false);
+  if(!contentHTML.trim()){
+    contentHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">لا يوجد محتوى</div>';
   }
-}
 
-function downloadBlob(blob, fileName){
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName;
-  a.style.display = 'none';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(()=>{
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 1500);
-}
+  const copies = [];
+  for(let i=0;i<copyCount;i++){
+    copies.push(`<div class="print-page" style="background:${paperBg}">${contentHTML}</div>`);
+  }
 
-function waitForImages(rootEl){
-  return new Promise(resolve=>{
-    const imgs = rootEl.querySelectorAll('img');
-    if(!imgs.length){ resolve(); return; }
-    let pending = imgs.length;
-    imgs.forEach(img=>{
-      if(img.complete && img.naturalWidth > 0){ pending--; if(pending === 0) resolve(); }
-      else{ img.onload = img.onerror = ()=>{ pending--; if(pending === 0) resolve(); }; }
-    });
-    setTimeout(resolve, 3000);
-  });
+  return `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>طباعة - ${escapeHtml(currentProject.name)}</title>
+<style>
+  @page { size: ${pageSize}; margin: 8mm; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI','Tajawal',sans-serif; background:#fff; }
+  .print-page {
+    width: 100%;
+    page-break-after: always;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .print-page:last-child { page-break-after: auto; }
+  .sheet-item { display:flex; flex-direction:column; margin-bottom:6px; }
+  .sheet-item-pair { display:flex; flex-wrap:nowrap; justify-content:center; align-items:flex-start; direction:ltr; gap:6px; }
+  .sheet-photos-grid { display:grid; gap:6px; }
+  .sheet-photos-grid.photos-4 { grid-template-columns:repeat(2,1fr); }
+  .sheet-photos-grid.photos-6 { grid-template-columns:repeat(2,1fr); }
+  .sheet-photos-grid.photos-9 { grid-template-columns:repeat(3,1fr); }
+  .s-img { background:#fff; display:block; overflow:hidden; position:relative; }
+  .s-img.blank { background:#fff; }
+  .s-img.hidden-card { background:#fff !important; }
+  .cropped-img-wrap { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }
+  .cropped-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+  .s-img.full-item-img { background:#fff; display:flex; align-items:center; justify-content:center; }
+  .s-img.full-item-img .cropped-img-wrap { position:relative; inset:auto; width:100%; height:100%; }
+  .s-img.full-item-img img { width:100%; height:auto; object-fit:contain; }
+  .book-render { width:100%; padding:10px 14px; display:flex; flex-direction:column; gap:10px; }
+  .book-render .bk-title { font-weight:900; line-height:1.4; white-space:pre-wrap; word-break:break-word; }
+  .book-render .bk-body { line-height:1.6; white-space:pre-wrap; word-break:break-word; font-weight:600; }
+  .book-render .bk-sign { line-height:1.5; white-space:pre-wrap; word-break:break-word; font-weight:800; margin-top:6px; }
+</style>
+</head>
+<body>
+${copies.join('')}
+<script>
+window.onload = function(){
+  setTimeout(function(){ window.print(); }, 300);
+};
+<\/script>
+</body>
+</html>`;
 }
 
 function openPrintWindow(){
-  if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
-  if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
-
-  const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
-  const p = paperMM[currentProject.size] || paperMM.A4;
-  const copies = currentProject.copyCount || 1;
-
-  // ★ كل صورة كاملة = صفحة مستقلة
-  const fullPages = getSortedItems().filter(it => it.template === 'full' && it.front && !it.hideFront);
-  const otherSheetHtml = buildSheetHTML(false);
-
-  let pagesHtml = '';
-
-  if(fullPages.length){
-    fullPages.forEach(it=>{
-      const onePage = `
-        <div class="sheet-item" style="margin-bottom:0">
-          <div class="s-img full-item-img">
-            ${buildCroppedImageHTML(it,'front')}
-          </div>
-        </div>`;
-      for(let c=0;c<copies;c++){
-        pagesHtml += `<div class="print-page">${onePage}</div>`;
-      }
-    });
+  if(!currentProject || !currentProject.ids.length){
+    showToast('لا يوجد محتوى للطباعة', '⚠️');
+    return;
   }
-
-  const hasNonFull = currentProject.ids.some(it => it.template !== 'full');
-  if(hasNonFull && otherSheetHtml.trim()){
-    for(let c=0;c<copies;c++){
-      pagesHtml += `<div class="print-page">${otherSheetHtml}</div>`;
-    }
+  const html = buildPrintHTML();
+  const w = window.open('', '_blank');
+  if(w){
+    w.document.write(html);
+    w.document.close();
+  } else {
+    showToast('الرجاء السماح بالنوافذ المنبثقة', '⚠️');
   }
-
-  const win = window.open('', '_blank');
-  if(!win){ showToast('اسمح بالنوافذ المنبثقة للطباعة','⚠️'); return; }
-
-  win.document.write(`
-    <!DOCTYPE html>
-    <html dir="rtl">
-    <head>
-      <meta charset="UTF-8">
-      <title>طباعة - ${escapeHtml(currentProject.name)}</title>
-      <style>
-        @page { size: ${p.w}mm ${p.h}mm; margin: 0; }
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Tajawal',sans-serif}
-        body{background:#fff}
-        .print-page{
-          width:${p.w}mm; height:${p.h}mm;
-          background:${currentProject.color};
-          padding:10px; box-sizing:border-box;
-          display:flex; flex-direction:column;
-          overflow:hidden;
-          page-break-after:always;
-          break-after:page;
-        }
-        .print-page:last-child{page-break-after:auto;break-after:auto}
-        .sheet-item{display:flex;flex-direction:column;margin-bottom:${ITEM_GAP_PX}px}
-        .sheet-item:last-child{margin-bottom:0}
-        .sheet-item-pair{display:flex;flex-wrap:nowrap;justify-content:center;align-items:flex-start;direction:ltr;gap:${PAIR_GAP_PX}px}
-        .sheet-photos-grid{display:grid;gap:${PHOTO_GAP_PX}px}
-        .sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
-        .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
-        .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
-        .s-img{background:#fff;display:block;overflow:hidden;position:relative}
-        .s-img.blank{background:#fff}
-        .s-img.hidden-card{background:#fff !important}
-        .s-img.full-item-img{display:flex;align-items:center;justify-content:center;width:100%;height:auto}
-        .s-img.full-item-img .cropped-img-wrap{position:relative;width:100%;height:auto}
-        .s-img.full-item-img img{width:100%;height:auto;object-fit:contain;display:block}
-        .cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden}
-        .cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-        .sheet-item-pair .s-img{width:45%;max-width:100%}
-        .sheet-item-pair .s-img .cropped-img-wrap{position:absolute;inset:0;width:100%;height:100%}
-      </style>
-    </head>
-    <body>${pagesHtml}</body>
-    </html>
-  `);
-  win.document.close();
-
-  setTimeout(()=>{
-    win.focus();
-    win.print();
-  }, 700);
 }
 
-/* Boot */
+async function saveSheetImage(){
+  if(!currentProject || !currentProject.ids.length){
+    showToast('لا يوجد محتوى للحفظ', '⚠️');
+    return;
+  }
+  const preview = $('livePreview');
+  try{
+    showToast('جاري تحضير الصورة...', '⏳');
+    const canvas = await html2canvas(preview, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: currentProject.color || '#ffffff'
+    });
+    const link = document.createElement('a');
+    link.download = `مطبعة-${currentProject.name}-${Date.now()}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('تم حفظ الصورة', '💾');
+  }catch(err){
+    console.error(err);
+    showToast('تعذّر حفظ الصورة', '❌');
+  }
+}
+
+/* تهيئة */
 loadProjects();
 </script>
 </body>
